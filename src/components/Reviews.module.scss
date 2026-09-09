@@ -15,8 +15,8 @@
 
   &__list {
     display: flex;
-    justify-content: space-between;
-    gap: 2rem;
+    justify-content: center;
+    gap: 5.3125rem;
     margin-bottom: 8.5625rem;
   }
 
@@ -61,7 +61,6 @@
     display: flex;
     justify-content: center;
     gap: 0.625rem;
-    // margin-top: 2.875rem;
   }
 
     &__dot {

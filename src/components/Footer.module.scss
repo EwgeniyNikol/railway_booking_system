@@ -1,0 +1,209 @@
+@use '../styles/mixins' as *;
+
+.footer {
+  width: 100%;
+  background: #2d2b2f;
+  padding: 3.125rem 15.75rem 1.5rem;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 3.25rem;
+  }
+
+  &__title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: var(--color-white);
+    margin-bottom: 1.875rem;
+  }
+
+  &__contact {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 1.875rem;
+  }
+
+  &__icon {
+    width: 1.875rem;
+    height: 1.875rem;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: var(--color-light);
+  }
+
+  &__subtitle {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: var(--color-light);
+    margin-bottom: 1.25rem;
+  }
+
+  &__form {
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 1.875rem;
+  }
+
+  &__input {
+    width: 27.9375rem;
+    height: 3.75rem;
+    background: var(--color-white);
+    border: none;
+    border-radius: 0.1875rem;
+    padding: 0 1.25rem;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: var(--color-light);
+
+    &::placeholder {
+      color: var(--color-light);
+    }
+  }
+
+  &__button {
+    width: 10.5625rem;
+    height: 3.75rem;
+    background: transparent;
+    border: 0.0625rem solid var(--color-white);
+    border-radius: 0.1875rem;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    text-transform: uppercase;
+    color: var(--color-light);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--color-white);
+      color: var(--color-dark);
+    }
+  }
+
+  &__social_title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: var(--color-white);
+    margin-bottom: 1.25rem;
+  }
+
+    &__socials {
+    display: flex;
+    align-items: center;
+    gap: 3.03125rem;
+  }
+
+  &__social {
+    height: 1.875rem;
+    width: auto;
+    cursor: pointer;
+  }
+
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 0.0625rem solid var(--color-light);
+    padding-top: 1.5rem;
+  }
+
+  &__logo {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-black);
+    font-size: 2.25rem;
+    line-height: 2.625rem;
+    color: var(--color-light);
+  }
+
+  &__arrow {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0.0625rem solid var(--color-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__arrow_icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  &__year {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-light);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: var(--color-light);
+  }
+}
+
+@include respond-to(tablet) {
+  .footer {
+    padding: 2rem 1.5rem 1rem;
+
+    &__top {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    &__form {
+      flex-direction: column;
+    }
+
+    &__input {
+      width: 100%;
+    }
+
+    &__button {
+      width: 100%;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .footer {
+    padding: 1.5rem 0.75rem 1rem;
+
+    &__title {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+    }
+
+    &__text {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
+
+    &__subtitle {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
+
+    &__socials {
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    &__year {
+      font-size: 1.25rem;
+    }
+  }
+}

@@ -49,9 +49,10 @@
 
     &__items {
     display: flex;
-    justify-content: center;
     gap: 12.5625rem;
     padding-top: 6.6875rem;
+    width: 980px;
+    margin: 0 auto;
   }
 
   &__item {
@@ -95,6 +96,7 @@
 
 @include respond-to(laptop) {
   .how {
+    
     &__items {
       padding-top: 5rem;
     }
@@ -145,6 +147,12 @@
     &__title {
       font-size: 1.5rem;
       line-height: 1.75rem;
+    }
+
+    &__items {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     &__button {
