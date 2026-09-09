@@ -1,0 +1,15 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.home__subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+  text-align: center;
+}
