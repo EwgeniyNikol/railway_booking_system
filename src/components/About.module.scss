@@ -1,0 +1,103 @@
+@use '../styles/mixins' as *;
+
+.about {
+  padding: 9rem 16.125rem 0;
+
+  &__title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 2.25rem;
+    line-height: 2.625rem;
+    text-transform: uppercase;
+    color: var(--color-dark);
+    margin-bottom: 1.875rem;
+  }
+
+  &__content {
+    display: flex;
+    gap: 1.75rem;
+  }
+
+  &__line {
+    width: 0.5625rem;
+    height: 14.4375rem;
+    background: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  &__text_block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 82.5rem;
+  }
+
+  &__text {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: var(--color-dark);
+  }
+
+  &__text_bold {
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+@include respond-to(laptop) {
+  .about {
+    padding: 4rem 2rem 0;
+
+    &__text {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
+
+    &__text_block {
+      max-width: 100%;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .about {
+    padding: 2.5rem 1.5rem 0;
+
+    &__title {
+      font-size: 1.75rem;
+      line-height: 2rem;
+    }
+
+    &__content {
+      gap: 1rem;
+    }
+
+    &__line {
+      height: auto;
+      align-self: stretch;
+    }
+
+    &__text {
+      font-size: 1.125rem;
+      line-height: 1.375rem;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .about {
+    padding: 1.5rem 0.75rem 0;
+
+    &__title {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    &__text {
+      font-size: 1rem;
+      line-height: 1.25rem;
+    }
+  }
+}
