@@ -1,73 +1,85 @@
-# React + TypeScript + Vite
+# railway_booking_system
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Дипломный проект — SPA для системы бронирования ж/д билетов на React + TypeScript.
 
-Currently, two official plugins are available:
+## Демо
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **GitHub Pages**: (будет добавлено после деплоя)
+- **API**: https://students.netoservices.ru/fe-diplom
 
-## React Compiler
+## Технологии
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19** + **TypeScript**
+- **Vite** — сборка
+- **Redux Toolkit** — глобальное состояние
+- **React Router 7** — роутинг
+- **SCSS-модули** — стили
+- **ESLint + Prettier** — качество кода
 
-## Expanding the ESLint configuration
+## Функциональность
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Поиск городов с подсказками
+- Поиск направлений с фильтрами и сортировкой
+- Выбор мест в вагоне
+- Оформление заказа
+- Подписка на новости
+- Адаптивная вёрстка
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Структура проекта
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+src/
+  api/              — запросы к API
+  components/       — компоненты
+    choose-train/   — компоненты страницы выбора поезда
+  fonts/            — локальные шрифты
+  images/           — изображения и иконки
+  pages/            — страницы
+  store/            — Redux Toolkit
+    selectors/      — селекторы
+    slices/         — срезы
+  styles/           — SCSS-миксины
+  index.scss        — глобальные стили
+  App.tsx           — роутинг
+  main.tsx          — точка входа
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+## Установка и запуск
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+npm install
+npm run dev
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+Откройте http://localhost:5173/
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+## Скрипты
+
+npm run dev           — запуск dev-сервера
+npm run build         — сборка
+npm run preview       — предпросмотр сборки
+npm run lint          — проверка ESLint
+npm run format        — форматирование Prettier
+npm run format:check  — проверка форматирования
+
+## Страницы
+
+- `/` — главная
+- `/choose-train` — выбор поезда
+
+## API
+
+Базовый URL: `https://students.netoservices.ru/fe-diplom`
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | `/routes/cities?name=` | Поиск городов |
+| GET | `/routes/last` | Последние направления |
+| GET | `/routes?from_city_id=&to_city_id=&...` | Поиск направлений |
+| GET | `/routes/{id}/seats` | Места в вагоне |
+| POST | `/routes/order` | Оформление заказа |
+| GET | `/subscribe?email=` | Подписка |
+
+## Автор
+
+EwgeniyNikol
+
+## Лицензия
+
+Дипломный проект, 2026

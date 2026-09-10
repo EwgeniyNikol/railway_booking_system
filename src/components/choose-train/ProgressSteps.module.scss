@@ -1,0 +1,162 @@
+@use '../../styles/mixins' as *;
+
+.progress {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 6.125rem;
+  background: #3e3c41;
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+    &__step {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    height: 100%;
+    padding: 0 3rem 0 2.1875rem;
+    background: #3e3c41;
+    cursor: pointer;
+
+    &:first-child {
+      padding-left: 14.375rem;
+      clip-path: polygon(
+        0 0,
+        calc(100% - 2.3125rem) 0,
+        100% 50%,
+        calc(100% - 2.3125rem) 100%,
+        0 100%
+      );
+    }
+
+    &_active {
+      background: var(--color-accent);
+
+      .progress__number,
+      .progress__label {
+        color: var(--color-white);
+      }
+    }
+  }
+
+  &__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 0.1875rem solid var(--color-white);
+    border-radius: 50%;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    font-size: 2.25rem;
+    line-height: 2.625rem;
+    color: var(--color-white);
+  }
+
+  &__label {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: var(--color-white);
+  }
+
+  &__arrow {
+    width: 2.375rem;
+    height: 6.125rem;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+@include respond-to(laptop) {
+  .progress {
+    &__step {
+      padding: 0 2rem 0 2.5rem;
+      gap: 0.75rem;
+
+      &:first-child {
+        padding-left: 2rem;
+      }
+    }
+
+    &__number {
+      width: 3rem;
+      height: 3rem;
+      font-size: 1.75rem;
+    }
+
+    &__label {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .progress {
+    &__step {
+      padding: 0 1.5rem 0 2rem;
+      gap: 0.5rem;
+
+      &:first-child {
+        padding-left: 1.5rem;
+      }
+    }
+
+    &__number {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.5rem;
+    }
+
+    &__label {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .progress {
+    height: auto;
+    flex-direction: column;
+
+    &__wrapper {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    &__step {
+      width: 100%;
+      padding: 0.75rem 1rem;
+
+      &:first-child {
+        padding-left: 1rem;
+      }
+    }
+
+    &__number {
+      width: 2rem;
+      height: 2rem;
+      font-size: 1.25rem;
+      border-width: 0.125rem;
+    }
+
+    &__label {
+      font-size: 1rem;
+    }
+
+    &__arrow {
+      display: none;
+    }
+  }
+}
