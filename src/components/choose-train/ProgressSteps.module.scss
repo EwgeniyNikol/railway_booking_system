@@ -12,19 +12,9 @@
     display: flex;
     align-items: center;
     height: 100%;
-  }
 
-    &__step {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    height: 100%;
-    padding: 0 3rem 0 2.1875rem;
-    background: #3e3c41;
-    cursor: pointer;
-
-    &:first-child {
-      padding-left: 14.375rem;
+    &:nth-child(1) .progress__step {
+      padding: 0 9.375rem 0 14.375rem;
       clip-path: polygon(
         0 0,
         calc(100% - 2.3125rem) 0,
@@ -33,6 +23,27 @@
         0 100%
       );
     }
+
+    &:nth-child(2) .progress__step {
+      padding: 0 2.625rem 0 2.1875rem;
+    }
+
+    &:nth-child(3) .progress__step {
+      padding: 0 5.875rem 0 2.1875rem;
+    }
+
+    &:nth-child(4) .progress__step {
+      padding: 0 0 0 2.1875rem;
+    }
+  }
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    height: 100%;
+    background: #3e3c41;
+    cursor: pointer;
 
     &_active {
       background: var(--color-accent);
@@ -81,13 +92,26 @@
 
 @include respond-to(laptop) {
   .progress {
-    &__step {
-      padding: 0 2rem 0 2.5rem;
-      gap: 0.75rem;
-
-      &:first-child {
-        padding-left: 2rem;
+    &__wrapper {
+      &:nth-child(1) .progress__step {
+        padding: 0 6rem 0 10rem;
       }
+
+      &:nth-child(2) .progress__step {
+        padding: 0 1.75rem 0 1.5rem;
+      }
+
+      &:nth-child(3) .progress__step {
+        padding: 0 4rem 0 1.5rem;
+      }
+
+      &:nth-child(4) .progress__step {
+        padding: 0 0 0 1.5rem;
+      }
+    }
+
+    &__step {
+      gap: 0.75rem;
     }
 
     &__number {
@@ -104,13 +128,26 @@
 
 @include respond-to(tablet) {
   .progress {
-    &__step {
-      padding: 0 1.5rem 0 2rem;
-      gap: 0.5rem;
-
-      &:first-child {
-        padding-left: 1.5rem;
+    &__wrapper {
+      &:nth-child(1) .progress__step {
+        padding: 0 3rem 0 3rem;
       }
+
+      &:nth-child(2) .progress__step {
+        padding: 0 1.25rem 0 1.25rem;
+      }
+
+      &:nth-child(3) .progress__step {
+        padding: 0 2rem 0 1.25rem;
+      }
+
+      &:nth-child(4) .progress__step {
+        padding: 0 0 0 1.25rem;
+      }
+    }
+
+    &__step {
+      gap: 0.5rem;
     }
 
     &__number {
@@ -133,15 +170,17 @@
     &__wrapper {
       width: 100%;
       flex-direction: column;
+
+      &:nth-child(1) .progress__step,
+      &:nth-child(2) .progress__step,
+      &:nth-child(3) .progress__step,
+      &:nth-child(4) .progress__step {
+        padding: 0.75rem 1rem;
+      }
     }
 
     &__step {
       width: 100%;
-      padding: 0.75rem 1rem;
-
-      &:first-child {
-        padding-left: 1rem;
-      }
     }
 
     &__number {

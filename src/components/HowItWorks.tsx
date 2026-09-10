@@ -13,9 +13,9 @@ const HowItWorks = () => {
         <div className={styles.how__item}>
           <div className={styles.how__icon}>
             <img
-                src="/src/images/icon-order.svg"
-                alt=""
-                className={styles.how__icon_img}
+              src="/src/images/icon-order.svg"
+              alt=""
+              className={styles.how__icon_img}
             />
           </div>
           <p className={`${styles.how__text} ${styles.how__text_light}`}>
@@ -25,9 +25,9 @@ const HowItWorks = () => {
         <div className={styles.how__item}>
           <div className={styles.how__icon}>
             <img
-                src="/src/images/icon-office.svg"
-                alt=""
-                className={styles.how__icon_img}
+              src="/src/images/icon-office.svg"
+              alt=""
+              className={styles.how__icon_img}
             />
           </div>
           <p className={styles.how__text}>Нет необходимости ехать в офис</p>
@@ -35,9 +35,9 @@ const HowItWorks = () => {
         <div className={styles.how__item}>
           <div className={styles.how__icon}>
             <img
-                src="/src/images/icon-directions.svg"
-                alt=""
-                className={styles.how__icon_img}
+              src="/src/images/icon-directions.svg"
+              alt=""
+              className={styles.how__icon_img}
             />
           </div>
           <p className={styles.how__text}>Огромный выбор направлений</p>

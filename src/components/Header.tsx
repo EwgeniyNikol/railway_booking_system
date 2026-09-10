@@ -22,10 +22,10 @@ const Header = () => {
       </nav>
       <div className={styles.header__content}>
         <div className={styles.header__title_wrapper}>
-            <h1 className={styles.header__title}>
-                <span className={styles.header__title_thin}>Вся жизнь -</span>{' '}
-                <span className={styles.header__title_bold}>путешествие!</span>
-            </h1>
+          <h1 className={styles.header__title}>
+            <span className={styles.header__title_thin}>Вся жизнь -</span>{' '}
+            <span className={styles.header__title_bold}>путешествие!</span>
+          </h1>
         </div>
         <div className={styles.header__search}>
           <div className={styles.header__label}>Направление</div>
