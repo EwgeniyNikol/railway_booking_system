@@ -76,10 +76,3 @@ npm run format:check  — проверка форматирования
 | POST | `/routes/order` | Оформление заказа |
 | GET | `/subscribe?email=` | Подписка |
 
-## Автор
-
-EwgeniyNikol
-
-## Лицензия
-
-Дипломный проект, 2026
