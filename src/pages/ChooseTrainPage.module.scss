@@ -4,4 +4,10 @@
   padding: 0 16.125rem;
   margin-top: 5.9375rem;
   margin-bottom: 5.875rem;
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 5.875rem;
+  }
 }

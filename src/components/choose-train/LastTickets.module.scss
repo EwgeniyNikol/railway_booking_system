@@ -1,0 +1,128 @@
+@use '../../styles/mixins' as *;
+
+.lastTickets {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 23.6875rem;
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    text-transform: uppercase;
+    color: #000000;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.0625rem;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 22.5rem;
+    padding: 1.125rem 1.125rem 1.25rem;
+    background: var(--color-white);
+    border: 1px solid #c4c4c4;
+    box-shadow: 0 0.125rem 0.125rem rgba(62, 60, 65, 0.25);
+  }
+
+  &__cities {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__city {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.4375rem;
+    color: #292929;
+
+    &:last-child {
+      text-align: right;
+    }
+  }
+
+  &__stations {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__station {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.1875rem;
+    color: #928f94;
+
+    &:last-child {
+      text-align: right;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  &__icons {
+    display: flex;
+    gap: 0.625rem;
+    font-size: 0.75rem;
+    color: #c4c4c4;
+  }
+
+  &__icon {
+    height: 1.25rem;
+    width: auto;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+  }
+
+  &__priceLabel {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.1875rem;
+    color: #928f94;
+  }
+
+  &__priceValue {
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 2.625rem;
+    color: #ffa800;
+  }
+
+  &__priceCurrency {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: #928f94;
+  }
+}
+
+@include respond-to(mobile) {
+  .lastTickets {
+    width: 100%;
+
+    &__card {
+      width: 100%;
+    }
+  }
+}
