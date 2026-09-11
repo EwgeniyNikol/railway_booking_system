@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import Calendar from './Calendar';
+import Calendar from './common/Calendar';
+import CityInput from './common/CityInput';
 import styles from './Header.module.scss';
 
 const Header = () => {
+  const [fromCity, setFromCity] = useState('');
+  const [toCity, setToCity] = useState('');
   const [departureDate, setDepartureDate] = useState('');
   const [arrivalDate, setArrivalDate] = useState('');
   const [calendarOpenDeparture, setCalendarOpenDeparture] = useState(false);
@@ -37,20 +40,22 @@ const Header = () => {
         <div className={styles.header__search}>
           <div className={styles.header__label}>Направление</div>
           <div className={styles.header__row}>
-            <input
-              type="text"
-              className={`${styles.header__input} ${styles.header__input_icon}`}
+            <CityInput
+              value={fromCity}
+              onChange={setFromCity}
               placeholder="Откуда"
+              className={`${styles.header__input} ${styles.header__input_icon}`}
             />
             <img
               src="/src/images/ic-cached.svg"
               alt=""
               className={styles.header__swap}
             />
-            <input
-              type="text"
-              className={`${styles.header__input} ${styles.header__input_icon}`}
+            <CityInput
+              value={toCity}
+              onChange={setToCity}
               placeholder="Куда"
+              className={`${styles.header__input} ${styles.header__input_icon}`}
             />
           </div>
           <div className={styles.header__label}>Дата</div>
