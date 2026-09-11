@@ -15,13 +15,6 @@
 
     &:nth-child(1) .progress__step {
       padding: 0 9.375rem 0 14.375rem;
-      clip-path: polygon(
-        0 0,
-        calc(100% - 2.3125rem) 0,
-        100% 50%,
-        calc(100% - 2.3125rem) 100%,
-        0 100%
-      );
     }
 
     &:nth-child(2) .progress__step {
@@ -32,8 +25,17 @@
       padding: 0 5.875rem 0 2.1875rem;
     }
 
-    &:nth-child(4) .progress__step {
-      padding: 0 0 0 2.1875rem;
+    &:nth-child(4) {
+      flex: 1;
+
+      .progress__step {
+        width: 100%;
+        padding: 0 0 0 2.1875rem;
+      }
+
+      .progress__step_active {
+        clip-path: none;
+      }
     }
   }
 
@@ -46,6 +48,22 @@
     cursor: pointer;
 
     &_active {
+      background: var(--color-accent);
+      clip-path: polygon(
+        0 0,
+        calc(100% - 2.3125rem) 0,
+        100% 50%,
+        calc(100% - 2.3125rem) 100%,
+        0 100%
+      );
+
+      .progress__number,
+      .progress__label {
+        color: var(--color-white);
+      }
+    }
+
+    &_passed {
       background: var(--color-accent);
 
       .progress__number,
@@ -87,6 +105,10 @@
     transform: translateX(-50%);
     pointer-events: none;
     z-index: 1;
+  }
+
+  &__wrapper:has(.progress__step_active) + .progress__wrapper .progress__arrow {
+    transform: translateX(calc(-50% - 2.3125rem));
   }
 }
 
@@ -181,6 +203,10 @@
 
     &__step {
       width: 100%;
+
+      &_active {
+        clip-path: none;
+      }
     }
 
     &__number {

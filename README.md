@@ -1,6 +1,6 @@
 # railway_booking_system
 
-Дипломный проект — SPA для системы бронирования ж/д билетов на React + TypeScript.
+SPA для системы бронирования ж/д билетов на React + TypeScript.
 
 ## Демо
 

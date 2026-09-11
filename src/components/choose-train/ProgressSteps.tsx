@@ -12,14 +12,14 @@ const ProgressSteps = () => {
         <div key={label} className={styles.progress__wrapper}>
           <div
             className={`${styles.progress__step} ${
-              index === activeStep ? styles.progress__step_active : ''
-            }`}
+              index < activeStep ? styles.progress__step_passed : ''
+            } ${index === activeStep ? styles.progress__step_active : ''}`}
             onClick={() => setActiveStep(index)}
           >
             <span className={styles.progress__number}>{index + 1}</span>
             <span className={styles.progress__label}>{label}</span>
           </div>
-          {index > 0 && index < steps.length - 1 && (
+          {index > activeStep && index < steps.length - 1 && (
             <img
               src="/src/images/strel.svg"
               alt=""

@@ -47,8 +47,8 @@
     color: #292929;
 
     &::placeholder {
-    color: #928f94;
-    opacity: 1;
+      color: #928f94;
+      opacity: 1;
     }
   }
 
@@ -58,6 +58,18 @@
     width: 1.25rem;
     height: 1.375rem;
     pointer-events: none;
+  }
+
+  &__inputWrapper {
+    position: relative;
+  }
+
+    &__calendar {
+    position: absolute;
+    top: 100%;
+    left: -1.75rem;
+    margin-top: 0.75rem;
+    z-index: 10;
   }
 
   &__divider {
@@ -203,6 +215,8 @@
     display: flex;
     align-items: center;
     gap: 1.25rem;
+    justify-content: space-between;
+    width: 100%;
     background: transparent;
     border: none;
     padding: 0;
@@ -222,6 +236,47 @@
     line-height: 2.1875rem;
     color: var(--color-white);
     transition: color 0.2s;
+  }
+
+  &__directionToggle {
+    margin-left: auto;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &__timeBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .sidebar__slider {
+      width: 18.4375rem;
+      margin-top: 0;
+    }
+  }
+
+  &__timeTitle {
+    margin: 0;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: #e5e5e5;
+  }
+
+  &__timeTitleRight {
+    text-align: right;
+  }
+
+  &__timeRow {
+    display: flex;
+    justify-content: space-between;
+    width: 18.4375rem;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.1875rem;
+    color: #e5e5e5;
   }
 }
 

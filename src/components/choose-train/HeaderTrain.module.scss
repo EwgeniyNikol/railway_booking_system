@@ -153,6 +153,18 @@
       background: #d49100;
     }
   }
+
+  &__inputWrapper {
+    position: relative;
+  }
+
+    &__calendar {
+    position: absolute;
+    top: 100%;
+    left: -1.75rem;
+    margin-top: 0.75rem;
+    z-index: 10;
+  }
 }
 
 @include respond-to(laptop) {
