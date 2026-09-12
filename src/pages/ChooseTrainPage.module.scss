@@ -1,13 +1,71 @@
+@use '../styles/mixins' as *;
+
 .page {
   display: flex;
   gap: 5.3125rem;
   padding: 0 16.125rem;
   margin-top: 5.9375rem;
-  margin-bottom: 5.875rem;
+  margin-bottom: 12.0625rem;
 
   &__sidebar {
     display: flex;
     flex-direction: column;
     gap: 5.875rem;
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  &__tickets {
+    display: flex;
+    flex-direction: column;
+    gap: 3.0625rem;
+  }
+
+  &__pagination {
+    margin-top: 5.8125rem;
+  }
+}
+
+@include respond-to(laptop) {
+  .page {
+    gap: 3rem;
+    padding: 0 2rem;
+  }
+}
+
+@include respond-to(tablet) {
+  .page {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+}
+
+@include respond-to(mobile) {
+  .page {
+    gap: 1.5rem;
+    padding: 0 1rem;
+    margin-top: 2rem;
+  }
+
+  .page__sidebar {
+    gap: 3rem;
+  }
+
+  .page__content {
+    gap: 2rem;
+  }
+
+  .page__tickets {
+    gap: 1.5rem;
+  }
+
+  .page__pagination {
+    margin-top: 2rem;
   }
 }
