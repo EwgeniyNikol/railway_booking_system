@@ -89,8 +89,13 @@
     cursor: pointer;
 
     &:hover {
-      background: var(--color-white);
-      color: var(--color-dark);
+        background: #ffca62;
+        color: var(--color-dark);
+    }
+
+    &:active {
+        background: #ffffff;
+        color: var(--color-dark);
     }
   }
 
@@ -113,6 +118,10 @@
     height: 1.875rem;
     width: auto;
     cursor: pointer;
+
+    &:active {
+      filter: brightness(0) saturate(100%) invert(82%) sepia(28%) saturate(1178%) hue-rotate(325deg) brightness(101%) contrast(101%);
+   }
   }
 
   &__bottom {
