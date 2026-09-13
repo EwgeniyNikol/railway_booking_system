@@ -1,0 +1,60 @@
+@use '../../styles/mixins' as *;
+
+.seatsBlock {
+  display: flex;
+  flex-direction: column;
+
+  &__wagons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 2.3125rem;
+    padding: 0 2.125rem;
+    background: rgba(255, 168, 0, 0.44);
+  }
+
+  &__wagonsLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  &__wagonsLabel {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.3125rem;
+    color: #2d2b2f;
+  }
+
+  &__wagon {
+    background: transparent;
+    border: none;
+    padding: 0 0.25rem;
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.3125rem;
+    color: #2d2b2f;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #ffffff;
+    }
+
+    &_active {
+      color: #ffffff;
+      font-weight: 700;
+    }
+  }
+
+  &__wagonsHint {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.1875rem;
+    color: #292929;
+  }
+}

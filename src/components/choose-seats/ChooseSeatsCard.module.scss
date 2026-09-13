@@ -1,0 +1,10 @@
+@use '../../styles/mixins' as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 59.9375rem;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 0.125rem 0.125rem rgba(0, 0, 0, 0.25);
+}

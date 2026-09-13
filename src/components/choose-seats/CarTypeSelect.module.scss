@@ -1,0 +1,119 @@
+@use '../../styles/mixins' as *;
+
+.carType {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+  padding: 2.5rem 9rem 2.5rem 4rem;
+  border-top: 1px dashed #c4c4c4;
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: #292929;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &_disabled {
+      cursor: default;
+      opacity: 0.4;
+    }
+
+    &:hover:not(&_disabled) .carType__icon img {
+      filter: brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(1226%) hue-rotate(1deg) brightness(103%) contrast(105%);
+    }
+
+    &:hover:not(&_disabled) .carType__label {
+      color: #ffa800;
+    }
+
+    &_selected .carType__icon img {
+      filter: brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(1226%) hue-rotate(1deg) brightness(103%) contrast(105%);
+    }
+
+    &_selected .carType__label {
+      color: #ffa800;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.125rem;
+    height: 3.125rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      transition: filter 0.2s;
+    }
+  }
+
+  &__label {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: #928f94;
+    transition: color 0.2s;
+  }
+}
+
+@include respond-to(laptop) {
+  .carType {
+    padding: 2rem 2rem;
+
+    &__label {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .carType {
+    &__list {
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .carType {
+    padding: 2rem 1rem;
+
+    &__title {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+    }
+
+    &__list {
+      gap: 1rem;
+    }
+
+    &__label {
+      font-size: 1rem;
+      line-height: 1.1875rem;
+    }
+  }
+}

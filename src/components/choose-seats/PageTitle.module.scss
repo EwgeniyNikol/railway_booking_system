@@ -1,0 +1,11 @@
+@use '../../styles/mixins' as *;
+
+.pageTitle {
+  margin: 0;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 1.875rem;
+  line-height: 2.1875rem;
+  text-transform: uppercase;
+  color: #292929;
+}

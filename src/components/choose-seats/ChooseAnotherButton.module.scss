@@ -1,0 +1,35 @@
+@use '../../styles/mixins' as *;
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-bottom: 2rem;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.75rem;
+    height: 3.75rem;
+    background: #ffa800;
+    border-radius: 0.3125rem;
+
+    img {
+      width: 1.875rem;
+      height: 1.25rem;
+    }
+  }
+
+  &__text {
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: #292929;
+  }
+}

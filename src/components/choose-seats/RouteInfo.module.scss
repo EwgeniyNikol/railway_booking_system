@@ -1,0 +1,133 @@
+@use '../../styles/mixins' as *;
+
+.routeInfo {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 7.6875rem;
+  padding: 0 1.1875rem;
+  background: #f7f6f6;
+  margin-bottom: 2.5rem;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  &__trainIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__trainInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__trainNumber {
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: #3e3c41;
+  }
+
+  &__route {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.1875rem;
+    color: #928f94;
+    max-width: 9rem;
+  }
+
+  &__divider {
+    width: 1px;
+    height: 7.5rem;
+    background: #ffffff;
+    flex-shrink: 0;
+    margin: 0 1.875rem;
+  }
+
+  &__timeBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  &__time {
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: #000000;
+  }
+
+  &__city {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    color: #000000;
+  }
+
+  &__station {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.1875rem;
+    color: #928f94;
+  }
+
+  &__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin: 0 1.875rem;
+
+    img {
+      width: 1.875rem;
+      height: 1.25rem;
+    }
+  }
+
+  &__durationBlock {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+  }
+
+  &__clock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 1.875rem;
+      height: 1.875rem;
+    }
+  }
+
+  &__duration {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.3125rem;
+    color: #000000;
+  }
+}
