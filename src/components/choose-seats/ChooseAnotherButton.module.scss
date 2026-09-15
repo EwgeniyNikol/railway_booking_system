@@ -9,6 +9,16 @@
   padding: 0;
   cursor: pointer;
   margin-bottom: 2rem;
+  margin-left: 1.1875rem;
+  align-self: flex-start;
+  padding-top: 2.25rem;
+
+  &_backward {
+    flex-direction: row-reverse;
+    margin-left: auto;
+    margin-right: 1.1875rem;
+    padding-top: 2.5rem;
+  }
 
   &__icon {
     display: flex;
@@ -18,11 +28,18 @@
     height: 3.75rem;
     background: #ffa800;
     border-radius: 0.3125rem;
+    flex-shrink: 0;
 
     img {
       width: 1.875rem;
       height: 1.25rem;
     }
+  }
+
+  &__iconFull {
+    width: 4.75rem;
+    height: 3.75rem;
+    flex-shrink: 0;
   }
 
   &__text {
@@ -31,5 +48,20 @@
     font-size: 1.5rem;
     line-height: 1.75rem;
     color: #292929;
+  }
+
+  &:hover .button__icon,
+    &:hover .button__iconFull {
+    box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
+  }
+
+  &:active .button__icon,
+  &:active .button__iconFull {
+    background: #e69500;
+    box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
+  }
+
+  &:active .button__text {
+    color: #ffa800;
   }
 }

@@ -1,35 +1,53 @@
-import { useState } from 'react';
 import styles from './CarTypeSelect.module.scss';
 
 type CarType = 'sitting' | 'platzkart' | 'coupe' | 'lux';
 
 type CarTypeSelectProps = {
-  availableTypes?: CarType[];
+  availableApiTypes?: string[];
+  selectedType?: string;
+  onTypeChange?: (type: string) => void;
 };
 
-const CAR_TYPES: { key: CarType; label: string; icon: string }[] = [
+const CAR_TYPES: {
+  key: CarType;
+  label: string;
+  icon: string;
+  apiType: string;
+}[] = [
   {
     key: 'sitting',
     label: 'Сидячий',
     icon: '/src/images/icon-car-sitting.svg',
+    apiType: 'fourth',
   },
   {
     key: 'platzkart',
     label: 'Плацкарт',
     icon: '/src/images/icon-car-platzkart.svg',
+    apiType: 'third',
   },
-  { key: 'coupe', label: 'Купе', icon: '/src/images/icon-car-coupe.svg' },
-  { key: 'lux', label: 'Люкс', icon: '/src/images/icon-car-lux.svg' },
+  {
+    key: 'coupe',
+    label: 'Купе',
+    icon: '/src/images/icon-car-coupe.svg',
+    apiType: 'second',
+  },
+  {
+    key: 'lux',
+    label: 'Люкс',
+    icon: '/src/images/icon-car-lux.svg',
+    apiType: 'first',
+  },
 ];
 
 const CarTypeSelect = ({
-  availableTypes = ['sitting', 'platzkart', 'coupe', 'lux'],
+  availableApiTypes = ['first', 'second', 'third', 'fourth'],
+  selectedType,
+  onTypeChange,
 }: CarTypeSelectProps) => {
-  const [selected, setSelected] = useState<CarType | null>(null);
-
-  const handleSelect = (type: CarType) => {
-    if (availableTypes.includes(type)) {
-      setSelected(type);
+  const handleSelect = (apiType: string) => {
+    if (availableApiTypes.includes(apiType) && onTypeChange) {
+      onTypeChange(apiType);
     }
   };
 
@@ -39,8 +57,8 @@ const CarTypeSelect = ({
 
       <div className={styles.carType__list}>
         {CAR_TYPES.map((type) => {
-          const isAvailable = availableTypes.includes(type.key);
-          const isSelected = selected === type.key;
+          const isAvailable = availableApiTypes.includes(type.apiType);
+          const isSelected = selectedType === type.apiType;
 
           return (
             <button
@@ -49,7 +67,7 @@ const CarTypeSelect = ({
               className={`${styles.carType__item} ${
                 isSelected ? styles.carType__item_selected : ''
               } ${!isAvailable ? styles.carType__item_disabled : ''}`}
-              onClick={() => handleSelect(type.key)}
+              onClick={() => handleSelect(type.apiType)}
               disabled={!isAvailable}
             >
               <span className={styles.carType__icon}>

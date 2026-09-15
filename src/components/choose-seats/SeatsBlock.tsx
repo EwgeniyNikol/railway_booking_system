@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import WagonInfo from './WagonInfo';
+import WagonScheme from './WagonScheme';
 import styles from './SeatsBlock.module.scss';
+
+type Seat = {
+  index: number;
+  available: boolean;
+};
 
 type Coach = {
   _id: string;
+  number: number;
   name: string;
   class_type: 'first' | 'second' | 'third' | 'fourth';
   have_wifi: boolean;
@@ -16,6 +23,7 @@ type Coach = {
   wifi_price: number;
   is_linens_included: boolean;
   available_seats: number;
+  seats: Seat[];
 };
 
 type SeatsBlockProps = {
@@ -24,8 +32,17 @@ type SeatsBlockProps = {
 
 const SeatsBlock = ({ coaches }: SeatsBlockProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
 
   if (!coaches.length) return null;
+
+  const selectedCoach = coaches[selectedIndex] || coaches[0];
+
+  const handleSeatClick = (index: number) => {
+    setSelectedSeats((prev) =>
+      prev.includes(index) ? prev.filter((s) => s !== index) : [...prev, index]
+    );
+  };
 
   return (
     <div className={styles.seatsBlock}>
@@ -41,7 +58,7 @@ const SeatsBlock = ({ coaches }: SeatsBlockProps) => {
               }`}
               onClick={() => setSelectedIndex(index)}
             >
-              {index + 1}
+              {coach.number}
             </button>
           ))}
         </div>
@@ -50,9 +67,13 @@ const SeatsBlock = ({ coaches }: SeatsBlockProps) => {
         </span>
       </div>
 
-      <WagonInfo
-        coach={coaches[selectedIndex]}
-        wagonNumber={selectedIndex + 1}
+      <WagonInfo coach={selectedCoach} wagonNumber={selectedCoach.number} />
+
+      <WagonScheme
+        classType={selectedCoach.class_type}
+        seats={selectedCoach.seats}
+        selectedSeats={selectedSeats}
+        onSeatClick={handleSeatClick}
       />
     </div>
   );

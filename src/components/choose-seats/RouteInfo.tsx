@@ -16,6 +16,7 @@ type RouteInfoProps = {
   from: Station;
   to: Station;
   duration: number;
+  direction?: 'forward' | 'backward';
 };
 
 const capitalizeCity = (name: string) =>
@@ -37,7 +38,13 @@ const formatDuration = (seconds: number) => {
   return `${hours} часов ${minutes} минут`;
 };
 
-const RouteInfo = ({ trainName, from, to, duration }: RouteInfoProps) => {
+const RouteInfo = ({
+  trainName,
+  from,
+  to,
+  duration,
+  direction = 'forward',
+}: RouteInfoProps) => {
   const trainNumber = trainName.split(' - ')[1] || '';
 
   return (
@@ -69,7 +76,14 @@ const RouteInfo = ({ trainName, from, to, duration }: RouteInfoProps) => {
       </div>
 
       <div className={styles.routeInfo__arrow}>
-        <img src="/src/images/arrow-duration.svg" alt="" />
+        <img
+          src={
+            direction === 'forward'
+              ? '/src/images/arrow-duration.svg'
+              : '/src/images/arrow-duration-left.svg'
+          }
+          alt=""
+        />
       </div>
 
       <div className={styles.routeInfo__timeBlock}>

@@ -28,9 +28,12 @@ const WagonInfo = ({
   wagonNumber,
   passengersCount = 13,
 }: WagonInfoProps) => {
-  const hasTop = coach.top_price > 0;
-  const hasBottom = coach.bottom_price > 0;
-  const hasSide = coach.side_price > 0;
+  const isCoupeOrPlatzkart =
+    coach.class_type === 'second' || coach.class_type === 'third';
+
+  const hasTop = isCoupeOrPlatzkart && coach.top_price > 0;
+  const hasBottom = isCoupeOrPlatzkart && coach.bottom_price > 0;
+  const hasSide = coach.class_type === 'third' && coach.side_price > 0;
 
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
@@ -98,6 +101,15 @@ const WagonInfo = ({
             </span>
             <span className={styles.wagonInfo__rowPrice}>
               {coach.side_price.toLocaleString('ru-RU')} ₽
+            </span>
+          </div>
+        )}
+
+        {!isCoupeOrPlatzkart && coach.price > 0 && (
+          <div className={styles.wagonInfo__row}>
+            <span className={styles.wagonInfo__rowLabel}>Стоимость</span>
+            <span className={styles.wagonInfo__rowPrice}>
+              {coach.price.toLocaleString('ru-RU')} ₽
             </span>
           </div>
         )}

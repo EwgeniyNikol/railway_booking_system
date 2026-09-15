@@ -1,0 +1,17 @@
+@use '../../styles/mixins' as *;
+
+.wagonScheme {
+  padding: 0 1.1875rem 2.5rem;
+}
+
+@include respond-to(laptop) {
+  .wagonScheme {
+    padding: 0 0 2rem;
+  }
+}
+
+@include respond-to(mobile) {
+  .wagonScheme {
+    padding: 0 0 1.5rem;
+  }
+}

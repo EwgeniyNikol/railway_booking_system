@@ -1,0 +1,29 @@
+@use '../../styles/mixins' as *;
+
+.button {
+  width: 13.875rem;
+  height: 3.75rem;
+  background: #ffa800;
+  border: 1px solid #ffa800;
+  border-radius: 0.3125rem;
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  text-align: center;
+  text-transform: uppercase;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    background: transparent;
+    color: #ffa800;
+    border: 1px solid #ffa800;
+    box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
+  }
+}
