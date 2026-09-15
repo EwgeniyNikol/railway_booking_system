@@ -1,0 +1,211 @@
+{
+  "total_count": 5,
+  "items": [
+    {
+      "have_first_class": true,
+      "have_second_class": true,
+      "have_third_class": false,
+      "have_fourth_class": false,
+      "have_wifi": true,
+      "have_air_conditioning": false,
+      "is_express": false,
+      "min_price": 2400,
+      "available_seats": 90,
+      "available_seats_info": { "first": 20, "second": 70 },
+      "departure": {
+        "_id": "route-spb-moscow-1",
+        "have_first_class": true,
+        "have_second_class": true,
+        "have_third_class": false,
+        "have_fourth_class": false,
+        "have_wifi": true,
+        "have_air_conditioning": false,
+        "is_express": false,
+        "min_price": 2400,
+        "duration": 14400,
+        "available_seats": 90,
+        "available_seats_info": { "first": 20, "second": 70 },
+        "train": { "_id": "train-r1", "name": "Аврора - 12" },
+        "from": {
+          "railway_station_name": "Московский",
+          "city": { "_id": "2", "name": "санкт-петербург" },
+          "datetime": 1798765200
+        },
+        "to": {
+          "railway_station_name": "Ленинградский",
+          "city": { "_id": "1", "name": "москва" },
+          "datetime": 1798779600
+        },
+        "price_info": {
+          "first": { "price": 4200, "top_price": 2700, "bottom_price": 3300 },
+          "second": { "top_price": 2900, "bottom_price": 2400 }
+        }
+      }
+    },
+    {
+      "have_first_class": false,
+      "have_second_class": true,
+      "have_third_class": true,
+      "have_fourth_class": true,
+      "have_wifi": true,
+      "have_air_conditioning": true,
+      "is_express": true,
+      "min_price": 1700,
+      "available_seats": 120,
+      "available_seats_info": { "second": 70, "third": 50, "fourth": 65 },
+      "departure": {
+        "_id": "route-spb-moscow-2",
+        "have_first_class": false,
+        "have_second_class": true,
+        "have_third_class": true,
+        "have_fourth_class": true,
+        "have_wifi": true,
+        "have_air_conditioning": true,
+        "is_express": true,
+        "min_price": 1700,
+        "duration": 12600,
+        "available_seats": 120,
+        "available_seats_info": { "second": 70, "third": 50, "fourth": 65 },
+        "train": { "_id": "train-r2", "name": "Сапсан - 755" },
+        "from": {
+          "railway_station_name": "Московский",
+          "city": { "_id": "2", "name": "санкт-петербург" },
+          "datetime": 1798774200
+        },
+        "to": {
+          "railway_station_name": "Ленинградский",
+          "city": { "_id": "1", "name": "москва" },
+          "datetime": 1798786800
+        },
+        "price_info": {
+          "second": { "top_price": 1900, "bottom_price": 1700 },
+          "third": { "top_price": 4300, "bottom_price": 4750, "side_price": 5000 },
+          "fourth": { "top_price": 1300, "bottom_price": 1100 }
+        }
+      }
+    },
+    {
+      "have_first_class": false,
+      "have_second_class": false,
+      "have_third_class": true,
+      "have_fourth_class": false,
+      "have_wifi": false,
+      "have_air_conditioning": true,
+      "is_express": false,
+      "min_price": 3900,
+      "available_seats": 50,
+      "available_seats_info": { "third": 50 },
+      "departure": {
+        "_id": "route-spb-moscow-3",
+        "have_first_class": false,
+        "have_second_class": false,
+        "have_third_class": true,
+        "have_fourth_class": false,
+        "have_wifi": false,
+        "have_air_conditioning": true,
+        "is_express": false,
+        "min_price": 3900,
+        "duration": 17100,
+        "available_seats": 50,
+        "available_seats_info": { "third": 50 },
+        "train": { "_id": "train-r3", "name": "Тройка - 96" },
+        "from": {
+          "railway_station_name": "Ладожский",
+          "city": { "_id": "2", "name": "санкт-петербург" },
+          "datetime": 1798794000
+        },
+        "to": {
+          "railway_station_name": "Курский",
+          "city": { "_id": "1", "name": "москва" },
+          "datetime": 1798811100
+        },
+        "price_info": {
+          "third": { "top_price": 4900, "bottom_price": 3900, "side_price": 4250 }
+        }
+      }
+    },
+    {
+      "have_first_class": true,
+      "have_second_class": false,
+      "have_third_class": true,
+      "have_fourth_class": false,
+      "have_wifi": true,
+      "have_air_conditioning": true,
+      "is_express": false,
+      "min_price": 2850,
+      "available_seats": 115,
+      "available_seats_info": { "first": 20, "third": 95 },
+      "departure": {
+        "_id": "route-spb-moscow-4",
+        "have_first_class": true,
+        "have_second_class": false,
+        "have_third_class": true,
+        "have_fourth_class": false,
+        "have_wifi": true,
+        "have_air_conditioning": true,
+        "is_express": false,
+        "min_price": 2850,
+        "duration": 18000,
+        "available_seats": 115,
+        "available_seats_info": { "first": 20, "third": 95 },
+        "train": { "_id": "train-r4", "name": "Перун - 36" },
+        "from": {
+          "railway_station_name": "Московский",
+          "city": { "_id": "2", "name": "санкт-петербург" },
+          "datetime": 1798815600
+        },
+        "to": {
+          "railway_station_name": "Ленинградский",
+          "city": { "_id": "1", "name": "москва" },
+          "datetime": 1798833600
+        },
+        "price_info": {
+          "first": { "price": 3000, "top_price": 4500, "bottom_price": 3600 },
+          "third": { "top_price": 3850, "bottom_price": 2850, "side_price": 2950 }
+        }
+      }
+    },
+    {
+      "have_first_class": false,
+      "have_second_class": true,
+      "have_third_class": true,
+      "have_fourth_class": true,
+      "have_wifi": true,
+      "have_air_conditioning": true,
+      "is_express": false,
+      "min_price": 600,
+      "available_seats": 150,
+      "available_seats_info": { "second": 35, "third": 50, "fourth": 65 },
+      "departure": {
+        "_id": "route-spb-moscow-5",
+        "have_first_class": false,
+        "have_second_class": true,
+        "have_third_class": true,
+        "have_fourth_class": true,
+        "have_wifi": true,
+        "have_air_conditioning": true,
+        "is_express": false,
+        "min_price": 600,
+        "duration": 21600,
+        "available_seats": 150,
+        "available_seats_info": { "second": 35, "third": 50, "fourth": 65 },
+        "train": { "_id": "train-r5", "name": "Зевс - 94" },
+        "from": {
+          "railway_station_name": "Ладожский",
+          "city": { "_id": "2", "name": "санкт-петербург" },
+          "datetime": 1798828800
+        },
+        "to": {
+          "railway_station_name": "Курский",
+          "city": { "_id": "1", "name": "москва" },
+          "datetime": 1798850400
+        },
+        "price_info": {
+          "second": { "top_price": 2100, "bottom_price": 2600 },
+          "third": { "top_price": 5000, "bottom_price": 4700, "side_price": 4400 },
+          "fourth": { "top_price": 600, "bottom_price": 1000 }
+        }
+      }
+    }
+  ]
+}

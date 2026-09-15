@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { fetchRoutes, fetchLastRoutes, searchCities } from '../../api';
+import type { RouteItem } from '../../types/api';
 
 export interface SearchState {
   params: {
@@ -25,8 +26,12 @@ export interface SearchState {
     offset: number;
     sort: 'date' | 'price' | 'duration' | null;
   };
-  routes: unknown[];
+  from_city: { _id: string; name: string } | null;
+  to_city: { _id: string; name: string } | null;
+  routes: RouteItem[];
+  returnRoutes: RouteItem[];
   total_count: number;
+  return_total_count: number;
   lastRoutes: unknown[];
   cities: unknown[];
   status: 'idle' | 'loading' | 'success' | 'error';
@@ -56,8 +61,12 @@ const initialState: SearchState = {
     offset: 0,
     sort: null,
   },
+  from_city: null,
+  to_city: null,
   routes: [],
+  returnRoutes: [],
   total_count: 0,
+  return_total_count: 0,
   lastRoutes: [],
   cities: [],
   status: 'idle',
@@ -66,6 +75,14 @@ const initialState: SearchState = {
 
 export const searchRoutes = createAsyncThunk(
   'search/searchRoutes',
+  async (params: SearchState['params']) => {
+    const response = await fetchRoutes(params);
+    return response;
+  }
+);
+
+export const getReturnRoutes = createAsyncThunk(
+  'search/getReturnRoutes',
   async (params: SearchState['params']) => {
     const response = await fetchRoutes(params);
     return response;
@@ -95,8 +112,20 @@ const searchSlice = createSlice({
     setParams(state, action: PayloadAction<Partial<SearchState['params']>>) {
       state.params = { ...state.params, ...action.payload };
     },
+    setCities(
+      state,
+      action: PayloadAction<{
+        from_city: { _id: string; name: string };
+        to_city: { _id: string; name: string };
+      }>
+    ) {
+      state.from_city = action.payload.from_city;
+      state.to_city = action.payload.to_city;
+    },
     resetParams(state) {
       state.params = initialState.params;
+      state.from_city = null;
+      state.to_city = null;
     },
   },
   extraReducers: (builder) => {
@@ -113,6 +142,19 @@ const searchSlice = createSlice({
         state.status = 'error';
         state.error = action.error.message || 'Ошибка загрузки направлений';
       })
+      .addCase(getReturnRoutes.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getReturnRoutes.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.returnRoutes = action.payload.items;
+        state.return_total_count = action.payload.total_count;
+      })
+      .addCase(getReturnRoutes.rejected, (state, action) => {
+        state.status = 'error';
+        state.error =
+          action.error.message || 'Ошибка загрузки обратных направлений';
+      })
       .addCase(getLastRoutes.fulfilled, (state, action) => {
         state.lastRoutes = action.payload;
       })
@@ -122,5 +164,5 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setParams, resetParams } = searchSlice.actions;
+export const { setParams, setCities, resetParams } = searchSlice.actions;
 export default searchSlice.reducer;

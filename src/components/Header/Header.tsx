@@ -1,15 +1,128 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Calendar from '../common/Calendar/Calendar';
 import CityInput from '../common/CityInput/CityInput';
+import {
+  setParams,
+  setCities,
+  searchRoutes,
+  getReturnRoutes,
+} from '../../store/slices/searchSlice';
+import type { AppDispatch } from '../../store/store';
 import styles from './Header.module.scss';
 
+type City = {
+  _id: string;
+  name: string;
+};
+
+const convertDate = (date: string): string | null => {
+  if (!date) return null;
+  const parts = date.split(/[./]/);
+  if (parts.length !== 3) return null;
+  const [day, month, year] = parts;
+  const fullYear = year.length === 2 ? `20${year}` : year;
+  return `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
+
+const parseDate = (date: string): Date | null => {
+  const iso = convertDate(date);
+  if (!iso) return null;
+  return new Date(iso);
+};
+
 const Header = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
+  const [fromCityId, setFromCityId] = useState<string | null>(null);
+  const [toCityId, setToCityId] = useState<string | null>(null);
   const [departureDate, setDepartureDate] = useState('');
   const [arrivalDate, setArrivalDate] = useState('');
   const [calendarOpenDeparture, setCalendarOpenDeparture] = useState(false);
   const [calendarOpenArrival, setCalendarOpenArrival] = useState(false);
+  const [errors, setErrors] = useState({
+    from: false,
+    to: false,
+    date: false,
+  });
+
+  const handleFromSelect = (city: City) => {
+    setFromCityId(city._id);
+    setErrors((prev) => ({ ...prev, from: false }));
+  };
+
+  const handleToSelect = (city: City) => {
+    setToCityId(city._id);
+    setErrors((prev) => ({ ...prev, to: false }));
+  };
+
+  const handleSubmit = () => {
+    const fromError = !fromCityId;
+    const toError = !toCityId;
+
+    let dateError = false;
+    const depDate = parseDate(departureDate);
+    const arrDate = parseDate(arrivalDate);
+
+    if (depDate && arrDate && arrDate < depDate) {
+      dateError = true;
+    }
+
+    setErrors({ from: fromError, to: toError, date: dateError });
+
+    if (fromError || toError || dateError) {
+      return;
+    }
+
+    const params = {
+      from_city_id: fromCityId,
+      to_city_id: toCityId,
+      date_start: convertDate(departureDate),
+      date_end: null,
+      have_first_class: false,
+      have_second_class: false,
+      have_third_class: false,
+      have_fourth_class: false,
+      have_wifi: false,
+      have_air_conditioning: false,
+      have_express: false,
+      price_from: null,
+      price_to: null,
+      start_departure_hour_from: null,
+      start_departure_hour_to: null,
+      start_arrival_hour_from: null,
+      start_arrival_hour_to: null,
+      limit: 5,
+      offset: 0,
+      sort: null,
+    };
+
+    dispatch(setParams(params));
+    dispatch(
+      setCities({
+        from_city: { _id: fromCityId!, name: fromCity },
+        to_city: { _id: toCityId!, name: toCity },
+      })
+    );
+    dispatch(searchRoutes(params));
+
+    if (arrivalDate) {
+      const returnParams = {
+        ...params,
+        from_city_id: toCityId,
+        to_city_id: fromCityId,
+        date_start: convertDate(arrivalDate),
+        date_end: null,
+      };
+      dispatch(getReturnRoutes(returnParams));
+    }
+
+    navigate('/choose-train');
+  };
 
   return (
     <header className={styles.header}>
@@ -43,8 +156,11 @@ const Header = () => {
             <CityInput
               value={fromCity}
               onChange={setFromCity}
+              onSelect={handleFromSelect}
               placeholder="Откуда"
-              className={`${styles.header__input} ${styles.header__input_icon}`}
+              className={`${styles.header__input} ${styles.header__input_icon} ${
+                errors.from ? styles.header__input_error : ''
+              }`}
             />
             <img
               src="/src/images/ic-cached.svg"
@@ -54,8 +170,11 @@ const Header = () => {
             <CityInput
               value={toCity}
               onChange={setToCity}
+              onSelect={handleToSelect}
               placeholder="Куда"
-              className={`${styles.header__input} ${styles.header__input_icon}`}
+              className={`${styles.header__input} ${styles.header__input_icon} ${
+                errors.to ? styles.header__input_error : ''
+              }`}
             />
           </div>
           <div className={styles.header__label}>Дата</div>
@@ -88,7 +207,9 @@ const Header = () => {
                 placeholder="ДД/ММ/ГГ"
                 onChange={(e) => setArrivalDate(e.target.value)}
                 onFocus={() => setCalendarOpenArrival(true)}
-                className={`${styles.header__input} ${styles.header__input_calendar}`}
+                className={`${styles.header__input} ${styles.header__input_calendar} ${
+                  errors.date ? styles.header__input_error : ''
+                }`}
               />
               {calendarOpenArrival && (
                 <div className={styles.header__calendar}>
@@ -104,7 +225,11 @@ const Header = () => {
             </div>
           </div>
           <div className={styles.header__button_wrapper}>
-            <button type="button" className={styles.header__button}>
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleSubmit}
+            >
               найти билеты
             </button>
           </div>

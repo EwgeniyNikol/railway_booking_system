@@ -1,5 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
-import { searchCities } from '../../../api';
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCities } from '../../../store/slices/searchSlice';
+import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './CityInput.module.scss';
 
 type City = {
@@ -10,6 +12,7 @@ type City = {
 type CityInputProps = {
   value: string;
   onChange: (value: string) => void;
+  onSelect: (city: City) => void;
   placeholder?: string;
   className?: string;
 };
@@ -17,10 +20,14 @@ type CityInputProps = {
 const CityInput = ({
   value,
   onChange,
+  onSelect,
   placeholder,
   className,
 }: CityInputProps) => {
-  const [cities, setCities] = useState<City[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const cities = useSelector(
+    (state: RootState) => state.search.cities
+  ) as City[];
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -29,20 +36,12 @@ const CityInput = ({
       return;
     }
 
-    const timer = setTimeout(async () => {
-      try {
-        const data = await searchCities(value);
-        const sorted = [...data].sort((a: City, b: City) =>
-          a.name.localeCompare(b.name)
-        );
-        setCities(sorted);
-      } catch {
-        setCities([]);
-      }
+    const timer = setTimeout(() => {
+      dispatch(getCities(value));
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [value]);
+  }, [value, dispatch]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,6 +62,7 @@ const CityInput = ({
   const handleSelect = (city: City) => {
     const capitalized = city.name.charAt(0).toUpperCase() + city.name.slice(1);
     onChange(capitalized);
+    onSelect(city);
     setOpen(false);
   };
 

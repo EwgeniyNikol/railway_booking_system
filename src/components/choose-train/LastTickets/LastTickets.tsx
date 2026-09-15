@@ -1,39 +1,9 @@
-import { useState, useEffect } from 'react';
-import { fetchLastRoutes } from '../../../api';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getLastRoutes } from '../../../store/slices/searchSlice';
+import type { RootState, AppDispatch } from '../../../store/store';
+import type { RouteItem } from '../../../types/api';
 import styles from './LastTickets.module.scss';
-
-type City = {
-  _id: string;
-  name: string;
-};
-
-type Station = {
-  railway_station_name: string;
-  city: City;
-  datetime: number;
-};
-
-type Departure = {
-  _id: string;
-  have_wifi: boolean;
-  have_air_conditioning: boolean;
-  is_express: boolean;
-  min_price: number;
-  from: Station;
-  to: Station;
-};
-
-type LastRoute = {
-  have_first_class: boolean;
-  have_second_class: boolean;
-  have_third_class: boolean;
-  have_fourth_class: boolean;
-  have_wifi: boolean;
-  have_air_conditioning: boolean;
-  is_express: boolean;
-  min_price: number;
-  departure: Departure;
-};
 
 const capitalizeCity = (name: string) =>
   name
@@ -42,13 +12,16 @@ const capitalizeCity = (name: string) =>
     .join(name.includes('-') ? '-' : ' ');
 
 const LastTickets = () => {
-  const [routes, setRoutes] = useState<LastRoute[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const lastRoutes = useSelector(
+    (state: RootState) => state.search.lastRoutes
+  ) as RouteItem[];
 
   useEffect(() => {
-    fetchLastRoutes()
-      .then((data: LastRoute[]) => setRoutes(data.slice(0, 3)))
-      .catch(() => setRoutes([]));
-  }, []);
+    dispatch(getLastRoutes());
+  }, [dispatch]);
+
+  const routes = lastRoutes.slice(0, 3);
 
   return (
     <div className={styles.lastTickets}>

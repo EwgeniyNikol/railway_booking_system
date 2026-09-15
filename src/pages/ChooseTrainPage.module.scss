@@ -29,6 +29,30 @@
   &__pagination {
     margin-top: 5.8125rem;
   }
+
+  &__loader {
+    padding: 3rem;
+    text-align: center;
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    color: #928f94;
+  }
+
+  &__empty {
+    padding: 3rem;
+    text-align: center;
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    color: #928f94;
+  }
+
+  &__directionTitle {
+    margin: 0;
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #292929;
+  }
 }
 
 @include respond-to(laptop) {

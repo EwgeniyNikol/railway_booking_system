@@ -1,4 +1,6 @@
-const API_BASE_URL = 'https://students.netoservices.ru/fe-diplom';
+const API_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:3001'
+  : 'https://students.netoservices.ru/fe-diplom';
 
 export async function searchCities(name: string) {
   const response = await fetch(
