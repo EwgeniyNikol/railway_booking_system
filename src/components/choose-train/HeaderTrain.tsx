@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Calendar from '../common/Calendar';
-import CityInput from '../common/CityInput';
+import Calendar from '../common/Calendar/Calendar';
+import CityInput from '../common/CityInput/CityInput';
 import styles from './HeaderTrain.module.scss';
 
 const HeaderTrain = () => {

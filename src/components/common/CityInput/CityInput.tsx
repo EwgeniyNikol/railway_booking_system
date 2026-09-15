@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { searchCities } from '../../api';
+import { searchCities } from '../../../api';
 import styles from './CityInput.module.scss';
 
 type City = {

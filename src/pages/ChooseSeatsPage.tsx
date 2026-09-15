@@ -10,7 +10,7 @@ import RouteInfo from '../components/choose-seats/RouteInfo';
 import PassengerCount from '../components/choose-seats/PassengerCount';
 import CarTypeSelect from '../components/choose-seats/CarTypeSelect';
 import SeatsBlock from '../components/choose-seats/SeatsBlock';
-import NextButton from '../components/common/NextButton';
+import NextButton from '../components/common/NextButton/NextButton';
 import Footer from '../components/Footer';
 import styles from './ChooseSeatsPage.module.scss';
 

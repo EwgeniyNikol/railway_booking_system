@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Calendar from '../common/Calendar';
+import Calendar from '../common/Calendar/Calendar';
 import styles from './Sidebar.module.scss';
 
 type CarType = 'coupe' | 'platzkart' | 'sitting' | 'lux';
