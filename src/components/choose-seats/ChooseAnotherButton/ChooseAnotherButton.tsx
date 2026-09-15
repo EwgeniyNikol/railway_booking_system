@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styles from './ChooseAnotherButton.module.scss';
 
 type ChooseAnotherButtonProps = {
@@ -9,13 +10,23 @@ const ChooseAnotherButton = ({
   onClick,
   direction = 'forward',
 }: ChooseAnotherButtonProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate('/choose-train');
+    }
+  };
+
   return (
     <button
       type="button"
       className={`${styles.button} ${
         direction === 'backward' ? styles.button_backward : ''
       }`}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {direction === 'forward' ? (
         <span className={styles.button__icon}>

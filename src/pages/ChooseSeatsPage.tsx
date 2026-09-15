@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import HeaderTrain from '../components/choose-train/HeaderTrain/HeaderTrain';
 import ProgressSteps from '../components/choose-train/ProgressSteps/ProgressSteps';
 import Sidebar from '../components/choose-train/Sidebar/Sidebar';
@@ -12,6 +14,7 @@ import CarTypeSelect from '../components/choose-seats/CarTypeSelect/CarTypeSelec
 import SeatsBlock from '../components/choose-seats/SeatsBlock/SeatsBlock';
 import NextButton from '../components/common/NextButton/NextButton';
 import Footer from '../components/Footer/Footer';
+import type { RootState } from '../store/store';
 import styles from './ChooseSeatsPage.module.scss';
 
 type CoachClass = 'first' | 'second' | 'third' | 'fourth';
@@ -55,40 +58,10 @@ const allCoaches: Coach[] = [
     wifi_price: 225,
     is_linens_included: true,
     available_seats: 32,
-    seats: [
-      { index: 1, available: true },
-      { index: 2, available: true },
-      { index: 3, available: false },
-      { index: 4, available: true },
-      { index: 5, available: true },
-      { index: 6, available: false },
-      { index: 7, available: true },
-      { index: 8, available: true },
-      { index: 9, available: true },
-      { index: 10, available: true },
-      { index: 11, available: false },
-      { index: 12, available: true },
-      { index: 13, available: true },
-      { index: 14, available: true },
-      { index: 15, available: true },
-      { index: 16, available: true },
-      { index: 17, available: true },
-      { index: 18, available: false },
-      { index: 19, available: true },
-      { index: 20, available: true },
-      { index: 21, available: true },
-      { index: 22, available: true },
-      { index: 23, available: true },
-      { index: 24, available: true },
-      { index: 25, available: true },
-      { index: 26, available: true },
-      { index: 27, available: true },
-      { index: 28, available: true },
-      { index: 29, available: true },
-      { index: 30, available: true },
-      { index: 31, available: true },
-      { index: 32, available: true },
-    ],
+    seats: Array.from({ length: 32 }, (_, i) => ({
+      index: i + 1,
+      available: i % 5 !== 0,
+    })),
   },
   {
     _id: '2',
@@ -105,26 +78,10 @@ const allCoaches: Coach[] = [
     wifi_price: 250,
     is_linens_included: true,
     available_seats: 18,
-    seats: [
-      { index: 1, available: true },
-      { index: 2, available: true },
-      { index: 3, available: true },
-      { index: 4, available: false },
-      { index: 5, available: true },
-      { index: 6, available: true },
-      { index: 7, available: true },
-      { index: 8, available: true },
-      { index: 9, available: true },
-      { index: 10, available: true },
-      { index: 11, available: true },
-      { index: 12, available: true },
-      { index: 13, available: true },
-      { index: 14, available: true },
-      { index: 15, available: true },
-      { index: 16, available: true },
-      { index: 17, available: true },
-      { index: 18, available: true },
-    ],
+    seats: Array.from({ length: 18 }, (_, i) => ({
+      index: i + 1,
+      available: i % 6 !== 0,
+    })),
   },
   {
     _id: '3',
@@ -141,40 +98,10 @@ const allCoaches: Coach[] = [
     wifi_price: 144,
     is_linens_included: true,
     available_seats: 32,
-    seats: [
-      { index: 1, available: true },
-      { index: 2, available: true },
-      { index: 3, available: true },
-      { index: 4, available: true },
-      { index: 5, available: true },
-      { index: 6, available: true },
-      { index: 7, available: true },
-      { index: 8, available: true },
-      { index: 9, available: false },
-      { index: 10, available: true },
-      { index: 11, available: true },
-      { index: 12, available: true },
-      { index: 13, available: true },
-      { index: 14, available: true },
-      { index: 15, available: true },
-      { index: 16, available: false },
-      { index: 17, available: true },
-      { index: 18, available: true },
-      { index: 19, available: true },
-      { index: 20, available: true },
-      { index: 21, available: true },
-      { index: 22, available: true },
-      { index: 23, available: true },
-      { index: 24, available: true },
-      { index: 25, available: true },
-      { index: 26, available: true },
-      { index: 27, available: true },
-      { index: 28, available: true },
-      { index: 29, available: true },
-      { index: 30, available: true },
-      { index: 31, available: true },
-      { index: 32, available: true },
-    ],
+    seats: Array.from({ length: 32 }, (_, i) => ({
+      index: i + 1,
+      available: i % 7 !== 0,
+    })),
   },
   {
     _id: '4',
@@ -223,12 +150,23 @@ const availableCarTypes = Array.from(
 );
 
 const ChooseSeatsPage = () => {
+  const selectedRoute = useSelector(
+    (state: RootState) => state.booking.selectedRoute
+  );
+  const selectedReturnRoute = useSelector(
+    (state: RootState) => state.booking.selectedReturnRoute
+  );
+
   const [selectedCarType, setSelectedCarType] = useState<string>(
     availableCarTypes[0] || 'second'
   );
   const [selectedCarTypeBack, setSelectedCarTypeBack] = useState<string>(
     availableCarTypes[0] || 'second'
   );
+
+  if (!selectedRoute) {
+    return <Navigate to="/choose-train" replace />;
+  }
 
   return (
     <>
@@ -246,18 +184,10 @@ const ChooseSeatsPage = () => {
             <ChooseSeatsCard>
               <ChooseAnotherButton />
               <RouteInfo
-                trainName="Иволга - 116С"
-                from={{
-                  railway_station_name: 'Курский вокзал',
-                  city: { _id: '1', name: 'москва' },
-                  datetime: 1704978475,
-                }}
-                to={{
-                  railway_station_name: 'Ладожский вокзал',
-                  city: { _id: '2', name: 'санкт-петербург' },
-                  datetime: 1705363555,
-                }}
-                duration={34920}
+                trainName={selectedRoute.train.name}
+                from={selectedRoute.from}
+                to={selectedRoute.to}
+                duration={selectedRoute.duration}
               />
               <PassengerCount />
               <CarTypeSelect
@@ -273,37 +203,31 @@ const ChooseSeatsPage = () => {
             </ChooseSeatsCard>
           </div>
 
-          <div className={styles.page__cardWrapLast}>
-            <ChooseSeatsCard>
-              <ChooseAnotherButton direction="backward" />
-              <RouteInfo
-                trainName="Брусника - 58"
-                direction="backward"
-                from={{
-                  railway_station_name: 'Ладожский вокзал',
-                  city: { _id: '2', name: 'санкт-петербург' },
-                  datetime: 1705363555,
-                }}
-                to={{
-                  railway_station_name: 'Курский вокзал',
-                  city: { _id: '1', name: 'москва' },
-                  datetime: 1704978475,
-                }}
-                duration={34920}
-              />
-              <PassengerCount />
-              <CarTypeSelect
-                selectedType={selectedCarTypeBack}
-                onTypeChange={setSelectedCarTypeBack}
-                availableApiTypes={availableCarTypes}
-              />
-              <SeatsBlock
-                coaches={allCoaches.filter(
-                  (c) => c.class_type === selectedCarTypeBack
-                )}
-              />
-            </ChooseSeatsCard>
-          </div>
+          {selectedReturnRoute && (
+            <div className={styles.page__cardWrapLast}>
+              <ChooseSeatsCard>
+                <ChooseAnotherButton direction="backward" />
+                <RouteInfo
+                  trainName={selectedReturnRoute.train.name}
+                  direction="backward"
+                  from={selectedReturnRoute.from}
+                  to={selectedReturnRoute.to}
+                  duration={selectedReturnRoute.duration}
+                />
+                <PassengerCount />
+                <CarTypeSelect
+                  selectedType={selectedCarTypeBack}
+                  onTypeChange={setSelectedCarTypeBack}
+                  availableApiTypes={availableCarTypes}
+                />
+                <SeatsBlock
+                  coaches={allCoaches.filter(
+                    (c) => c.class_type === selectedCarTypeBack
+                  )}
+                />
+              </ChooseSeatsCard>
+            </div>
+          )}
 
           <div className={styles.page__next}>
             <NextButton />

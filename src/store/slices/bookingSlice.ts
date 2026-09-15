@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { fetchSeats, submitOrder } from '../../api';
+import type { Departure } from '../../types/api';
 
 export interface SelectedPlace {
   id: string;
@@ -31,7 +32,8 @@ export interface Passenger {
 }
 
 export interface BookingState {
-  selectedRoute: unknown | null;
+  selectedRoute: Departure | null;
+  selectedReturnRoute: Departure | null;
   selectedPlaces: SelectedPlace[];
   passengers: Passenger[];
   services: {
@@ -45,6 +47,7 @@ export interface BookingState {
 
 const initialState: BookingState = {
   selectedRoute: null,
+  selectedReturnRoute: null,
   selectedPlaces: [],
   passengers: [],
   services: {
@@ -82,8 +85,11 @@ const bookingSlice = createSlice({
   name: 'booking',
   initialState,
   reducers: {
-    setSelectedRoute(state, action: PayloadAction<unknown>) {
+    setSelectedRoute(state, action: PayloadAction<Departure>) {
       state.selectedRoute = action.payload;
+    },
+    setSelectedReturnRoute(state, action: PayloadAction<Departure | null>) {
+      state.selectedReturnRoute = action.payload;
     },
     addPlace(state, action: PayloadAction<SelectedPlace>) {
       state.selectedPlaces.push(action.payload);
@@ -123,6 +129,7 @@ const bookingSlice = createSlice({
     },
     resetBooking(state) {
       state.selectedRoute = null;
+      state.selectedReturnRoute = null;
       state.selectedPlaces = [];
       state.passengers = [];
       state.services = initialState.services;
@@ -147,6 +154,7 @@ const bookingSlice = createSlice({
 
 export const {
   setSelectedRoute,
+  setSelectedReturnRoute,
   addPlace,
   removePlace,
   addPassenger,
