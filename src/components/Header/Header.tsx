@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Calendar from './common/Calendar/Calendar';
-import CityInput from './common/CityInput/CityInput';
+import Calendar from '../common/Calendar/Calendar';
+import CityInput from '../common/CityInput/CityInput';
 import styles from './Header.module.scss';
 
 const Header = () => {

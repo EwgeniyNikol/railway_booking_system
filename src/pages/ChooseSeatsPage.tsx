@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import HeaderTrain from '../components/choose-train/HeaderTrain';
-import ProgressSteps from '../components/choose-train/ProgressSteps';
-import Sidebar from '../components/choose-train/Sidebar';
-import LastTickets from '../components/choose-train/LastTickets';
+import HeaderTrain from '../components/choose-train/HeaderTrain/HeaderTrain';
+import ProgressSteps from '../components/choose-train/ProgressSteps/ProgressSteps';
+import Sidebar from '../components/choose-train/Sidebar/Sidebar';
+import LastTickets from '../components/choose-train/LastTickets/LastTickets';
 import PageTitle from '../components/choose-seats/PageTitle/PageTitle';
 import ChooseSeatsCard from '../components/choose-seats/ChooseSeatsCard/ChooseSeatsCard';
 import ChooseAnotherButton from '../components/choose-seats/ChooseAnotherButton/ChooseAnotherButton';
@@ -11,7 +11,7 @@ import PassengerCount from '../components/choose-seats/PassengerCount/PassengerC
 import CarTypeSelect from '../components/choose-seats/CarTypeSelect/CarTypeSelect';
 import SeatsBlock from '../components/choose-seats/SeatsBlock/SeatsBlock';
 import NextButton from '../components/common/NextButton/NextButton';
-import Footer from '../components/Footer';
+import Footer from '../components/Footer/Footer';
 import styles from './ChooseSeatsPage.module.scss';
 
 type CoachClass = 'first' | 'second' | 'third' | 'fourth';

@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import HeaderTrain from '../components/choose-train/HeaderTrain';
-import ProgressSteps from '../components/choose-train/ProgressSteps';
-import Sidebar from '../components/choose-train/Sidebar';
-import LastTickets from '../components/choose-train/LastTickets';
-import TicketsToolbar from '../components/choose-train/TicketsToolbar';
-import TicketCard from '../components/choose-train/TicketCard';
-import Pagination from '../components/choose-train/Pagination';
-import Footer from '../components/Footer';
+import HeaderTrain from '../components/choose-train/HeaderTrain/HeaderTrain';
+import ProgressSteps from '../components/choose-train/ProgressSteps/ProgressSteps';
+import Sidebar from '../components/choose-train/Sidebar/Sidebar';
+import LastTickets from '../components/choose-train/LastTickets/LastTickets';
+import TicketsToolbar from '../components/choose-train/TicketsToolbar/TicketsToolbar';
+import TicketCard from '../components/choose-train/TicketCard/TicketCard';
+import Pagination from '../components/choose-train/Pagination/Pagination';
+import Footer from '../components/Footer/Footer';
 import styles from './ChooseTrainPage.module.scss';
 
 type SortValue = 'времени' | 'стоимости' | 'длительности';

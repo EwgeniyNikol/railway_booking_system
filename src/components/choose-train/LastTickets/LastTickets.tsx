@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchLastRoutes } from '../../api';
+import { fetchLastRoutes } from '../../../api';
 import styles from './LastTickets.module.scss';
 
 type City = {
