@@ -36,12 +36,35 @@ app.get('/routes/:id/seats', (req, res) => {
 });
 
 app.get('/routes', (req, res) => {
-  const { from_city_id, to_city_id, sort, limit, offset } = req.query;
+  const {
+    from_city_id,
+    to_city_id,
+    sort,
+    limit,
+    offset,
+    have_first_class,
+    have_second_class,
+    have_third_class,
+    have_fourth_class,
+    have_wifi,
+    have_express,
+    price_from,
+    price_to,
+  } = req.query;
+
   const routes = readJson('routes.json');
 
-  let filtered = routes.filter((route) => {
+  const filtered = routes.filter((route) => {
     if (from_city_id && route.from_city_id !== from_city_id) return false;
     if (to_city_id && route.to_city_id !== to_city_id) return false;
+    if (have_first_class === 'true' && !route.have_first_class) return false;
+    if (have_second_class === 'true' && !route.have_second_class) return false;
+    if (have_third_class === 'true' && !route.have_third_class) return false;
+    if (have_fourth_class === 'true' && !route.have_fourth_class) return false;
+    if (have_wifi === 'true' && !route.have_wifi) return false;
+    if (have_express === 'true' && !route.is_express) return false;
+    if (price_from && route.min_price < Number(price_from)) return false;
+    if (price_to && route.min_price > Number(price_to)) return false;
     return true;
   });
 

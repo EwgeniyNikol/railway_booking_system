@@ -40,16 +40,60 @@ const ChooseTrainPage = () => {
     (state: RootState) => state.search.total_count
   );
 
+  const {
+    from_city_id,
+    to_city_id,
+    date_start,
+    date_end,
+    have_first_class,
+    have_second_class,
+    have_third_class,
+    have_fourth_class,
+    have_wifi,
+    have_express,
+    price_from,
+    price_to,
+    have_air_conditioning,
+    start_departure_hour_from,
+    start_departure_hour_to,
+    start_arrival_hour_from,
+    start_arrival_hour_to,
+    end_departure_hour_from,
+    end_departure_hour_to,
+    end_arrival_hour_from,
+    end_arrival_hour_to,
+  } = params;
+
   const totalPages = Math.ceil(totalCount / limit) || 1;
 
   useEffect(() => {
-    if (!params.from_city_id || !params.to_city_id) return;
+    if (!from_city_id || !to_city_id) return;
 
     const offset = (currentPage - 1) * limit;
 
     dispatch(
       searchRoutes({
-        ...params,
+        from_city_id,
+        to_city_id,
+        date_start,
+        date_end,
+        have_first_class,
+        have_second_class,
+        have_third_class,
+        have_fourth_class,
+        have_wifi,
+        have_express,
+        price_from,
+        price_to,
+        have_air_conditioning,
+        start_departure_hour_from,
+        start_departure_hour_to,
+        start_arrival_hour_from,
+        start_arrival_hour_to,
+        end_departure_hour_from,
+        end_departure_hour_to,
+        end_arrival_hour_from,
+        end_arrival_hour_to,
         sort: sortMap[sortBy],
         limit,
         offset,
@@ -60,9 +104,27 @@ const ChooseTrainPage = () => {
     sortBy,
     limit,
     currentPage,
-    params.from_city_id,
-    params.to_city_id,
-    params.date_start,
+    from_city_id,
+    to_city_id,
+    date_start,
+    date_end,
+    have_first_class,
+    have_second_class,
+    have_third_class,
+    have_fourth_class,
+    have_wifi,
+    have_express,
+    price_from,
+    price_to,
+    have_air_conditioning,
+    start_departure_hour_from,
+    start_departure_hour_to,
+    start_arrival_hour_from,
+    start_arrival_hour_to,
+    end_departure_hour_from,
+    end_departure_hour_to,
+    end_arrival_hour_from,
+    end_arrival_hour_to,
   ]);
 
   if (status === 'loading') {

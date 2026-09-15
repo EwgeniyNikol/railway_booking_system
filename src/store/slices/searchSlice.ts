@@ -22,6 +22,10 @@ export interface SearchState {
     start_departure_hour_to: number | null;
     start_arrival_hour_from: number | null;
     start_arrival_hour_to: number | null;
+    end_departure_hour_from: number | null;
+    end_departure_hour_to: number | null;
+    end_arrival_hour_from: number | null;
+    end_arrival_hour_to: number | null;
     limit: number;
     offset: number;
     sort: 'date' | 'price' | 'duration' | null;
@@ -57,6 +61,10 @@ const initialState: SearchState = {
     start_departure_hour_to: null,
     start_arrival_hour_from: null,
     start_arrival_hour_to: null,
+    end_departure_hour_from: null,
+    end_departure_hour_to: null,
+    end_arrival_hour_from: null,
+    end_arrival_hour_to: null,
     limit: 5,
     offset: 0,
     sort: null,

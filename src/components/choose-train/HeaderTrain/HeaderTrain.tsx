@@ -57,7 +57,9 @@ const HeaderTrain = () => {
   const [departureDate, setDepartureDate] = useState(
     isoToDisplay(savedParams.date_start)
   );
-  const [arrivalDate, setArrivalDate] = useState('');
+  const [arrivalDate, setArrivalDate] = useState(
+    isoToDisplay(savedParams.date_end)
+  );
   const [calendarOpenDeparture, setCalendarOpenDeparture] = useState(false);
   const [calendarOpenArrival, setCalendarOpenArrival] = useState(false);
 
@@ -80,7 +82,7 @@ const HeaderTrain = () => {
       from_city_id: fromCityId,
       to_city_id: toCityId,
       date_start: convertDate(departureDate),
-      date_end: null,
+      date_end: convertDate(arrivalDate),
       have_first_class: false,
       have_second_class: false,
       have_third_class: false,
@@ -94,6 +96,10 @@ const HeaderTrain = () => {
       start_departure_hour_to: null,
       start_arrival_hour_from: null,
       start_arrival_hour_to: null,
+      end_departure_hour_from: null,
+      end_departure_hour_to: null,
+      end_arrival_hour_from: null,
+      end_arrival_hour_to: null,
       limit: 5,
       offset: 0,
       sort: null,
