@@ -1,12 +1,17 @@
-import { ToiletIcon, ConductorIcon, TeaIcon, TrashIcon } from './WagonIcons';
-import styles from './WagonShared.module.scss';
+import {
+  ToiletIcon,
+  ConductorIcon,
+  TeaIcon,
+  TrashIcon,
+} from '../WagonIcons/WagonIcons';
+import styles from '../WagonScheme/WagonShared.module.scss';
 
 type Seat = {
   index: number;
   available: boolean;
 };
 
-type WagonSittingProps = {
+type WagonPlatzkartProps = {
   seats: Seat[];
   selectedSeats: number[];
   onSeatClick: (index: number) => void;
@@ -33,22 +38,22 @@ const renderSeat = (
   );
 };
 
-const WagonSitting = ({
+const WagonPlatzkart = ({
   seats,
   selectedSeats,
   onSeatClick,
-}: WagonSittingProps) => {
-  const topSeats = seats.slice(0, 32);
-  const bottomSeats = seats.slice(32);
+}: WagonPlatzkartProps) => {
+  const mainSeats = seats.slice(0, 32);
+  const sideSeats = seats.slice(32);
 
-  const topBlocks: Seat[][] = [];
-  for (let i = 0; i < topSeats.length; i += 4) {
-    topBlocks.push(topSeats.slice(i, i + 4));
+  const mainBlocks: Seat[][] = [];
+  for (let i = 0; i < mainSeats.length; i += 4) {
+    mainBlocks.push(mainSeats.slice(i, i + 4));
   }
 
-  const bottomBlocks: Seat[][] = [];
-  for (let i = 0; i < bottomSeats.length; i += 4) {
-    bottomBlocks.push(bottomSeats.slice(i, i + 4));
+  const sideBlocks: Seat[][] = [];
+  for (let i = 0; i < sideSeats.length; i += 2) {
+    sideBlocks.push(sideSeats.slice(i, i + 2));
   }
 
   return (
@@ -61,7 +66,7 @@ const WagonSitting = ({
 
       <div className={styles.platzkart}>
         <div className={styles.sideRow}>
-          {topBlocks.map((block, i) => (
+          {mainBlocks.map((block, i) => (
             <div key={i} className={styles.block}>
               <div className={styles.blockRow}>
                 {renderSeat(block[1], selectedSeats, onSeatClick)}
@@ -76,16 +81,10 @@ const WagonSitting = ({
         </div>
 
         <div className={styles.sideRow}>
-          {bottomBlocks.map((block, i) => (
-            <div key={i} className={styles.block}>
-              <div className={styles.blockRow}>
-                {block[1] && renderSeat(block[1], selectedSeats, onSeatClick)}
-                {block[3] && renderSeat(block[3], selectedSeats, onSeatClick)}
-              </div>
-              <div className={styles.blockRow}>
-                {block[0] && renderSeat(block[0], selectedSeats, onSeatClick)}
-                {block[2] && renderSeat(block[2], selectedSeats, onSeatClick)}
-              </div>
+          {sideBlocks.map((block, i) => (
+            <div key={i} className={styles.blockRow}>
+              {renderSeat(block[0], selectedSeats, onSeatClick)}
+              {renderSeat(block[1], selectedSeats, onSeatClick)}
             </div>
           ))}
         </div>
@@ -99,4 +98,4 @@ const WagonSitting = ({
   );
 };
 
-export default WagonSitting;
+export default WagonPlatzkart;

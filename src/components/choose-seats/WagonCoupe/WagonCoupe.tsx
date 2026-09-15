@@ -1,5 +1,10 @@
-import { ToiletIcon, ConductorIcon, TeaIcon, TrashIcon } from './WagonIcons';
-import styles from './WagonShared.module.scss';
+import {
+  ToiletIcon,
+  ConductorIcon,
+  TeaIcon,
+  TrashIcon,
+} from '../WagonIcons/WagonIcons';
+import styles from '../WagonScheme/WagonShared.module.scss';
 
 type Seat = {
   index: number;

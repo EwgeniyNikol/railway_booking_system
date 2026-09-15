@@ -1,7 +1,7 @@
-import WagonCoupe from './WagonCoupe';
-import WagonLux from './WagonLux';
-import WagonPlatzkart from './WagonPlatzkart';
-import WagonSitting from './WagonSitting';
+import WagonCoupe from '../WagonCoupe/WagonCoupe';
+import WagonLux from '../WagonLux/WagonLux';
+import WagonPlatzkart from '../WagonPlatzkart/WagonPlatzkart';
+import WagonSitting from '../WagonSitting/WagonSitting';
 import styles from './WagonScheme.module.scss';
 
 type Seat = {

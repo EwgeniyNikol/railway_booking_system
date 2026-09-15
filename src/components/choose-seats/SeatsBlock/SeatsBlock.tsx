@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import WagonInfo from './WagonInfo';
-import WagonScheme from './WagonScheme';
+import WagonInfo from '../WagonInfo/WagonInfo';
+import WagonScheme from '../WagonScheme/WagonScheme';
 import styles from './SeatsBlock.module.scss';
 
 type Seat = {
