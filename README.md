@@ -28,19 +28,21 @@ SPA для системы бронирования ж/д билетов на Rea
 ## Структура проекта
 
 src/
-  api/              — запросы к API
-  components/       — компоненты
-    choose-train/   — компоненты страницы выбора поезда
-  fonts/            — локальные шрифты
-  images/           — изображения и иконки
-  pages/            — страницы
-  store/            — Redux Toolkit
-    selectors/      — селекторы
-    slices/         — срезы
-  styles/           — SCSS-миксины
-  index.scss        — глобальные стили
-  App.tsx           — роутинг
-  main.tsx          — точка входа
+  api/                  — запросы к API
+  components/           — компоненты
+    common/             — общие компоненты (Calendar, CityInput, NextButton)
+    choose-train/       — компоненты страницы выбора поезда
+    choose-seats/       — компоненты страницы выбора мест
+  fonts/                — локальные шрифты
+  images/               — изображения и иконки
+  pages/                — страницы
+  store/                — Redux Toolkit
+    selectors/          — селекторы
+    slices/             — срезы
+  styles/               — SCSS-миксы
+  index.scss            — глобальные стили
+  App.tsx               — роутинг
+  main.tsx              — точка входа
 
 ## Установка и запуск
 
@@ -62,6 +64,7 @@ npm run format:check  — проверка форматирования
 
 - `/` — главная
 - `/choose-train` — выбор поезда
+- `/choose-seats` — выбор мест
 
 ## API
 
@@ -75,4 +78,3 @@ npm run format:check  — проверка форматирования
 | GET | `/routes/{id}/seats` | Места в вагоне |
 | POST | `/routes/order` | Оформление заказа |
 | GET | `/subscribe?email=` | Подписка |
-
