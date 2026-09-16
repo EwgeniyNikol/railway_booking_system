@@ -31,8 +31,160 @@ app.get('/routes/last', (req, res) => {
 });
 
 app.get('/routes/:id/seats', (req, res) => {
-  const seats = readJson('seats.json');
-  res.json(seats);
+  const {
+    have_first_class,
+    have_second_class,
+    have_third_class,
+    have_fourth_class,
+    have_wifi,
+    have_air_conditioning,
+  } = req.query;
+
+  const routes = readJson('routes.json');
+  const route = routes.find((r) => r._id === req.params.id);
+
+  if (!route) {
+    return res.json([]);
+  }
+
+  const coaches = [];
+
+  if (route.have_first_class) {
+    coaches.push({
+      coach: {
+        _id: `${route._id}-lux`,
+        name: 'ЛЮКС-01',
+        class_type: 'first',
+        have_wifi: route.have_wifi,
+        have_air_conditioning: route.have_air_conditioning,
+        price: route.price_info?.first?.price || 5000,
+        top_price: 0,
+        bottom_price: route.price_info?.first?.bottom_price || 5000,
+        side_price: 0,
+        linens_price: 200,
+        wifi_price: 250,
+        is_linens_included: true,
+        available_seats: 18,
+        train: route.train._id,
+      },
+      seats: Array.from({ length: 18 }, (_, i) => ({
+        index: i + 1,
+        available: i % 5 !== 0,
+      })),
+    });
+  }
+
+  if (route.have_second_class) {
+    coaches.push({
+      coach: {
+        _id: `${route._id}-coupe`,
+        name: 'КУПЕ-05',
+        class_type: 'second',
+        have_wifi: route.have_wifi,
+        have_air_conditioning: route.have_air_conditioning,
+        price: 0,
+        top_price: route.price_info?.second?.top_price || 2500,
+        bottom_price: route.price_info?.second?.bottom_price || 2000,
+        side_price: 0,
+        linens_price: 100,
+        wifi_price: 150,
+        is_linens_included: true,
+        available_seats: 32,
+        train: route.train._id,
+      },
+      seats: Array.from({ length: 32 }, (_, i) => ({
+        index: i + 1,
+        available: i % 6 !== 0,
+      })),
+    });
+    coaches.push({
+      coach: {
+        _id: `${route._id}-coupe-2`,
+        name: 'КУПЕ-07',
+        class_type: 'second',
+        have_wifi: route.have_wifi,
+        have_air_conditioning: route.have_air_conditioning,
+        price: 0,
+        top_price: route.price_info?.second?.top_price || 2500,
+        bottom_price: route.price_info?.second?.bottom_price || 2000,
+        side_price: 0,
+        linens_price: 100,
+        wifi_price: 150,
+        is_linens_included: true,
+        available_seats: 32,
+        train: route.train._id,
+      },
+      seats: Array.from({ length: 32 }, (_, i) => ({
+        index: i + 1,
+        available: i % 8 !== 0,
+      })),
+    });
+  }
+
+  if (route.have_third_class) {
+    coaches.push({
+      coach: {
+        _id: `${route._id}-platzkart`,
+        name: 'ПЛАЦ-12',
+        class_type: 'third',
+        have_wifi: route.have_wifi,
+        have_air_conditioning: route.have_air_conditioning,
+        price: 0,
+        top_price: route.price_info?.third?.top_price || 2500,
+        bottom_price: route.price_info?.third?.bottom_price || 2200,
+        side_price: route.price_info?.third?.side_price || 1800,
+        linens_price: 100,
+        wifi_price: 150,
+        is_linens_included: true,
+        available_seats: 48,
+        train: route.train._id,
+      },
+      seats: Array.from({ length: 48 }, (_, i) => ({
+        index: i + 1,
+        available: i % 7 !== 0,
+      })),
+    });
+  }
+
+  if (route.have_fourth_class) {
+    coaches.push({
+      coach: {
+        _id: `${route._id}-sitting`,
+        name: 'СИД-20',
+        class_type: 'fourth',
+        have_wifi: route.have_wifi,
+        have_air_conditioning: route.have_air_conditioning,
+        price: route.price_info?.fourth?.price || 1000,
+        top_price: 0,
+        bottom_price: route.price_info?.fourth?.bottom_price || 1000,
+        side_price: 0,
+        linens_price: 0,
+        wifi_price: 100,
+        is_linens_included: false,
+        available_seats: 62,
+        train: route.train._id,
+      },
+      seats: Array.from({ length: 62 }, (_, i) => ({
+        index: i + 1,
+        available: i % 6 !== 0,
+      })),
+    });
+  }
+
+  const filtered = coaches.filter((item) => {
+    const c = item.coach;
+    if (have_first_class === 'true' && c.class_type !== 'first') return false;
+    if (have_second_class === 'true' && c.class_type !== 'second') return false;
+    if (have_third_class === 'true' && c.class_type !== 'third') return false;
+    if (have_fourth_class === 'true' && c.class_type !== 'fourth')
+      return false;
+    if (have_wifi === 'true' && !c.have_wifi) return false;
+    if (have_air_conditioning === 'true' && !c.have_air_conditioning)
+      return false;
+    return true;
+  });
+
+  res.json(filtered);
 });
 
 app.get('/routes', (req, res) => {

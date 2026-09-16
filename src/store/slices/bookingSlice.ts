@@ -4,18 +4,11 @@ import { fetchSeats, submitOrder } from '../../api';
 import type { Departure } from '../../types/api';
 
 export interface SelectedPlace {
-  id: string;
-  routeDirectionId: string;
   coachId: string;
   seatNumber: number;
-  classType: string;
+  classType: 'first' | 'second' | 'third' | 'fourth';
   price: number;
-  topPrice?: number;
-  bottomPrice?: number;
-  sidePrice?: number;
-  linensPrice: number;
-  wifiPrice: number;
-  isLinensIncluded: boolean;
+  direction: 'forward' | 'back';
 }
 
 export interface Passenger {
@@ -31,10 +24,40 @@ export interface Passenger {
   isChild: boolean;
 }
 
+export interface CoachApiResponse {
+  coach: {
+    _id: string;
+    name: string;
+    class_type: 'first' | 'second' | 'third' | 'fourth';
+    have_wifi: boolean;
+    have_air_conditioning: boolean;
+    price: number;
+    top_price: number;
+    bottom_price: number;
+    side_price: number;
+    linens_price: number;
+    wifi_price: number;
+    is_linens_included: boolean;
+    available_seats: number;
+    train: string;
+  };
+  seats: {
+    index: number;
+    available: boolean;
+  }[];
+}
+
 export interface BookingState {
   selectedRoute: Departure | null;
   selectedReturnRoute: Departure | null;
+  seats: CoachApiResponse[];
+  returnSeats: CoachApiResponse[];
   selectedPlaces: SelectedPlace[];
+  passengerCount: {
+    adults: number;
+    children: number;
+    childrenWithoutSeat: number;
+  };
   passengers: Passenger[];
   services: {
     linens: boolean;
@@ -48,7 +71,14 @@ export interface BookingState {
 const initialState: BookingState = {
   selectedRoute: null,
   selectedReturnRoute: null,
+  seats: [],
+  returnSeats: [],
   selectedPlaces: [],
+  passengerCount: {
+    adults: 2,
+    children: 1,
+    childrenWithoutSeat: 0,
+  },
   passengers: [],
   services: {
     linens: false,
@@ -61,6 +91,20 @@ const initialState: BookingState = {
 
 export const getSeats = createAsyncThunk(
   'booking/getSeats',
+  async ({
+    routeId,
+    params,
+  }: {
+    routeId: string;
+    params: Record<string, string | number | boolean>;
+  }) => {
+    const response = await fetchSeats(routeId, params);
+    return response;
+  }
+);
+
+export const getReturnSeats = createAsyncThunk(
+  'booking/getReturnSeats',
   async ({
     routeId,
     params,
@@ -91,16 +135,36 @@ const bookingSlice = createSlice({
     setSelectedReturnRoute(state, action: PayloadAction<Departure | null>) {
       state.selectedReturnRoute = action.payload;
     },
-    addPlace(state, action: PayloadAction<SelectedPlace>) {
+    setPassengerCount(
+      state,
+      action: PayloadAction<Partial<BookingState['passengerCount']>>
+    ) {
+      state.passengerCount = { ...state.passengerCount, ...action.payload };
+    },
+    togglePlace(state, action: PayloadAction<SelectedPlace>) {
+      const { coachId, seatNumber, direction } = action.payload;
+      const index = state.selectedPlaces.findIndex(
+        (p) =>
+          p.coachId === coachId &&
+          p.seatNumber === seatNumber &&
+          p.direction === direction
+      );
+      if (index >= 0) {
+        state.selectedPlaces.splice(index, 1);
+        return;
+      }
+      const maxPlaces =
+        state.passengerCount.adults + state.passengerCount.children;
+      const placesForDirection = state.selectedPlaces.filter(
+        (p) => p.direction === direction
+      );
+      if (placesForDirection.length >= maxPlaces) {
+        return;
+      }
       state.selectedPlaces.push(action.payload);
     },
-    removePlace(state, action: PayloadAction<string>) {
-      state.selectedPlaces = state.selectedPlaces.filter(
-        (place) => place.id !== action.payload
-      );
-      state.passengers = state.passengers.filter(
-        (passenger) => passenger.placeId !== action.payload
-      );
+    clearPlaces(state) {
+      state.selectedPlaces = [];
     },
     addPassenger(state, action: PayloadAction<Passenger>) {
       state.passengers.push(action.payload);
@@ -130,7 +194,10 @@ const bookingSlice = createSlice({
     resetBooking(state) {
       state.selectedRoute = null;
       state.selectedReturnRoute = null;
+      state.seats = [];
+      state.returnSeats = [];
       state.selectedPlaces = [];
+      state.passengerCount = initialState.passengerCount;
       state.passengers = [];
       state.services = initialState.services;
       state.orderStatus = 'idle';
@@ -139,6 +206,12 @@ const bookingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getSeats.fulfilled, (state, action) => {
+        state.seats = action.payload;
+      })
+      .addCase(getReturnSeats.fulfilled, (state, action) => {
+        state.returnSeats = action.payload;
+      })
       .addCase(submitBooking.pending, (state) => {
         state.orderStatus = 'loading';
       })
@@ -155,8 +228,9 @@ const bookingSlice = createSlice({
 export const {
   setSelectedRoute,
   setSelectedReturnRoute,
-  addPlace,
-  removePlace,
+  setPassengerCount,
+  togglePlace,
+  clearPlaces,
   addPassenger,
   updatePassenger,
   removePassenger,

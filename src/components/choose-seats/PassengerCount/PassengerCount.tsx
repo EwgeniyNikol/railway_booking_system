@@ -1,13 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPassengerCount } from '../../../store/slices/bookingSlice';
+import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './PassengerCount.module.scss';
 
 type FieldType = 'adults' | 'children' | 'childrenNoSeat';
 
 const PassengerCount = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const passengerCount = useSelector(
+    (state: RootState) => state.booking.passengerCount
+  );
+
+  const adults = passengerCount.adults;
+  const children = passengerCount.children;
+  const childrenNoSeat = passengerCount.childrenWithoutSeat;
+
   const [activeField, setActiveField] = useState<FieldType | null>(null);
-  const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(1);
-  const [childrenNoSeat, setChildrenNoSeat] = useState(0);
 
   const adultsRef = useRef<HTMLDivElement>(null);
   const childrenRef = useRef<HTMLDivElement>(null);
@@ -44,18 +53,21 @@ const PassengerCount = () => {
   };
 
   const handleIncrement = (field: FieldType) => {
-    if (field === 'adults' && adults < 4) setAdults(adults + 1);
+    if (field === 'adults' && adults < 4)
+      dispatch(setPassengerCount({ adults: adults + 1 }));
     if (field === 'children' && children < adults - 1)
-      setChildren(children + 1);
+      dispatch(setPassengerCount({ children: children + 1 }));
     if (field === 'childrenNoSeat' && childrenNoSeat < adults)
-      setChildrenNoSeat(childrenNoSeat + 1);
+      dispatch(setPassengerCount({ childrenWithoutSeat: childrenNoSeat + 1 }));
   };
 
   const handleDecrement = (field: FieldType) => {
-    if (field === 'adults' && adults > 1) setAdults(adults - 1);
-    if (field === 'children' && children > 0) setChildren(children - 1);
+    if (field === 'adults' && adults > 1)
+      dispatch(setPassengerCount({ adults: adults - 1 }));
+    if (field === 'children' && children > 0)
+      dispatch(setPassengerCount({ children: children - 1 }));
     if (field === 'childrenNoSeat' && childrenNoSeat > 0)
-      setChildrenNoSeat(childrenNoSeat - 1);
+      dispatch(setPassengerCount({ childrenWithoutSeat: childrenNoSeat - 1 }));
   };
 
   return (
