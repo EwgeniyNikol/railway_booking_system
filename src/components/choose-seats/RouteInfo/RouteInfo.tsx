@@ -15,7 +15,6 @@ type RouteInfoProps = {
   trainName: string;
   from: Station;
   to: Station;
-  duration: number;
   direction?: 'forward' | 'backward';
 };
 
@@ -32,7 +31,8 @@ const formatTime = (timestamp: number) => {
   return `${hours}:${minutes}`;
 };
 
-const formatDuration = (seconds: number) => {
+const formatDuration = (from: number, to: number) => {
+  const seconds = to - from;
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${hours} часов ${minutes} минут`;
@@ -42,7 +42,6 @@ const RouteInfo = ({
   trainName,
   from,
   to,
-  duration,
   direction = 'forward',
 }: RouteInfoProps) => {
   const trainNumber = trainName.split(' - ')[1] || '';
@@ -103,7 +102,7 @@ const RouteInfo = ({
           <img src="/src/images/icon-clock.svg" alt="" />
         </div>
         <div className={styles.routeInfo__duration}>
-          {formatDuration(duration)}
+          {formatDuration(from.datetime, to.datetime)}
         </div>
       </div>
     </div>

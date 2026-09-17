@@ -81,7 +81,8 @@ const formatTime = (timestamp: number) => {
   return `${hours}:${minutes}`;
 };
 
-const formatDuration = (seconds: number) => {
+const formatDuration = (from: number, to: number) => {
+  const seconds = to - from;
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${hours} : ${String(minutes).padStart(2, '0')}`;
@@ -142,7 +143,10 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
 
           <div className={styles.ticketCard__arrowBlock}>
             <div className={styles.ticketCard__duration}>
-              {formatDuration(departureRoute.duration)}
+              {formatDuration(
+                departureRoute.from.datetime,
+                departureRoute.to.datetime
+              )}
             </div>
             <img
               src="/src/images/arrow-right.svg"
@@ -180,7 +184,10 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
 
             <div className={styles.ticketCard__arrowBlock}>
               <div className={styles.ticketCard__duration}>
-                {formatDuration(returnRoute.duration)}
+                {formatDuration(
+                  returnRoute.from.datetime,
+                  returnRoute.to.datetime
+                )}
               </div>
               <img
                 src="/src/images/arrow-left.svg"

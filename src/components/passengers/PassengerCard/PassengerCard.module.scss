@@ -1,0 +1,311 @@
+@use '../../../styles/mixins' as *;
+
+.passengerCard {
+  box-sizing: border-box;
+  width: 60rem;
+  background: var(--color-white);
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 0.125rem 0.125rem rgba(0, 0, 0, 0.25);
+  margin-bottom: 2.75rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 6.6875rem;
+    background: #f9f9f9;
+    padding: 0 2.5625rem 0 1.5rem;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: var(--color-dark);
+    margin-left: 1rem;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2.1875rem;
+  }
+
+  &__divider {
+    height: 0;
+    border-top: 1px dashed #928f94;
+    margin-bottom: 2.375rem;
+    margin-left: -2.1875rem;
+    margin-right: -2.1875rem;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__label {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1rem;
+    line-height: 1.4375rem;
+    color: #928f94;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    width: 17.5rem;
+    height: 3.125rem;
+    padding: 0 1rem;
+    background: var(--color-white);
+    border: 1px solid #928f94;
+    border-radius: 0.3125rem;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.125rem;
+    color: var(--color-dark);
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-accent);
+    }
+
+    &_short {
+      width: 12.8125rem;
+    }
+
+    &_wide {
+      width: 12.9375rem;
+    }
+  }
+
+  &__select {
+    box-sizing: border-box;
+    width: 17.5rem;
+    height: 3.125rem;
+    padding: 0 2.5rem 0 1rem;
+    background-color: var(--color-white);
+    background-image: url('/src/images/select-arrow.svg');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    border: 1px solid #928f94;
+    border-radius: 0.3125rem;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.125rem;
+    color: var(--color-dark);
+    cursor: pointer;
+    appearance: none;
+    margin-bottom: 2.8125rem;
+
+    &_short {
+      width: 12.8125rem;
+    }
+
+    &_wide {
+      width: 27.75rem;
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: 1.5625rem;
+    margin-bottom: 1.9375rem;
+  }
+
+  &__gender {
+    display: flex;
+    width: 12.75rem;
+    height: 3.125rem;
+    border: 1px solid #928f94;
+    border-radius: 0.3125rem;
+    overflow: hidden;
+  }
+
+  &__genderBtn {
+    flex: 1;
+    background: var(--color-white);
+    border: none;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-black);
+    font-size: 1.875rem;
+    text-transform: uppercase;
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+
+    &:first-child {
+      border-right: 1px solid #928f94;
+    }
+
+    &_active {
+      background: var(--color-accent);
+
+      &:hover {
+        background: var(--color-accent);
+      }
+    }
+  }
+
+  &__mobility {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.9375rem;
+    cursor: pointer;
+  }
+
+  &__checkbox {
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid #928f94;
+    border-radius: 0.3125rem;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &__mobilityText {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.125rem;
+    line-height: 1.4375rem;
+    color: var(--color-dark);
+  }
+
+  &__error {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 0.875rem;
+    line-height: 1rem;
+    color: #ff0000;
+  }
+
+    &__next {
+    align-self: flex-end;
+    width: 18.9375rem;
+    height: 3.25rem;
+    margin-top: 4.375rem;
+    margin-bottom: 1.75rem;
+    background: transparent;
+    border: 1px solid var(--color-dark);
+    border-radius: 0.3125rem;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    font-size: 1.5rem;
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+
+    &:hover {
+      filter: drop-shadow(0 0.25rem 0.25rem rgba(0, 0, 0, 0.25));
+      color: var(--color-accent);
+    }
+
+    &:active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
+      color: var(--color-dark);
+    }
+  }
+}
+
+@include respond-to(laptop) {
+  .passengerCard {
+    width: 100%;
+  }
+}
+
+@include respond-to(tablet) {
+  .passengerCard {
+    width: 100%;
+  }
+
+  .passengerCard__row {
+    flex-wrap: wrap;
+  }
+
+  .passengerCard__field {
+    flex: 1 1 calc(50% - 0.78125rem);
+  }
+}
+
+@include respond-to(mobile) {
+  .passengerCard {
+    width: 100%;
+  }
+
+  .passengerCard__header {
+    height: 5rem;
+    padding: 0 1.5rem 0 1rem;
+  }
+
+  .passengerCard__title {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  .passengerCard__content {
+    padding: 0 1rem;
+  }
+
+  .passengerCard__divider {
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+
+  .passengerCard__row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .passengerCard__input,
+  .passengerCard__select,
+  .passengerCard__input_short,
+  .passengerCard__select_short,
+  .passengerCard__input_wide,
+  .passengerCard__select_wide {
+    width: 100%;
+  }
+
+  .passengerCard__gender {
+    width: 100%;
+  }
+
+  .passengerCard__next {
+    width: 100%;
+    font-size: 1.25rem;
+  }
+}

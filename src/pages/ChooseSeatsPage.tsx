@@ -91,7 +91,6 @@ const ChooseSeatsPage = () => {
                 trainName={selectedRoute.train.name}
                 from={selectedRoute.from}
                 to={selectedRoute.to}
-                duration={selectedRoute.duration}
               />
               <PassengerCount />
               <CarTypeSelect
@@ -120,7 +119,6 @@ const ChooseSeatsPage = () => {
                   direction="backward"
                   from={selectedReturnRoute.from}
                   to={selectedReturnRoute.to}
-                  duration={selectedReturnRoute.duration}
                 />
                 <PassengerCount />
                 <CarTypeSelect
