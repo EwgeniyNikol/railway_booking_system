@@ -61,6 +61,9 @@ const SeatsBlock = ({ coaches, direction = 'forward' }: SeatsBlockProps) => {
         classType: coach.class_type,
         price,
         direction,
+        linensPrice: coach.linens_price,
+        wifiPrice: coach.wifi_price,
+        isLinensIncluded: coach.is_linens_included,
       })
     );
   };

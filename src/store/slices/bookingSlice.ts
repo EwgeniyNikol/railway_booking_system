@@ -9,10 +9,14 @@ export interface SelectedPlace {
   classType: 'first' | 'second' | 'third' | 'fourth';
   price: number;
   direction: 'forward' | 'back';
+  linensPrice: number;
+  wifiPrice: number;
+  isLinensIncluded: boolean;
 }
 
 export interface Passenger {
-  placeId: string;
+  passengerId: string;
+  placeId: string | null;
   firstName: string;
   lastName: string;
   patronymic: string;
@@ -68,6 +72,23 @@ export interface BookingState {
   orderError: string | null;
 }
 
+export const createPassenger = (
+  isAdult: boolean,
+  isChild: boolean
+): Passenger => ({
+  passengerId: crypto.randomUUID(),
+  placeId: null,
+  firstName: '',
+  lastName: '',
+  patronymic: '',
+  gender: true,
+  birthday: '',
+  documentType: isAdult ? 'passport' : 'birth',
+  documentData: '',
+  isAdult,
+  isChild,
+});
+
 const initialState: BookingState = {
   selectedRoute: null,
   selectedReturnRoute: null,
@@ -87,6 +108,39 @@ const initialState: BookingState = {
   },
   orderStatus: 'idle',
   orderError: null,
+};
+
+const syncPassengers = (state: BookingState) => {
+  const { adults, children, childrenWithoutSeat } = state.passengerCount;
+  const adultsInState = state.passengers.filter((p) => p.isAdult).length;
+  const childrenInState = state.passengers.length - adultsInState;
+
+  let needAdults = adults - adultsInState;
+  let needChildren = children + childrenWithoutSeat - childrenInState;
+
+  while (needAdults > 0) {
+    state.passengers.push(createPassenger(true, false));
+    needAdults -= 1;
+  }
+
+  while (needChildren > 0) {
+    state.passengers.push(createPassenger(false, true));
+    needChildren -= 1;
+  }
+
+  while (needAdults < 0) {
+    const index = state.passengers.findIndex((p) => p.isAdult);
+    if (index === -1) break;
+    state.passengers.splice(index, 1);
+    needAdults += 1;
+  }
+
+  while (needChildren < 0) {
+    const index = state.passengers.findIndex((p) => !p.isAdult);
+    if (index === -1) break;
+    state.passengers.splice(index, 1);
+    needChildren += 1;
+  }
 };
 
 export const getSeats = createAsyncThunk(
@@ -140,6 +194,7 @@ const bookingSlice = createSlice({
       action: PayloadAction<Partial<BookingState['passengerCount']>>
     ) {
       state.passengerCount = { ...state.passengerCount, ...action.payload };
+      syncPassengers(state);
     },
     togglePlace(state, action: PayloadAction<SelectedPlace>) {
       const { coachId, seatNumber, direction } = action.payload;
@@ -166,24 +221,44 @@ const bookingSlice = createSlice({
     clearPlaces(state) {
       state.selectedPlaces = [];
     },
-    addPassenger(state, action: PayloadAction<Passenger>) {
-      state.passengers.push(action.payload);
+    initPassengers(state) {
+      if (state.passengers.length > 0) {
+        return;
+      }
+      syncPassengers(state);
     },
     updatePassenger(
       state,
-      action: PayloadAction<{ placeId: string; data: Partial<Passenger> }>
+      action: PayloadAction<{ passengerId: string; data: Partial<Passenger> }>
     ) {
       const passenger = state.passengers.find(
-        (p) => p.placeId === action.payload.placeId
+        (p) => p.passengerId === action.payload.passengerId
       );
       if (passenger) {
         Object.assign(passenger, action.payload.data);
       }
     },
     removePassenger(state, action: PayloadAction<string>) {
-      state.passengers = state.passengers.filter(
-        (passenger) => passenger.placeId !== action.payload
+      const passenger = state.passengers.find(
+        (p) => p.passengerId === action.payload
       );
+      if (!passenger) return;
+
+      state.passengers = state.passengers.filter(
+        (p) => p.passengerId !== action.payload
+      );
+
+      if (passenger.isAdult) {
+        state.passengerCount = {
+          ...state.passengerCount,
+          adults: Math.max(0, state.passengerCount.adults - 1),
+        };
+      } else {
+        state.passengerCount = {
+          ...state.passengerCount,
+          children: Math.max(0, state.passengerCount.children - 1),
+        };
+      }
     },
     setServices(
       state,
@@ -231,7 +306,7 @@ export const {
   setPassengerCount,
   togglePlace,
   clearPlaces,
-  addPassenger,
+  initPassengers,
   updatePassenger,
   removePassenger,
   setServices,

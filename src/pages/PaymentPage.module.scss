@@ -49,3 +49,35 @@
     }
   }
 }
+
+@include respond-to(laptop) {
+  .page {
+    width: 100%;
+    padding: 0 5rem;
+    gap: 2rem;
+  }
+}
+
+@include respond-to(tablet) {
+  .page {
+    width: 100%;
+    padding: 0 2rem;
+    gap: 1.5rem;
+  }
+}
+
+@include respond-to(mobile) {
+  .page {
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    gap: 2rem;
+  }
+
+  .page__button {
+    width: 100%;
+    font-size: 1.25rem;
+    margin-top: 2rem;
+  }
+}

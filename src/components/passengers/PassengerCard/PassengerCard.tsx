@@ -1,10 +1,18 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '../../../store/store';
+import {
+  updatePassenger,
+  type Passenger,
+} from '../../../store/slices/bookingSlice';
 import styles from './PassengerCard.module.scss';
 
 type PassengerCardProps = {
+  passengerId: string;
   index: number;
-  isExpanded: boolean;
-  onToggle: () => void;
+  defaultExpanded: boolean;
+  onRemove: () => void;
+  onNext: () => void;
 };
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]*$/;
@@ -52,18 +60,18 @@ const getAge = (value: string): number => {
   return age;
 };
 
-const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
-  const [gender, setGender] = useState<'m' | 'f'>('m');
-  const [passengerType, setPassengerType] = useState<'adult' | 'child'>(
-    'adult'
+const PassengerCard = ({
+  passengerId,
+  index,
+  defaultExpanded,
+  onRemove,
+  onNext,
+}: PassengerCardProps) => {
+  const dispatch = useDispatch();
+  const passenger = useSelector((state: RootState) =>
+    state.booking.passengers.find((p) => p.passengerId === passengerId)
   );
-  const [documentType, setDocumentType] = useState('passport');
-  const [lastName, setLastName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [passportSeries, setPassportSeries] = useState('');
-  const [passportNumber, setPassportNumber] = useState('');
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const [lastNameError, setLastNameError] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
   const [middleNameError, setMiddleNameError] = useState('');
@@ -71,13 +79,21 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
   const [passportSeriesError, setPassportSeriesError] = useState('');
   const [passportNumberError, setPassportNumberError] = useState('');
 
+  if (!passenger) {
+    return null;
+  }
+
+  const update = (data: Partial<Passenger>) => {
+    dispatch(updatePassenger({ passengerId, data }));
+  };
+
   const handleNameChange = (
     value: string,
-    setter: (v: string) => void,
+    field: 'lastName' | 'firstName' | 'patronymic',
     errorSetter: (v: string) => void
   ) => {
     if (NAME_REGEX.test(value)) {
-      setter(value);
+      update({ [field]: value } as Partial<Passenger>);
       errorSetter('');
     } else {
       errorSetter('Только русские буквы');
@@ -86,15 +102,20 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
 
   const handleBirthDateChange = (value: string) => {
     const formatted = formatDate(value);
-    setBirthDate(formatted);
     const error = validateDate(formatted);
     setBirthDateError(error);
     if (!error && formatted.length === 10) {
       const age = getAge(formatted);
-      const type = age < 18 ? 'child' : 'adult';
-      setPassengerType(type);
-      setDocumentType(type === 'adult' ? 'passport' : 'birth');
+      const isAdult = age >= 18;
+      update({
+        birthday: formatted,
+        isAdult,
+        isChild: !isAdult,
+        documentType: isAdult ? 'passport' : 'birth',
+      });
+      return;
     }
+    update({ birthday: formatted });
   };
 
   const handleSeriesChange = (value: string) => {
@@ -102,13 +123,14 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
       setPassportSeriesError('Неверная серия');
       return;
     }
-    setPassportSeries(value.slice(0, 4));
+    const currentNumber = passenger.documentData.slice(4, 10);
+    update({ documentData: value.slice(0, 4) + currentNumber });
     setPassportSeriesError('');
   };
 
   const handleNumberChange = (value: string) => {
-    if (documentType === 'birth') {
-      setPassportNumber(value);
+    if (passenger.documentType === 'birth') {
+      update({ documentData: value });
       setPassportNumberError('');
       return;
     }
@@ -116,29 +138,40 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
       setPassportNumberError('Неверный номер');
       return;
     }
-    setPassportNumber(value.slice(0, 6));
+    const currentSeries = passenger.documentData.slice(0, 4);
+    update({ documentData: currentSeries + value.slice(0, 6) });
     setPassportNumberError('');
   };
 
   const handlePassengerTypeChange = (value: 'adult' | 'child') => {
-    setPassengerType(value);
-    setDocumentType(value === 'adult' ? 'passport' : 'birth');
-    setBirthDate('');
+    update({
+      isAdult: value === 'adult',
+      isChild: value === 'child',
+      documentType: value === 'adult' ? 'passport' : 'birth',
+      birthday: '',
+      documentData: '',
+    });
     setBirthDateError('');
-    setPassportNumber('');
-    setPassportSeries('');
     setPassportNumberError('');
     setPassportSeriesError('');
   };
 
   const handleDocumentTypeChange = (value: string) => {
-    setDocumentType(value);
-    setPassengerType(value === 'passport' ? 'adult' : 'child');
-    setPassportNumber('');
-    setPassportSeries('');
+    update({
+      documentType: value,
+      isAdult: value === 'passport',
+      isChild: value !== 'passport',
+      documentData: '',
+    });
     setPassportNumberError('');
     setPassportSeriesError('');
   };
+
+  const series = passenger.documentData.slice(0, 4);
+  const number =
+    passenger.documentType === 'birth'
+      ? passenger.documentData
+      : passenger.documentData.slice(4, 10);
 
   return (
     <div className={styles.passengerCard}>
@@ -146,7 +179,7 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
         <button
           type="button"
           className={styles.passengerCard__toggle}
-          onClick={onToggle}
+          onClick={() => setIsExpanded(!isExpanded)}
         >
           <svg viewBox="0 0 32 32" width="32" height="32">
             <circle
@@ -182,7 +215,11 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
         <span className={styles.passengerCard__title}>
           Пассажир {index + 1}
         </span>
-        <button type="button" className={styles.passengerCard__close}>
+        <button
+          type="button"
+          className={styles.passengerCard__close}
+          onClick={onRemove}
+        >
           <svg viewBox="0 0 12 12" width="12" height="12">
             <line
               x1="1"
@@ -212,7 +249,7 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
 
           <select
             className={styles.passengerCard__select}
-            value={passengerType}
+            value={passenger.isAdult ? 'adult' : 'child'}
             onChange={(e) =>
               handlePassengerTypeChange(e.target.value as 'adult' | 'child')
             }
@@ -227,13 +264,9 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
               <input
                 type="text"
                 className={styles.passengerCard__input}
-                value={lastName}
+                value={passenger.lastName}
                 onChange={(e) =>
-                  handleNameChange(
-                    e.target.value,
-                    setLastName,
-                    setLastNameError
-                  )
+                  handleNameChange(e.target.value, 'lastName', setLastNameError)
                 }
               />
               {lastNameError && (
@@ -247,11 +280,11 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
               <input
                 type="text"
                 className={styles.passengerCard__input}
-                value={firstName}
+                value={passenger.firstName}
                 onChange={(e) =>
                   handleNameChange(
                     e.target.value,
-                    setFirstName,
+                    'firstName',
                     setFirstNameError
                   )
                 }
@@ -267,11 +300,11 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
               <input
                 type="text"
                 className={styles.passengerCard__input}
-                value={middleName}
+                value={passenger.patronymic}
                 onChange={(e) =>
                   handleNameChange(
                     e.target.value,
-                    setMiddleName,
+                    'patronymic',
                     setMiddleNameError
                   )
                 }
@@ -291,18 +324,22 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
                 <button
                   type="button"
                   className={`${styles.passengerCard__genderBtn} ${
-                    gender === 'm' ? styles.passengerCard__genderBtn_active : ''
+                    passenger.gender
+                      ? styles.passengerCard__genderBtn_active
+                      : ''
                   }`}
-                  onClick={() => setGender('m')}
+                  onClick={() => update({ gender: true })}
                 >
                   м
                 </button>
                 <button
                   type="button"
                   className={`${styles.passengerCard__genderBtn} ${
-                    gender === 'f' ? styles.passengerCard__genderBtn_active : ''
+                    !passenger.gender
+                      ? styles.passengerCard__genderBtn_active
+                      : ''
                   }`}
-                  onClick={() => setGender('f')}
+                  onClick={() => update({ gender: false })}
                 >
                   ж
                 </button>
@@ -314,7 +351,7 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
                 type="text"
                 placeholder="ДД/ММ/ГГГГ"
                 className={styles.passengerCard__input}
-                value={birthDate}
+                value={passenger.birthday}
                 onChange={(e) => handleBirthDateChange(e.target.value)}
               />
               {birthDateError && (
@@ -339,24 +376,24 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
               <span className={styles.passengerCard__label}>Тип документа</span>
               <select
                 className={`${styles.passengerCard__select} ${
-                  documentType === 'birth'
+                  passenger.documentType === 'birth'
                     ? styles.passengerCard__select_wide
                     : styles.passengerCard__select_short
                 }`}
-                value={documentType}
+                value={passenger.documentType}
                 onChange={(e) => handleDocumentTypeChange(e.target.value)}
               >
                 <option value="passport">Паспорт РФ</option>
                 <option value="birth">Свидетельство о рождении</option>
               </select>
             </div>
-            {documentType === 'passport' && (
+            {passenger.documentType === 'passport' && (
               <div className={styles.passengerCard__field}>
                 <span className={styles.passengerCard__label}>Серия</span>
                 <input
                   type="text"
                   className={`${styles.passengerCard__input} ${styles.passengerCard__input_short}`}
-                  value={passportSeries}
+                  value={series}
                   onChange={(e) => handleSeriesChange(e.target.value)}
                 />
                 {passportSeriesError && (
@@ -371,11 +408,11 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
               <input
                 type="text"
                 className={`${styles.passengerCard__input} ${
-                  documentType === 'birth'
+                  passenger.documentType === 'birth'
                     ? styles.passengerCard__input_wide
                     : styles.passengerCard__input_short
                 }`}
-                value={passportNumber}
+                value={number}
                 onChange={(e) => handleNumberChange(e.target.value)}
               />
               {passportNumberError && (
@@ -388,7 +425,11 @@ const PassengerCard = ({ index, isExpanded, onToggle }: PassengerCardProps) => {
 
           <div className={styles.passengerCard__divider} />
 
-          <button type="button" className={styles.passengerCard__next}>
+          <button
+            type="button"
+            className={styles.passengerCard__next}
+            onClick={onNext}
+          >
             Следующий пассажир
           </button>
         </div>

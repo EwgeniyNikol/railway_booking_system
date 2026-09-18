@@ -140,7 +140,7 @@ const ChooseSeatsPage = () => {
           )}
 
           <div className={styles.page__next}>
-            <NextButton />
+            <NextButton to="/passengers" />
           </div>
         </div>
       </div>

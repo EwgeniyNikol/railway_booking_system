@@ -91,6 +91,14 @@
     }
   }
 
+  &__error {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 0.875rem;
+    line-height: 1rem;
+    color: #ff0000;
+  }
+
   &__method {
     display: flex;
     align-items: center;
@@ -162,5 +170,81 @@
     font-size: 1.5rem;
     line-height: 1.75rem;
     color: var(--color-dark);
+  }
+}
+
+@include respond-to(laptop) {
+  .paymentCard {
+    width: 100%;
+  }
+}
+
+@include respond-to(tablet) {
+  .paymentCard {
+    width: 100%;
+  }
+
+  .paymentCard__row {
+    flex-wrap: wrap;
+  }
+
+  .paymentCard__field {
+    flex: 1 1 calc(50% - 0.75rem);
+  }
+
+  .paymentCard__input {
+    width: 100%;
+
+    &_wide {
+      width: 100%;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .paymentCard {
+    width: 100%;
+  }
+
+  .paymentCard__bar {
+    height: 4rem;
+    padding: 0 1rem;
+  }
+
+  .paymentCard__title {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  .paymentCard__section {
+    padding: 1.5rem 1rem 2rem;
+
+    &_first {
+      padding: 1.5rem 1rem 2rem;
+    }
+  }
+
+  .paymentCard__row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .paymentCard__input {
+    width: 100%;
+
+    &_wide {
+      width: 100%;
+    }
+  }
+
+  .paymentCard__methodRow {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .paymentCard__cash {
+    width: 100%;
+    margin: 0;
+    padding: 2rem 0 0;
   }
 }

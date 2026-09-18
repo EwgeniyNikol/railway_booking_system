@@ -1,49 +1,55 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../store/store';
+import { selectTotalPrice } from '../../../store/selectors/totalPrice';
 import styles from './TripDetails.module.scss';
+
+const capitalize = (value: string): string => {
+  if (!value) return value;
+  return value.charAt(0).toUpperCase() + value.slice(1);
+};
+
+const formatDate = (timestamp: number): string => {
+  const date = new Date(timestamp * 1000);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}.${month}.${year}`;
+};
+
+const formatTime = (timestamp: number): string => {
+  const date = new Date(timestamp * 1000);
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
+const formatDuration = (fromTs: number, toTs: number): string => {
+  const diffSec = Math.abs(toTs - fromTs);
+  const hours = Math.floor(diffSec / 3600);
+  const minutes = Math.floor((diffSec % 3600) / 60);
+  return `${hours} : ${String(minutes).padStart(2, '0')}`;
+};
+
+const formatPrice = (value: number): string => {
+  return value.toLocaleString('ru-RU').replace(/,/g, ' ');
+};
 
 const TripDetails = () => {
   const [toExpanded, setToExpanded] = useState(true);
   const [backExpanded, setBackExpanded] = useState(true);
   const [passengersExpanded, setPassengersExpanded] = useState(true);
 
-  const toRoute = {
-    trainNumber: '116С',
-    from: 'Адлер',
-    to: 'Санкт-Петербург',
-    departureTime: '00:10',
-    arrivalTime: '09:52',
-    duration: '9 : 42',
-    departureDate: '30.08.2018',
-    arrivalDate: '31.08.2018',
-    fromCity: 'Москва',
-    fromStation: 'Курский вокзал',
-    toCity: 'Санкт-Петербург',
-    toStation: 'Ладожский вокзал',
-  };
-
-  const backRoute = {
-    trainNumber: '116С',
-    from: 'Адлер',
-    to: 'Санкт-Петербург',
-    departureTime: '00:10',
-    arrivalTime: '09:52',
-    duration: '9 : 42',
-    departureDate: '09.09.2018',
-    arrivalDate: '08.09.2018',
-    fromCity: 'Москва',
-    fromStation: 'Курский вокзал',
-    toCity: 'Санкт-Петербург',
-    toStation: 'Ладожский вокзал',
-  };
-
-  const passengers = {
-    adults: 2,
-    adultsPrice: '5 840',
-    children: 1,
-    childrenPrice: '1 920',
-  };
-
-  const total = '7 760';
+  const selectedRoute = useSelector(
+    (state: RootState) => state.booking.selectedRoute
+  );
+  const selectedReturnRoute = useSelector(
+    (state: RootState) => state.booking.selectedReturnRoute
+  );
+  const passengerCount = useSelector(
+    (state: RootState) => state.booking.passengerCount
+  );
+  const totalPrice = useSelector(selectTotalPrice);
 
   return (
     <div className={styles.tripDetails}>
@@ -51,187 +57,203 @@ const TripDetails = () => {
 
       <div className={styles.tripDetails__divider} />
 
-      <div className={styles.tripDetails__block}>
-        <button
-          type="button"
-          className={styles.tripDetails__header}
-          onClick={() => setToExpanded(!toExpanded)}
-        >
-          <img
-            src="/src/images/arrow-to.svg"
-            alt=""
-            className={styles.tripDetails__icon}
-          />
-          <span className={styles.tripDetails__blockTitle}>Туда</span>
-          <img
-            src={
-              toExpanded
-                ? '/src/images/icon-minus.svg'
-                : '/src/images/icon-plus.svg'
-            }
-            alt=""
-            className={styles.tripDetails__toggle}
-          />
-        </button>
+      {selectedRoute && (
+        <>
+          <div className={styles.tripDetails__block}>
+            <button
+              type="button"
+              className={styles.tripDetails__header}
+              onClick={() => setToExpanded(!toExpanded)}
+            >
+              <img
+                src="/src/images/arrow-to.svg"
+                alt=""
+                className={styles.tripDetails__icon}
+              />
+              <span className={styles.tripDetails__blockTitle}>Туда</span>
+              <img
+                src={
+                  toExpanded
+                    ? '/src/images/icon-minus.svg'
+                    : '/src/images/icon-plus.svg'
+                }
+                alt=""
+                className={styles.tripDetails__toggle}
+              />
+            </button>
 
-        {toExpanded && (
-          <div className={styles.tripDetails__content}>
-            <div className={styles.tripDetails__row}>
-              <span className={styles.tripDetails__label}>№ Поезда</span>
-              <span className={styles.tripDetails__value}>
-                {toRoute.trainNumber}
-              </span>
-            </div>
+            {toExpanded && (
+              <div className={styles.tripDetails__content}>
+                <div className={styles.tripDetails__row}>
+                  <span className={styles.tripDetails__label}>№ Поезда</span>
+                  <span className={styles.tripDetails__value}>
+                    {selectedRoute.train.name}
+                  </span>
+                </div>
 
-            <div className={styles.tripDetails__row}>
-              <span className={styles.tripDetails__label}>Название</span>
-              <span className={styles.tripDetails__route}>
-                {toRoute.from} <br /> {toRoute.to}
-              </span>
-            </div>
+                <div className={styles.tripDetails__row}>
+                  <span className={styles.tripDetails__label}>Название</span>
+                  <span className={styles.tripDetails__route}>
+                    {capitalize(selectedRoute.from.city.name)} <br />{' '}
+                    {capitalize(selectedRoute.to.city.name)}
+                  </span>
+                </div>
 
-            <div className={styles.tripDetails__times}>
-              <span className={styles.tripDetails__time}>
-                {toRoute.departureTime}
-              </span>
-              <div className={styles.tripDetails__arrowBlock}>
-                <span className={styles.tripDetails__duration}>
-                  {toRoute.duration}
-                </span>
-                <img
-                  src="/src/images/arrow-duration.svg"
-                  alt=""
-                  className={styles.tripDetails__arrow}
-                />
+                <div className={styles.tripDetails__times}>
+                  <span className={styles.tripDetails__time}>
+                    {formatTime(selectedRoute.from.datetime)}
+                  </span>
+                  <div className={styles.tripDetails__arrowBlock}>
+                    <span className={styles.tripDetails__duration}>
+                      {formatDuration(
+                        selectedRoute.from.datetime,
+                        selectedRoute.to.datetime
+                      )}
+                    </span>
+                    <img
+                      src="/src/images/arrow-duration.svg"
+                      alt=""
+                      className={styles.tripDetails__arrow}
+                    />
+                  </div>
+                  <span className={styles.tripDetails__time}>
+                    {formatTime(selectedRoute.to.datetime)}
+                  </span>
+                </div>
+
+                <div className={styles.tripDetails__dates}>
+                  <span className={styles.tripDetails__date}>
+                    {formatDate(selectedRoute.from.datetime)}
+                  </span>
+                  <span className={styles.tripDetails__date}>
+                    {formatDate(selectedRoute.to.datetime)}
+                  </span>
+                </div>
+
+                <div className={styles.tripDetails__stations}>
+                  <div className={styles.tripDetails__station}>
+                    <span className={styles.tripDetails__city}>
+                      {capitalize(selectedRoute.from.city.name)}
+                    </span>
+                    <span className={styles.tripDetails__railway}>
+                      {selectedRoute.from.railway_station_name}
+                    </span>
+                  </div>
+                  <div className={styles.tripDetails__station}>
+                    <span className={styles.tripDetails__city}>
+                      {capitalize(selectedRoute.to.city.name)}
+                    </span>
+                    <span className={styles.tripDetails__railway}>
+                      {selectedRoute.to.railway_station_name}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <span className={styles.tripDetails__time}>
-                {toRoute.arrivalTime}
-              </span>
-            </div>
-
-            <div className={styles.tripDetails__dates}>
-              <span className={styles.tripDetails__date}>
-                {toRoute.departureDate}
-              </span>
-              <span className={styles.tripDetails__date}>
-                {toRoute.arrivalDate}
-              </span>
-            </div>
-
-            <div className={styles.tripDetails__stations}>
-              <div className={styles.tripDetails__station}>
-                <span className={styles.tripDetails__city}>
-                  {toRoute.fromCity}
-                </span>
-                <span className={styles.tripDetails__railway}>
-                  {toRoute.fromStation}
-                </span>
-              </div>
-              <div className={styles.tripDetails__station}>
-                <span className={styles.tripDetails__city}>
-                  {toRoute.toCity}
-                </span>
-                <span className={styles.tripDetails__railway}>
-                  {toRoute.toStation}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className={styles.tripDetails__divider} />
+          <div className={styles.tripDetails__divider} />
+        </>
+      )}
 
-      <div className={styles.tripDetails__block}>
-        <button
-          type="button"
-          className={styles.tripDetails__header}
-          onClick={() => setBackExpanded(!backExpanded)}
-        >
-          <img
-            src="/src/images/arrow-back.svg"
-            alt=""
-            className={styles.tripDetails__icon}
-          />
-          <span className={styles.tripDetails__blockTitle}>Обратно</span>
-          <img
-            src={
-              backExpanded
-                ? '/src/images/icon-minus.svg'
-                : '/src/images/icon-plus.svg'
-            }
-            alt=""
-            className={styles.tripDetails__toggle}
-          />
-        </button>
+      {selectedReturnRoute && (
+        <>
+          <div className={styles.tripDetails__block}>
+            <button
+              type="button"
+              className={styles.tripDetails__header}
+              onClick={() => setBackExpanded(!backExpanded)}
+            >
+              <img
+                src="/src/images/arrow-back.svg"
+                alt=""
+                className={styles.tripDetails__icon}
+              />
+              <span className={styles.tripDetails__blockTitle}>Обратно</span>
+              <img
+                src={
+                  backExpanded
+                    ? '/src/images/icon-minus.svg'
+                    : '/src/images/icon-plus.svg'
+                }
+                alt=""
+                className={styles.tripDetails__toggle}
+              />
+            </button>
 
-        {backExpanded && (
-          <div className={styles.tripDetails__content}>
-            <div className={styles.tripDetails__row}>
-              <span className={styles.tripDetails__label}>№ Поезда</span>
-              <span className={styles.tripDetails__value}>
-                {backRoute.trainNumber}
-              </span>
-            </div>
+            {backExpanded && (
+              <div className={styles.tripDetails__content}>
+                <div className={styles.tripDetails__row}>
+                  <span className={styles.tripDetails__label}>№ Поезда</span>
+                  <span className={styles.tripDetails__value}>
+                    {selectedReturnRoute.train.name}
+                  </span>
+                </div>
 
-            <div className={styles.tripDetails__row}>
-              <span className={styles.tripDetails__label}>Название</span>
-              <span className={styles.tripDetails__route}>
-                {backRoute.from} <br /> {backRoute.to}
-              </span>
-            </div>
+                <div className={styles.tripDetails__row}>
+                  <span className={styles.tripDetails__label}>Название</span>
+                  <span className={styles.tripDetails__route}>
+                    {capitalize(selectedReturnRoute.from.city.name)} <br />{' '}
+                    {capitalize(selectedReturnRoute.to.city.name)}
+                  </span>
+                </div>
 
-            <div className={styles.tripDetails__times}>
-              <span className={styles.tripDetails__time}>
-                {backRoute.departureTime}
-              </span>
-              <div className={styles.tripDetails__arrowBlock}>
-                <span className={styles.tripDetails__duration}>
-                  {backRoute.duration}
-                </span>
-                <img
-                  src="/src/images/arrow-duration-left.svg"
-                  alt=""
-                  className={styles.tripDetails__arrow}
-                />
+                <div className={styles.tripDetails__times}>
+                  <span className={styles.tripDetails__time}>
+                    {formatTime(selectedReturnRoute.from.datetime)}
+                  </span>
+                  <div className={styles.tripDetails__arrowBlock}>
+                    <span className={styles.tripDetails__duration}>
+                      {formatDuration(
+                        selectedReturnRoute.from.datetime,
+                        selectedReturnRoute.to.datetime
+                      )}
+                    </span>
+                    <img
+                      src="/src/images/arrow-duration-left.svg"
+                      alt=""
+                      className={styles.tripDetails__arrow}
+                    />
+                  </div>
+                  <span className={styles.tripDetails__time}>
+                    {formatTime(selectedReturnRoute.to.datetime)}
+                  </span>
+                </div>
+
+                <div className={styles.tripDetails__dates}>
+                  <span className={styles.tripDetails__date}>
+                    {formatDate(selectedReturnRoute.from.datetime)}
+                  </span>
+                  <span className={styles.tripDetails__date}>
+                    {formatDate(selectedReturnRoute.to.datetime)}
+                  </span>
+                </div>
+
+                <div className={styles.tripDetails__stations}>
+                  <div className={styles.tripDetails__station}>
+                    <span className={styles.tripDetails__city}>
+                      {capitalize(selectedReturnRoute.from.city.name)}
+                    </span>
+                    <span className={styles.tripDetails__railway}>
+                      {selectedReturnRoute.from.railway_station_name}
+                    </span>
+                  </div>
+                  <div className={styles.tripDetails__station}>
+                    <span className={styles.tripDetails__city}>
+                      {capitalize(selectedReturnRoute.to.city.name)}
+                    </span>
+                    <span className={styles.tripDetails__railway}>
+                      {selectedReturnRoute.to.railway_station_name}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <span className={styles.tripDetails__time}>
-                {backRoute.arrivalTime}
-              </span>
-            </div>
-
-            <div className={styles.tripDetails__dates}>
-              <span className={styles.tripDetails__date}>
-                {backRoute.departureDate}
-              </span>
-              <span className={styles.tripDetails__date}>
-                {backRoute.arrivalDate}
-              </span>
-            </div>
-
-            <div className={styles.tripDetails__stations}>
-              <div className={styles.tripDetails__station}>
-                <span className={styles.tripDetails__city}>
-                  {backRoute.fromCity}
-                </span>
-                <span className={styles.tripDetails__railway}>
-                  {backRoute.fromStation}
-                </span>
-              </div>
-              <div className={styles.tripDetails__station}>
-                <span className={styles.tripDetails__city}>
-                  {backRoute.toCity}
-                </span>
-                <span className={styles.tripDetails__railway}>
-                  {backRoute.toStation}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className={styles.tripDetails__divider} />
+          <div className={styles.tripDetails__divider} />
+        </>
+      )}
 
       <div className={styles.tripDetails__block}>
         <button
@@ -257,23 +279,29 @@ const TripDetails = () => {
 
         {passengersExpanded && (
           <div className={styles.tripDetails__content}>
-            <div className={styles.tripDetails__row}>
-              <span className={styles.tripDetails__label}>
-                {passengers.adults} Взрослых
-              </span>
-              <span className={styles.tripDetails__value}>
-                {passengers.adultsPrice}
-              </span>
-            </div>
+            {passengerCount.adults > 0 && (
+              <div className={styles.tripDetails__row}>
+                <span className={styles.tripDetails__label}>
+                  {passengerCount.adults} Взрослых
+                </span>
+              </div>
+            )}
 
-            <div className={styles.tripDetails__row}>
-              <span className={styles.tripDetails__label}>
-                {passengers.children} Ребенок
-              </span>
-              <span className={styles.tripDetails__value}>
-                {passengers.childrenPrice}
-              </span>
-            </div>
+            {passengerCount.children > 0 && (
+              <div className={styles.tripDetails__row}>
+                <span className={styles.tripDetails__label}>
+                  {passengerCount.children} Ребенок
+                </span>
+              </div>
+            )}
+
+            {passengerCount.childrenWithoutSeat > 0 && (
+              <div className={styles.tripDetails__row}>
+                <span className={styles.tripDetails__label}>
+                  {passengerCount.childrenWithoutSeat} Без места
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -282,7 +310,9 @@ const TripDetails = () => {
 
       <div className={styles.tripDetails__total}>
         <span className={styles.tripDetails__totalLabel}>Итог</span>
-        <span className={styles.tripDetails__totalSum}>{total}</span>
+        <span className={styles.tripDetails__totalSum}>
+          {formatPrice(totalPrice.placesTotal)}
+        </span>
       </div>
     </div>
   );
