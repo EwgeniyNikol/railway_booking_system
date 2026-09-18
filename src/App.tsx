@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage';
 import ChooseTrainPage from './pages/ChooseTrainPage';
 import ChooseSeatsPage from './pages/ChooseSeatsPage';
 import PassengersPage from './pages/PassengersPage';
+import PaymentPage from './pages/PaymentPage';
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/choose-train" element={<ChooseTrainPage />} />
         <Route path="/choose-seats" element={<ChooseSeatsPage />} />
         <Route path="/passengers" element={<PassengersPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
       </Routes>
     </BrowserRouter>
   );
