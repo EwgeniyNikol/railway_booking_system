@@ -42,7 +42,7 @@ const PassengersPage = () => {
   return (
     <>
       <HeaderTrain />
-      <ProgressSteps />
+      <ProgressSteps activeStep={1} />
       <div className={styles.page}>
         <div className={styles.page__sidebar}>
           <TripDetails />

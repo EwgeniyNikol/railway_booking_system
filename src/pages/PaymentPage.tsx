@@ -9,7 +9,7 @@ const PaymentPage = () => {
   return (
     <>
       <HeaderTrain />
-      <ProgressSteps />
+      <ProgressSteps activeStep={2} />
       <div className={styles.page}>
         <div className={styles.page__sidebar}>
           <TripDetails />

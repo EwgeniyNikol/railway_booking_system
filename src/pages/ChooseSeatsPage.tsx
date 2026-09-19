@@ -75,7 +75,7 @@ const ChooseSeatsPage = () => {
   return (
     <>
       <HeaderTrain />
-      <ProgressSteps />
+      <ProgressSteps activeStep={0} />
       <div className={styles.page}>
         <div className={styles.page__sidebar}>
           <Sidebar />

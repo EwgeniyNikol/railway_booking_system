@@ -131,7 +131,7 @@ const ChooseTrainPage = () => {
     return (
       <>
         <HeaderTrain key={savedFromCity?._id || 'empty'} />
-        <ProgressSteps />
+        <ProgressSteps activeStep={0} />
         <div className={styles.page}>
           <div className={styles.page__sidebar}>
             <Sidebar />
@@ -149,7 +149,7 @@ const ChooseTrainPage = () => {
   return (
     <>
       <HeaderTrain key={savedFromCity?._id || 'empty'} />
-      <ProgressSteps />
+      <ProgressSteps activeStep={0} />
       <div className={styles.page}>
         <div className={styles.page__sidebar}>
           <Sidebar />

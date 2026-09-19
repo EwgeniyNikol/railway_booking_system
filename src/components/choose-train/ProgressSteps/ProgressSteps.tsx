@@ -1,11 +1,12 @@
-import { useState } from 'react';
 import styles from './ProgressSteps.module.scss';
+
+type ProgressStepsProps = {
+  activeStep: number;
+};
 
 const steps = ['Билеты', 'Пассажиры', 'Оплата', 'Проверка'];
 
-const ProgressSteps = () => {
-  const [activeStep, setActiveStep] = useState(0);
-
+const ProgressSteps = ({ activeStep }: ProgressStepsProps) => {
   return (
     <div className={styles.progress}>
       {steps.map((label, index) => (
@@ -14,7 +15,6 @@ const ProgressSteps = () => {
             className={`${styles.progress__step} ${
               index < activeStep ? styles.progress__step_passed : ''
             } ${index === activeStep ? styles.progress__step_active : ''}`}
-            onClick={() => setActiveStep(index)}
           >
             <span className={styles.progress__number}>{index + 1}</span>
             <span className={styles.progress__label}>{label}</span>
