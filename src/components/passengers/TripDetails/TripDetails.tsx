@@ -4,10 +4,11 @@ import type { RootState } from '../../../store/store';
 import { selectTotalPrice } from '../../../store/selectors/totalPrice';
 import styles from './TripDetails.module.scss';
 
-const capitalize = (value: string): string => {
-  if (!value) return value;
-  return value.charAt(0).toUpperCase() + value.slice(1);
-};
+const capitalizeCity = (name: string) =>
+  name
+    .split(/[-\s]/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(name.includes('-') ? '-' : ' ');
 
 const formatDate = (timestamp: number): string => {
   const date = new Date(timestamp * 1000);
@@ -94,8 +95,8 @@ const TripDetails = () => {
                 <div className={styles.tripDetails__row}>
                   <span className={styles.tripDetails__label}>Название</span>
                   <span className={styles.tripDetails__route}>
-                    {capitalize(selectedRoute.from.city.name)} <br />{' '}
-                    {capitalize(selectedRoute.to.city.name)}
+                    {capitalizeCity(selectedRoute.from.city.name)} <br />{' '}
+                    {capitalizeCity(selectedRoute.to.city.name)}
                   </span>
                 </div>
 
@@ -133,7 +134,7 @@ const TripDetails = () => {
                 <div className={styles.tripDetails__stations}>
                   <div className={styles.tripDetails__station}>
                     <span className={styles.tripDetails__city}>
-                      {capitalize(selectedRoute.from.city.name)}
+                      {capitalizeCity(selectedRoute.from.city.name)}
                     </span>
                     <span className={styles.tripDetails__railway}>
                       {selectedRoute.from.railway_station_name}
@@ -141,7 +142,7 @@ const TripDetails = () => {
                   </div>
                   <div className={styles.tripDetails__station}>
                     <span className={styles.tripDetails__city}>
-                      {capitalize(selectedRoute.to.city.name)}
+                      {capitalizeCity(selectedRoute.to.city.name)}
                     </span>
                     <span className={styles.tripDetails__railway}>
                       {selectedRoute.to.railway_station_name}
@@ -193,8 +194,8 @@ const TripDetails = () => {
                 <div className={styles.tripDetails__row}>
                   <span className={styles.tripDetails__label}>Название</span>
                   <span className={styles.tripDetails__route}>
-                    {capitalize(selectedReturnRoute.from.city.name)} <br />{' '}
-                    {capitalize(selectedReturnRoute.to.city.name)}
+                    {capitalizeCity(selectedReturnRoute.from.city.name)} <br />{' '}
+                    {capitalizeCity(selectedReturnRoute.to.city.name)}
                   </span>
                 </div>
 
@@ -232,7 +233,7 @@ const TripDetails = () => {
                 <div className={styles.tripDetails__stations}>
                   <div className={styles.tripDetails__station}>
                     <span className={styles.tripDetails__city}>
-                      {capitalize(selectedReturnRoute.from.city.name)}
+                      {capitalizeCity(selectedReturnRoute.from.city.name)}
                     </span>
                     <span className={styles.tripDetails__railway}>
                       {selectedReturnRoute.from.railway_station_name}
@@ -240,7 +241,7 @@ const TripDetails = () => {
                   </div>
                   <div className={styles.tripDetails__station}>
                     <span className={styles.tripDetails__city}>
-                      {capitalize(selectedReturnRoute.to.city.name)}
+                      {capitalizeCity(selectedReturnRoute.to.city.name)}
                     </span>
                     <span className={styles.tripDetails__railway}>
                       {selectedReturnRoute.to.railway_station_name}

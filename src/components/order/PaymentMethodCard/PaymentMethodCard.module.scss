@@ -1,0 +1,128 @@
+@use '../../../styles/mixins' as *;
+
+.paymentMethodCard {
+  box-sizing: border-box;
+  width: 60.0625rem;
+  background: var(--color-white);
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 0.125rem 0.125rem rgba(0, 0, 0, 0.25);
+  margin-bottom: 4.875rem;
+
+  &__header {
+    padding: 1.875rem 1.875rem 0;
+    border-bottom: 1px solid #928f94;
+  }
+
+  &__title {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: var(--color-dark);
+    margin-bottom: 1.875rem;
+  }
+
+  &__body {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__method {
+    padding: 2.75rem 0 4.75rem 2.0625rem;
+  }
+
+  &__methodName {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: var(--color-dark);
+  }
+
+  &__aside {
+    display: flex;
+    align-items: flex-end;
+    padding: 0 1.75rem  1.3125rem 1.6875rem;
+    border-left: 1px dashed #e5e5e5;
+  }
+
+  &__change {
+    width: 14.5625rem;
+    height: 2.4375rem;
+    background: transparent;
+    border: 1px solid var(--color-dark);
+    border-radius: 0.3125rem;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    text-align: center;
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: box-shadow 0.2s, color 0.2s;
+
+    &:hover {
+      box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
+      color: var(--color-accent);
+    }
+
+    &:active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--color-dark);
+      box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
+    }
+  }
+}
+
+@include respond-to(laptop) {
+  .paymentMethodCard {
+    width: 100%;
+  }
+}
+
+@include respond-to(tablet) {
+  .paymentMethodCard {
+    width: 100%;
+
+    &__body {
+      flex-direction: column;
+    }
+
+    &__aside {
+      padding: 1.5rem 1rem;
+      border-left: none;
+      border-top: 1px dashed #e5e5e5;
+    }
+
+    &__change {
+      width: 100%;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .paymentMethodCard {
+    &__header {
+      padding: 1rem 1rem 0;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+    }
+
+    &__method {
+      padding: 1rem;
+    }
+
+    &__methodName {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
+
+    &__aside {
+      padding: 1rem;
+    }
+  }
+}

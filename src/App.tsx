@@ -4,6 +4,7 @@ import ChooseTrainPage from './pages/ChooseTrainPage';
 import ChooseSeatsPage from './pages/ChooseSeatsPage';
 import PassengersPage from './pages/PassengersPage';
 import PaymentPage from './pages/PaymentPage';
+import OrderPage from './pages/OrderPage';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/choose-seats" element={<ChooseSeatsPage />} />
         <Route path="/passengers" element={<PassengersPage />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/order" element={<OrderPage />} />
       </Routes>
     </BrowserRouter>
   );

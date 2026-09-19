@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import HeaderTrain from '../components/choose-train/HeaderTrain/HeaderTrain';
 import ProgressSteps from '../components/choose-train/ProgressSteps/ProgressSteps';
 import TripDetails from '../components/passengers/TripDetails/TripDetails';
@@ -6,6 +7,12 @@ import Footer from '../components/Footer/Footer';
 import styles from './PaymentPage.module.scss';
 
 const PaymentPage = () => {
+  const navigate = useNavigate();
+
+  const handleBuy = () => {
+    navigate('/order');
+  };
+
   return (
     <>
       <HeaderTrain />
@@ -16,7 +23,11 @@ const PaymentPage = () => {
         </div>
         <div className={styles.page__content}>
           <PaymentCard />
-          <button type="button" className={styles.page__button}>
+          <button
+            type="button"
+            className={styles.page__button}
+            onClick={handleBuy}
+          >
             Купить билеты
           </button>
         </div>
