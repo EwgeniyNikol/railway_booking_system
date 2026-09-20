@@ -22,27 +22,40 @@ SPA для системы бронирования ж/д билетов на Rea
 - Поиск направлений с фильтрами и сортировкой
 - Выбор мест в вагоне
 - Оформление заказа
+- Подтверждение заказа
+- Оценка сервиса
 - Подписка на новости
 - Адаптивная вёрстка
 
 ## Структура проекта
 
 src/
-  api/                  — запросы к API
-  components/           — компоненты
-    common/             — общие компоненты (Calendar, CityInput, NextButton)
-    choose-train/       — компоненты страницы выбора поезда
-    choose-seats/       — компоненты страницы выбора мест
-  fonts/                — локальные шрифты
-  images/               — изображения и иконки
-  pages/                — страницы
-  store/                — Redux Toolkit
-    selectors/          — селекторы
-    slices/             — срезы
-  styles/               — SCSS-миксы
-  index.scss            — глобальные стили
-  App.tsx               — роутинг
-  main.tsx              — точка входа
+  api/                    — запросы к API
+  components/             — компоненты
+    common/               — общие компоненты (Calendar, CityInput, NextButton)
+    choose-train/         — компоненты страницы выбора поезда
+    choose-seats/         — компоненты страницы выбора мест
+    passengers/           — компоненты страницы пассажиров (TripDetails, PassengerCard)
+    payment/              — компоненты страницы оплаты (PaymentCard)
+    order/                — компоненты страницы подтверждения заказа
+    order-success/        — компоненты страницы успешного заказа
+    Header/               — шапка главной страницы
+    About/                — блок «О нас»
+    HowItWorks/           — блок «Как это работает»
+    Reviews/              — блок «Отзывы»
+    Footer/               — подвал
+  fonts/                  — локальные шрифты
+  images/                 — изображения и иконки
+  pages/                  — страницы
+  store/                  — Redux Toolkit
+    selectors/            — селекторы
+    slices/               — срезы
+  styles/                 — SCSS-миксы
+  types/                  — типы API
+  utils/                  — утилиты (валидация)
+  index.scss              — глобальные стили
+  App.tsx                 — роутинг
+  main.tsx                — точка входа
 
 ## Установка и запуск
 
@@ -50,6 +63,16 @@ npm install
 npm run dev
 
 Откройте http://localhost:5173/
+
+### Mock-сервер
+
+В dev-режиме используется локальный mock-сервер (Express + CORS):
+
+cd mock-server
+npm install
+node server.js
+
+Сервер запускается на http://localhost:3001
 
 ## Скрипты
 
@@ -65,6 +88,10 @@ npm run format:check  — проверка форматирования
 - `/` — главная
 - `/choose-train` — выбор поезда
 - `/choose-seats` — выбор мест
+- `/passengers` — ввод данных пассажиров
+- `/payment` — оплата
+- `/order` — подтверждение заказа
+- `/order-success` — успешное оформление заказа
 
 ## API
 

@@ -1,0 +1,97 @@
+@use '../../../styles/mixins' as *;
+
+.header {
+  position: relative;
+  width: 100%;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 4rem;
+    background: rgba(41, 41, 41, 0.6);
+    padding: 0 16.125rem;
+  }
+
+  &__logo {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-black);
+    font-size: 2.25rem;
+    line-height: 3.0625rem;
+    color: var(--color-light);
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 5.875rem;
+    background: var(--color-dark);
+    gap: 5.1875rem;
+    padding-left: 16.125rem;
+  }
+
+  &__link {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-light);
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: var(--color-white);
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+}
+
+@include respond-to(laptop) {
+  .header {
+    &__top {
+      padding: 0 5rem;
+    }
+
+    &__nav {
+      padding-left: 5rem;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .header {
+    &__top {
+      padding: 0 1.5rem;
+    }
+
+    &__nav {
+      padding-left: 1.5rem;
+      gap: 2rem;
+    }
+
+    &__link {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .header {
+    &__top {
+      padding: 0 0.75rem;
+    }
+
+    &__logo {
+      font-size: 1.75rem;
+    }
+
+    &__nav {
+      padding-left: 0.75rem;
+      gap: 1rem;
+    }
+
+    &__link {
+      font-size: 1rem;
+    }
+  }
+}

@@ -104,9 +104,7 @@ const PassengersCard = () => {
         <div className={styles.passengersCard__aside}>
           <div className={styles.passengersCard__total}>
             <span className={styles.passengersCard__totalLabel}>Всего</span>
-            <span className={styles.passengersCard__totalSum}>
-              {testTotal}
-            </span>
+            <span className={styles.passengersCard__totalSum}>{testTotal}</span>
             <img
               src="/src/images/icon-ruble.svg"
               alt=""

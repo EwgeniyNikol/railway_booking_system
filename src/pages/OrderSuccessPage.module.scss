@@ -1,0 +1,68 @@
+@use '../styles/mixins' as *;
+
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 52.125rem;
+  background-color: var(--color-accent);
+  background-image: image-set(
+    url('../images/hero-success-1x.webp') 1x,
+    url('../images/hero-success-2x.webp') 2x
+  );
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  &__title {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    font-size: 4.5rem;
+    line-height: 5.25rem;
+    color: var(--color-white);
+    padding: 21.9375rem 0 0 16.125rem;
+  }
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  margin-top: -13rem;
+  margin-bottom: 10.9375rem;
+  position: relative;
+  z-index: 1;
+}
+
+@include respond-to(laptop) {
+  .hero {
+    &__title {
+      font-size: 3.5rem;
+      line-height: 4rem;
+      padding: 16rem 0 0 5rem;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .hero {
+    min-height: 40rem;
+
+    &__title {
+      font-size: 3rem;
+      line-height: 3.5rem;
+      padding: 10rem 0 0 1.5rem;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .hero {
+    min-height: auto;
+    padding-bottom: 3rem;
+
+    &__title {
+      font-size: 2rem;
+      line-height: 2.5rem;
+      padding: 6rem 0 0 0.75rem;
+    }
+  }
+}
