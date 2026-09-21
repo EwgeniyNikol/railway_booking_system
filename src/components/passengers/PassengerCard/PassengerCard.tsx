@@ -15,6 +15,7 @@ type PassengerCardProps = {
   isActive: boolean;
   onNext: () => void;
   onActivate: () => void;
+  onRemove: () => void;
 };
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]*$/;
@@ -28,12 +29,29 @@ const formatDate = (value: string): string => {
   return parts.join('/');
 };
 
+const getAge = (value: string): number | null => {
+  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+    return null;
+  }
+  const [day, month, year] = value.split('/').map(Number);
+  const today = new Date();
+  let age = today.getFullYear() - year;
+  if (
+    today.getMonth() + 1 < month ||
+    (today.getMonth() + 1 === month && today.getDate() < day)
+  ) {
+    age -= 1;
+  }
+  return age;
+};
+
 const PassengerCard = ({
   passengerId,
   index,
   isActive,
   onNext,
   onActivate,
+  onRemove,
 }: PassengerCardProps) => {
   const dispatch = useDispatch();
   const passenger = useSelector((state: RootState) =>
@@ -68,6 +86,11 @@ const PassengerCard = ({
     dispatch(togglePassengerCollapsed(passengerId));
   };
 
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onRemove();
+  };
+
   const handleNameChange = (field: keyof Passenger, value: string) => {
     if (NAME_REGEX.test(value)) {
       update({ [field]: value } as Partial<Passenger>);
@@ -76,7 +99,21 @@ const PassengerCard = ({
 
   const handleBirthDateChange = (value: string) => {
     const formatted = formatDate(value);
-    update({ birthday: formatted });
+    const age = getAge(formatted);
+
+    if (age !== null) {
+      const isAdult = age >= 18;
+      update({
+        birthday: formatted,
+        isAdult,
+        isChild: !isAdult,
+        documentType: isAdult ? 'passport' : 'birth',
+        documentData: '',
+      });
+    } else {
+      update({ birthday: formatted });
+    }
+
     setBirthDateError('');
   };
 
@@ -180,7 +217,11 @@ const PassengerCard = ({
         <span className={styles.passengerCard__title}>
           Пассажир {index + 1}
         </span>
-        <button type="button" className={styles.passengerCard__close}>
+        <button
+          type="button"
+          className={styles.passengerCard__close}
+          onClick={handleRemove}
+        >
           <svg viewBox="0 0 12 12" width="12" height="12">
             <line
               x1="1"

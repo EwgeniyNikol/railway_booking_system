@@ -6,7 +6,11 @@ import TripDetails from '../components/passengers/TripDetails/TripDetails';
 import PassengerCard from '../components/passengers/PassengerCard/PassengerCard';
 import NextButton from '../components/common/NextButton/NextButton';
 import Footer from '../components/Footer/Footer';
-import { addPassenger, initPassengers } from '../store/slices/bookingSlice';
+import {
+  addPassenger,
+  initPassengers,
+  removePassenger,
+} from '../store/slices/bookingSlice';
 import type { RootState } from '../store/store';
 import { validatePassenger } from '../utils/validation';
 import styles from './PassengersPage.module.scss';
@@ -32,6 +36,13 @@ const PassengersPage = () => {
     dispatch(addPassenger());
   };
 
+  const handleRemove = (index: number) => {
+    dispatch(removePassenger(passengers[index].passengerId));
+    if (index <= activeIndex) {
+      setActiveIndex(Math.max(0, activeIndex - 1));
+    }
+  };
+
   const allValid = passengers.every((p) => validatePassenger(p).length === 0);
 
   return (
@@ -51,6 +62,7 @@ const PassengersPage = () => {
               isActive={i === activeIndex}
               onNext={handleNext}
               onActivate={() => setActiveIndex(i)}
+              onRemove={() => handleRemove(i)}
             />
           ))}
           <button
