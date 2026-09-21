@@ -26,6 +26,7 @@ export interface Passenger {
   documentData: string;
   isAdult: boolean;
   isChild: boolean;
+  isCollapsed: boolean;
 }
 
 export interface CoachApiResponse {
@@ -74,7 +75,8 @@ export interface BookingState {
 
 export const createPassenger = (
   isAdult: boolean,
-  isChild: boolean
+  isChild: boolean,
+  isCollapsed = false
 ): Passenger => ({
   passengerId: crypto.randomUUID(),
   placeId: null,
@@ -87,6 +89,7 @@ export const createPassenger = (
   documentData: '',
   isAdult,
   isChild,
+  isCollapsed,
 });
 
 const initialState: BookingState = {
@@ -227,6 +230,18 @@ const bookingSlice = createSlice({
       }
       syncPassengers(state);
     },
+    addPassenger(state) {
+      const passenger = createPassenger(false, true, true);
+      state.passengers.push(passenger);
+    },
+    togglePassengerCollapsed(state, action: PayloadAction<string>) {
+      const passenger = state.passengers.find(
+        (p) => p.passengerId === action.payload
+      );
+      if (passenger) {
+        passenger.isCollapsed = !passenger.isCollapsed;
+      }
+    },
     updatePassenger(
       state,
       action: PayloadAction<{ passengerId: string; data: Partial<Passenger> }>
@@ -307,6 +322,8 @@ export const {
   togglePlace,
   clearPlaces,
   initPassengers,
+  addPassenger,
+  togglePassengerCollapsed,
   updatePassenger,
   removePassenger,
   setServices,

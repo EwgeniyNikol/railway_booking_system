@@ -11,9 +11,10 @@
   &__header {
     display: flex;
     align-items: center;
+    gap: 1.25rem;
     height: 6.6875rem;
     background: #f9f9f9;
-    padding: 0 2.5625rem 0 1.5rem;
+    padding: 0 2.5625rem 0 2.1875rem;
   }
 
   &__toggle {
@@ -35,7 +36,6 @@
     font-size: 1.875rem;
     line-height: 2.1875rem;
     color: var(--color-dark);
-    margin-left: 1rem;
   }
 
   &__close {
@@ -98,6 +98,11 @@
       border-color: var(--color-accent);
     }
 
+    &:disabled {
+      background: #f5f5f5;
+      cursor: not-allowed;
+    }
+
     &_short {
       width: 12.8125rem;
     }
@@ -125,6 +130,11 @@
     cursor: pointer;
     appearance: none;
     margin-bottom: 2.8125rem;
+
+    &:disabled {
+      background: #f5f5f5;
+      cursor: not-allowed;
+    }
 
     &_short {
       width: 12.8125rem;
@@ -162,12 +172,16 @@
     cursor: pointer;
     transition: background 0.2s;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: #f5f5f5;
     }
 
     &:first-child {
       border-right: 1px solid #928f94;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
     }
 
     &_active {
@@ -194,6 +208,10 @@
     border-radius: 0.3125rem;
     cursor: pointer;
     flex-shrink: 0;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
   &__mobilityText {
@@ -212,21 +230,69 @@
     color: #ff0000;
   }
 
-    &__next {
-    align-self: flex-end;
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2.5rem 0 1.5rem;
+    min-height: 7.4375rem;
+
+    &_success {
+      background: #b2f6a1;
+    }
+
+    &_error {
+      background: rgba(255, 61, 0, 0.38);
+    }
+  }
+
+  &__statusIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+  }
+
+  &__statusSvg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__statusText {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.125rem;
+    line-height: 1.3125rem;
+    color: #ffffff;
+  }
+
+  &__statusError {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.125rem;
+    line-height: 1.3125rem;
+    color: var(--color-dark);
+    max-width: 29.5rem;
+  }
+
+  &__next {
     width: 18.9375rem;
     height: 3.25rem;
-    margin-top: 4.375rem;
-    margin-bottom: 1.75rem;
+    margin-left: auto;
     background: transparent;
     border: 1px solid var(--color-dark);
     border-radius: 0.3125rem;
     font-family: var(--font-family);
     font-weight: var(--font-weight-bold);
     font-size: 1.5rem;
+    line-height: 1.75rem;
+    text-align: center;
     color: var(--color-dark);
     cursor: pointer;
-    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+    flex-shrink: 0;
+    transition: box-shadow 0.2s, color 0.2s;
 
     &:hover {
       filter: drop-shadow(0 0.25rem 0.25rem rgba(0, 0, 0, 0.25));
@@ -251,61 +317,72 @@
 @include respond-to(tablet) {
   .passengerCard {
     width: 100%;
-  }
 
-  .passengerCard__row {
-    flex-wrap: wrap;
-  }
+    &__row {
+      flex-wrap: wrap;
+    }
 
-  .passengerCard__field {
-    flex: 1 1 calc(50% - 0.78125rem);
+    &__field {
+      flex: 1 1 calc(50% - 0.78125rem);
+    }
   }
 }
 
 @include respond-to(mobile) {
   .passengerCard {
     width: 100%;
-  }
 
-  .passengerCard__header {
-    height: 5rem;
-    padding: 0 1.5rem 0 1rem;
-  }
+    &__header {
+      height: 5rem;
+      padding: 0 1.5rem 0 1rem;
+    }
 
-  .passengerCard__title {
-    font-size: 1.5rem;
-    line-height: 1.75rem;
-  }
+    &__title {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+    }
 
-  .passengerCard__content {
-    padding: 0 1rem;
-  }
+    &__content {
+      padding: 0 1rem;
+    }
 
-  .passengerCard__divider {
-    margin-left: -1rem;
-    margin-right: -1rem;
-  }
+    &__divider {
+      margin-left: -1rem;
+      margin-right: -1rem;
+    }
 
-  .passengerCard__row {
-    flex-direction: column;
-    gap: 1rem;
-  }
+    &__row {
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-  .passengerCard__input,
-  .passengerCard__select,
-  .passengerCard__input_short,
-  .passengerCard__select_short,
-  .passengerCard__input_wide,
-  .passengerCard__select_wide {
-    width: 100%;
-  }
+    &__input,
+    &__select,
+    &__input_short,
+    &__select_short,
+    &__input_wide,
+    &__select_wide {
+      width: 100%;
+    }
 
-  .passengerCard__gender {
-    width: 100%;
-  }
+    &__gender {
+      width: 100%;
+    }
 
-  .passengerCard__next {
-    width: 100%;
-    font-size: 1.25rem;
+    &__status {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1rem;
+    }
+
+    &__next {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    &__statusError {
+      max-width: 100%;
+    }
   }
 }

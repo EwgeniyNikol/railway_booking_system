@@ -7,6 +7,8 @@ export interface ValidationError {
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]+$/;
 const DATE_REGEX = /^\d{2}\/\d{2}\/\d{4}$/;
+const PASSPORT_REGEX = /^\d{10}$/;
+const BIRTH_CERT_REGEX = /^[IVX]{1,4}-[А-ЯЁ]{2}-\d{6}$/;
 
 const getAge = (value: string): number => {
   const [day, month, year] = value.split('/').map(Number);
@@ -69,7 +71,23 @@ export const validatePassenger = (passenger: Passenger): ValidationError[] => {
   }
 
   if (!passenger.documentData.trim()) {
-    errors.push({ field: 'documentData', message: 'Укажите номер документа' });
+    errors.push({
+      field: 'documentData',
+      message: 'Укажите номер документа',
+    });
+  } else if (passenger.documentType === 'passport') {
+    if (!PASSPORT_REGEX.test(passenger.documentData)) {
+      errors.push({
+        field: 'documentData',
+        message: 'Номер паспорта указан некорректно. Пример: 4204 380694',
+      });
+    }
+  } else if (!BIRTH_CERT_REGEX.test(passenger.documentData)) {
+    errors.push({
+      field: 'documentData',
+      message:
+        'Номер свидетельства о рождении указан некорректно. Пример: VIII-ЫП-123456',
+    });
   }
 
   return errors;

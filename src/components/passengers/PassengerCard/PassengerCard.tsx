@@ -2,17 +2,19 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import {
+  togglePassengerCollapsed,
   updatePassenger,
   type Passenger,
 } from '../../../store/slices/bookingSlice';
+import { validatePassenger } from '../../../utils/validation';
 import styles from './PassengerCard.module.scss';
 
 type PassengerCardProps = {
   passengerId: string;
   index: number;
-  defaultExpanded: boolean;
-  onRemove: () => void;
+  isActive: boolean;
   onNext: () => void;
+  onActivate: () => void;
 };
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]*$/;
@@ -26,55 +28,17 @@ const formatDate = (value: string): string => {
   return parts.join('/');
 };
 
-const validateDate = (value: string): string => {
-  const parts = value.split('/');
-  if (parts[0] && parts[0].length === 2) {
-    const day = Number(parts[0]);
-    if (day < 1 || day > 31) return 'Неверная дата';
-  }
-  if (parts[1] && parts[1].length === 2) {
-    const month = Number(parts[1]);
-    if (month < 1 || month > 12) return 'Неверная дата';
-  }
-  if (value.length === 10) {
-    const [day, month, year] = value.split('/').map(Number);
-    const daysInMonth = new Date(year, month, 0).getDate();
-    if (day < 1 || day > daysInMonth) return 'Неверная дата';
-    const birthDate = new Date(year, month - 1, day);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-    if (age < 0 || age > 120) return 'Неверная дата';
-  }
-  return '';
-};
-
-const getAge = (value: string): number => {
-  const [day, month, year] = value.split('/').map(Number);
-  const birthDate = new Date(year, month - 1, day);
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-  return age;
-};
-
 const PassengerCard = ({
   passengerId,
   index,
-  defaultExpanded,
-  onRemove,
+  isActive,
   onNext,
+  onActivate,
 }: PassengerCardProps) => {
   const dispatch = useDispatch();
   const passenger = useSelector((state: RootState) =>
     state.booking.passengers.find((p) => p.passengerId === passengerId)
   );
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  const [lastNameError, setLastNameError] = useState('');
-  const [firstNameError, setFirstNameError] = useState('');
-  const [middleNameError, setMiddleNameError] = useState('');
   const [birthDateError, setBirthDateError] = useState('');
   const [passportSeriesError, setPassportSeriesError] = useState('');
   const [passportNumberError, setPassportNumberError] = useState('');
@@ -83,39 +47,37 @@ const PassengerCard = ({
     return null;
   }
 
+  const errors = validatePassenger(passenger);
+  const isValid = errors.length === 0;
+  const firstError = errors[0]?.message ?? '';
+
   const update = (data: Partial<Passenger>) => {
     dispatch(updatePassenger({ passengerId, data }));
   };
 
-  const handleNameChange = (
-    value: string,
-    field: 'lastName' | 'firstName' | 'patronymic',
-    errorSetter: (v: string) => void
-  ) => {
+  const handleHeaderClick = () => {
+    onActivate();
+    if (passenger.isCollapsed) {
+      dispatch(togglePassengerCollapsed(passengerId));
+    }
+  };
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onActivate();
+    dispatch(togglePassengerCollapsed(passengerId));
+  };
+
+  const handleNameChange = (field: keyof Passenger, value: string) => {
     if (NAME_REGEX.test(value)) {
       update({ [field]: value } as Partial<Passenger>);
-      errorSetter('');
-    } else {
-      errorSetter('Только русские буквы');
     }
   };
 
   const handleBirthDateChange = (value: string) => {
     const formatted = formatDate(value);
-    const error = validateDate(formatted);
-    setBirthDateError(error);
-    if (!error && formatted.length === 10) {
-      const age = getAge(formatted);
-      const isAdult = age >= 18;
-      update({
-        birthday: formatted,
-        isAdult,
-        isChild: !isAdult,
-        documentType: isAdult ? 'passport' : 'birth',
-      });
-      return;
-    }
     update({ birthday: formatted });
+    setBirthDateError('');
   };
 
   const handleSeriesChange = (value: string) => {
@@ -175,11 +137,14 @@ const PassengerCard = ({
 
   return (
     <div className={styles.passengerCard}>
-      <div className={styles.passengerCard__header}>
+      <div
+        className={styles.passengerCard__header}
+        onClick={handleHeaderClick}
+      >
         <button
           type="button"
           className={styles.passengerCard__toggle}
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={handleToggle}
         >
           <svg viewBox="0 0 32 32" width="32" height="32">
             <circle
@@ -187,7 +152,7 @@ const PassengerCard = ({
               cy="16"
               r="15"
               fill="none"
-              stroke="#928F94"
+              stroke="#FFA800"
               strokeWidth="2"
             />
             <line
@@ -195,17 +160,17 @@ const PassengerCard = ({
               y1="16"
               x2="22"
               y2="16"
-              stroke="#928F94"
+              stroke="#FFA800"
               strokeWidth="2"
               strokeLinecap="round"
             />
-            {!isExpanded && (
+            {passenger.isCollapsed && (
               <line
                 x1="16"
                 y1="10"
                 x2="16"
                 y2="22"
-                stroke="#928F94"
+                stroke="#FFA800"
                 strokeWidth="2"
                 strokeLinecap="round"
               />
@@ -215,18 +180,14 @@ const PassengerCard = ({
         <span className={styles.passengerCard__title}>
           Пассажир {index + 1}
         </span>
-        <button
-          type="button"
-          className={styles.passengerCard__close}
-          onClick={onRemove}
-        >
+        <button type="button" className={styles.passengerCard__close}>
           <svg viewBox="0 0 12 12" width="12" height="12">
             <line
               x1="1"
               y1="1"
               x2="11"
               y2="11"
-              stroke="#292929"
+              stroke="#928F94"
               strokeWidth="1.5"
               strokeLinecap="round"
             />
@@ -235,7 +196,7 @@ const PassengerCard = ({
               y1="1"
               x2="1"
               y2="11"
-              stroke="#292929"
+              stroke="#928F94"
               strokeWidth="1.5"
               strokeLinecap="round"
             />
@@ -243,196 +204,221 @@ const PassengerCard = ({
         </button>
       </div>
 
-      {isExpanded && (
-        <div className={styles.passengerCard__content}>
-          <div className={styles.passengerCard__divider} />
+      {!passenger.isCollapsed && (
+        <>
+          <div className={styles.passengerCard__content}>
+            <div className={styles.passengerCard__divider} />
 
-          <select
-            className={styles.passengerCard__select}
-            value={passenger.isAdult ? 'adult' : 'child'}
-            onChange={(e) =>
-              handlePassengerTypeChange(e.target.value as 'adult' | 'child')
-            }
-          >
-            <option value="adult">Взрослый</option>
-            <option value="child">Детский</option>
-          </select>
+            <select
+              className={styles.passengerCard__select}
+              value={passenger.isAdult ? 'adult' : 'child'}
+              onChange={(e) =>
+                handlePassengerTypeChange(e.target.value as 'adult' | 'child')
+              }
+              disabled={!isActive}
+            >
+              <option value="adult">Взрослый</option>
+              <option value="child">Детский</option>
+            </select>
 
-          <div className={styles.passengerCard__row}>
-            <div className={styles.passengerCard__field}>
-              <span className={styles.passengerCard__label}>Фамилия</span>
-              <input
-                type="text"
-                className={styles.passengerCard__input}
-                value={passenger.lastName}
-                onChange={(e) =>
-                  handleNameChange(e.target.value, 'lastName', setLastNameError)
-                }
-              />
-              {lastNameError && (
-                <span className={styles.passengerCard__error}>
-                  {lastNameError}
-                </span>
-              )}
-            </div>
-            <div className={styles.passengerCard__field}>
-              <span className={styles.passengerCard__label}>Имя</span>
-              <input
-                type="text"
-                className={styles.passengerCard__input}
-                value={passenger.firstName}
-                onChange={(e) =>
-                  handleNameChange(
-                    e.target.value,
-                    'firstName',
-                    setFirstNameError
-                  )
-                }
-              />
-              {firstNameError && (
-                <span className={styles.passengerCard__error}>
-                  {firstNameError}
-                </span>
-              )}
-            </div>
-            <div className={styles.passengerCard__field}>
-              <span className={styles.passengerCard__label}>Отчество</span>
-              <input
-                type="text"
-                className={styles.passengerCard__input}
-                value={passenger.patronymic}
-                onChange={(e) =>
-                  handleNameChange(
-                    e.target.value,
-                    'patronymic',
-                    setMiddleNameError
-                  )
-                }
-              />
-              {middleNameError && (
-                <span className={styles.passengerCard__error}>
-                  {middleNameError}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.passengerCard__row}>
-            <div className={styles.passengerCard__field}>
-              <span className={styles.passengerCard__label}>Пол</span>
-              <div className={styles.passengerCard__gender}>
-                <button
-                  type="button"
-                  className={`${styles.passengerCard__genderBtn} ${
-                    passenger.gender
-                      ? styles.passengerCard__genderBtn_active
-                      : ''
-                  }`}
-                  onClick={() => update({ gender: true })}
-                >
-                  м
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.passengerCard__genderBtn} ${
-                    !passenger.gender
-                      ? styles.passengerCard__genderBtn_active
-                      : ''
-                  }`}
-                  onClick={() => update({ gender: false })}
-                >
-                  ж
-                </button>
-              </div>
-            </div>
-            <div className={styles.passengerCard__field}>
-              <span className={styles.passengerCard__label}>Дата рождения</span>
-              <input
-                type="text"
-                placeholder="ДД/ММ/ГГГГ"
-                className={styles.passengerCard__input}
-                value={passenger.birthday}
-                onChange={(e) => handleBirthDateChange(e.target.value)}
-              />
-              {birthDateError && (
-                <span className={styles.passengerCard__error}>
-                  {birthDateError}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <label className={styles.passengerCard__mobility}>
-            <input type="checkbox" className={styles.passengerCard__checkbox} />
-            <span className={styles.passengerCard__mobilityText}>
-              ограниченная подвижность
-            </span>
-          </label>
-
-          <div className={styles.passengerCard__divider} />
-
-          <div className={styles.passengerCard__row}>
-            <div className={styles.passengerCard__field}>
-              <span className={styles.passengerCard__label}>Тип документа</span>
-              <select
-                className={`${styles.passengerCard__select} ${
-                  passenger.documentType === 'birth'
-                    ? styles.passengerCard__select_wide
-                    : styles.passengerCard__select_short
-                }`}
-                value={passenger.documentType}
-                onChange={(e) => handleDocumentTypeChange(e.target.value)}
-              >
-                <option value="passport">Паспорт РФ</option>
-                <option value="birth">Свидетельство о рождении</option>
-              </select>
-            </div>
-            {passenger.documentType === 'passport' && (
+            <div className={styles.passengerCard__row}>
               <div className={styles.passengerCard__field}>
-                <span className={styles.passengerCard__label}>Серия</span>
+                <span className={styles.passengerCard__label}>Фамилия</span>
                 <input
                   type="text"
-                  className={`${styles.passengerCard__input} ${styles.passengerCard__input_short}`}
-                  value={series}
-                  onChange={(e) => handleSeriesChange(e.target.value)}
+                  className={styles.passengerCard__input}
+                  value={passenger.lastName}
+                  onChange={(e) => handleNameChange('lastName', e.target.value)}
+                  disabled={!isActive}
                 />
-                {passportSeriesError && (
+              </div>
+              <div className={styles.passengerCard__field}>
+                <span className={styles.passengerCard__label}>Имя</span>
+                <input
+                  type="text"
+                  className={styles.passengerCard__input}
+                  value={passenger.firstName}
+                  onChange={(e) =>
+                    handleNameChange('firstName', e.target.value)
+                  }
+                  disabled={!isActive}
+                />
+              </div>
+              <div className={styles.passengerCard__field}>
+                <span className={styles.passengerCard__label}>Отчество</span>
+                <input
+                  type="text"
+                  className={styles.passengerCard__input}
+                  value={passenger.patronymic}
+                  onChange={(e) =>
+                    handleNameChange('patronymic', e.target.value)
+                  }
+                  disabled={!isActive}
+                />
+              </div>
+            </div>
+
+            <div className={styles.passengerCard__row}>
+              <div className={styles.passengerCard__field}>
+                <span className={styles.passengerCard__label}>Пол</span>
+                <div className={styles.passengerCard__gender}>
+                  <button
+                    type="button"
+                    className={`${styles.passengerCard__genderBtn} ${
+                      passenger.gender
+                        ? styles.passengerCard__genderBtn_active
+                        : ''
+                    }`}
+                    onClick={() => update({ gender: true })}
+                    disabled={!isActive}
+                  >
+                    м
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.passengerCard__genderBtn} ${
+                      !passenger.gender
+                        ? styles.passengerCard__genderBtn_active
+                        : ''
+                    }`}
+                    onClick={() => update({ gender: false })}
+                    disabled={!isActive}
+                  >
+                    ж
+                  </button>
+                </div>
+              </div>
+              <div className={styles.passengerCard__field}>
+                <span className={styles.passengerCard__label}>
+                  Дата рождения
+                </span>
+                <input
+                  type="text"
+                  placeholder="ДД/ММ/ГГГГ"
+                  className={styles.passengerCard__input}
+                  value={passenger.birthday}
+                  onChange={(e) => handleBirthDateChange(e.target.value)}
+                  disabled={!isActive}
+                />
+                {birthDateError && (
                   <span className={styles.passengerCard__error}>
-                    {passportSeriesError}
+                    {birthDateError}
                   </span>
                 )}
               </div>
-            )}
-            <div className={styles.passengerCard__field}>
-              <span className={styles.passengerCard__label}>Номер</span>
+            </div>
+
+            <label className={styles.passengerCard__mobility}>
               <input
-                type="text"
-                className={`${styles.passengerCard__input} ${
-                  passenger.documentType === 'birth'
-                    ? styles.passengerCard__input_wide
-                    : styles.passengerCard__input_short
-                }`}
-                value={number}
-                onChange={(e) => handleNumberChange(e.target.value)}
+                type="checkbox"
+                className={styles.passengerCard__checkbox}
+                disabled={!isActive}
               />
-              {passportNumberError && (
-                <span className={styles.passengerCard__error}>
-                  {passportNumberError}
+              <span className={styles.passengerCard__mobilityText}>
+                ограниченная подвижность
+              </span>
+            </label>
+
+            <div className={styles.passengerCard__divider} />
+
+            <div className={styles.passengerCard__row}>
+              <div className={styles.passengerCard__field}>
+                <span className={styles.passengerCard__label}>
+                  Тип документа
                 </span>
+                <select
+                  className={`${styles.passengerCard__select} ${
+                    passenger.documentType === 'birth'
+                      ? styles.passengerCard__select_wide
+                      : styles.passengerCard__select_short
+                  }`}
+                  value={passenger.documentType}
+                  onChange={(e) => handleDocumentTypeChange(e.target.value)}
+                  disabled={!isActive}
+                >
+                  <option value="passport">Паспорт РФ</option>
+                  <option value="birth">Свидетельство о рождении</option>
+                </select>
+              </div>
+              {passenger.documentType === 'passport' && (
+                <div className={styles.passengerCard__field}>
+                  <span className={styles.passengerCard__label}>Серия</span>
+                  <input
+                    type="text"
+                    className={`${styles.passengerCard__input} ${styles.passengerCard__input_short}`}
+                    value={series}
+                    onChange={(e) => handleSeriesChange(e.target.value)}
+                    disabled={!isActive}
+                  />
+                  {passportSeriesError && (
+                    <span className={styles.passengerCard__error}>
+                      {passportSeriesError}
+                    </span>
+                  )}
+                </div>
               )}
+              <div className={styles.passengerCard__field}>
+                <span className={styles.passengerCard__label}>Номер</span>
+                <input
+                  type="text"
+                  className={`${styles.passengerCard__input} ${
+                    passenger.documentType === 'birth'
+                      ? styles.passengerCard__input_wide
+                      : styles.passengerCard__input_short
+                  }`}
+                  value={number}
+                  onChange={(e) => handleNumberChange(e.target.value)}
+                  disabled={!isActive}
+                />
+                {passportNumberError && (
+                  <span className={styles.passengerCard__error}>
+                    {passportNumberError}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className={styles.passengerCard__divider} />
-
-          <button
-            type="button"
-            className={styles.passengerCard__next}
-            onClick={onNext}
-          >
-            Следующий пассажир
-          </button>
-        </div>
+          {isActive && (
+            <div
+              className={`${styles.passengerCard__status} ${
+                isValid
+                  ? styles.passengerCard__status_success
+                  : styles.passengerCard__status_error
+              }`}
+            >
+              <div className={styles.passengerCard__statusIcon}>
+                <img
+                  src={
+                    isValid
+                      ? '/src/images/icon-success-check.svg'
+                      : '/src/images/icon-success-error.svg'
+                  }
+                  alt=""
+                  className={styles.passengerCard__statusSvg}
+                />
+              </div>
+              {isValid ? (
+                <>
+                  <span className={styles.passengerCard__statusText}>
+                    Готово
+                  </span>
+                  <button
+                    type="button"
+                    className={styles.passengerCard__next}
+                    onClick={onNext}
+                  >
+                    Следующий пассажир
+                  </button>
+                </>
+              ) : (
+                <span className={styles.passengerCard__statusError}>
+                  {firstError}
+                </span>
+              )}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

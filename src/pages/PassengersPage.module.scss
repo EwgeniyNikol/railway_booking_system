@@ -19,8 +19,66 @@
     flex-direction: column;
   }
 
+  &__addPassenger {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 60rem;
+    height: 6.0625rem;
+    padding: 0 2.5625rem 0 1.625rem;
+    background: var(--color-white);
+    border: 1px solid #c4c4c4;
+    box-shadow: 0 0.125rem 0.125rem rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    margin-bottom: 2.75rem;
+  }
+
+  &__addPassengerText {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1.875rem;
+    line-height: 2.1875rem;
+    color: var(--color-dark);
+  }
+
+  &__addPassenger svg {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
   &__next {
     align-self: flex-end;
     margin-top: 3.6875rem;
+  }
+}
+
+@include respond-to(laptop) {
+  .page {
+    padding: 0 4rem;
+  }
+}
+
+@include respond-to(tablet) {
+  .page {
+    flex-direction: column;
+    padding: 0 2rem;
+  }
+}
+
+@include respond-to(mobile) {
+  .page {
+    padding: 0 1rem;
+    gap: 2rem;
+
+    &__addPassenger {
+      width: 100%;
+      height: 4rem;
+      padding: 0 1rem;
+    }
+
+    &__addPassengerText {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
   }
 }
