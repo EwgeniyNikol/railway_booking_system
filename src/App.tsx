@@ -9,7 +9,7 @@ import OrderSuccessPage from './pages/OrderSuccessPage';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/railway_booking_system">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/choose-train" element={<ChooseTrainPage />} />
