@@ -21,7 +21,7 @@ export async function fetchLastRoutes() {
 }
 
 export async function fetchRoutes(
-  params: Record<string, string | number | boolean>
+  params: Record<string, string | number | boolean | null>
 ) {
   const queryParams = new URLSearchParams();
 
@@ -40,7 +40,7 @@ export async function fetchRoutes(
 
 export async function fetchSeats(
   routeId: string,
-  params: Record<string, string | number | boolean>
+  params: Record<string, string | number | boolean | null>
 ) {
   const queryParams = new URLSearchParams();
 
