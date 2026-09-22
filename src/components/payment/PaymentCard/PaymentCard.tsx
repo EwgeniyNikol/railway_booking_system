@@ -1,16 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './PaymentCard.module.scss';
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]*$/;
-const PHONE_REGEX = /^\d*$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const formatPhone = (value: string): string => {
-  const digits = value.replace(/\D/g, '').slice(0, 10);
-  return digits;
+const formatPhoneDisplay = (digits: string): string => {
+  if (!digits) return '';
+  const d = digits.startsWith('7') ? digits.slice(1) : digits;
+  const parts = ['+7'];
+  if (d.length > 0) parts.push(d.slice(0, 3));
+  if (d.length > 3) parts.push(d.slice(3, 6));
+  if (d.length > 6) parts.push(d.slice(6, 8));
+  if (d.length > 8) parts.push(d.slice(8, 10));
+  return parts.join(' ');
 };
 
-const PaymentCard = () => {
+type PaymentCardProps = {
+  onValidityChange?: (isValid: boolean) => void;
+};
+
+const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
   const [paymentMethod, setPaymentMethod] = useState('online');
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -22,6 +31,28 @@ const PaymentCard = () => {
   const [middleNameError, setMiddleNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [emailError, setEmailError] = useState('');
+
+  useEffect(() => {
+    const isValid =
+      lastName.trim() !== '' &&
+      NAME_REGEX.test(lastName) &&
+      firstName.trim() !== '' &&
+      NAME_REGEX.test(firstName) &&
+      (!middleName || NAME_REGEX.test(middleName)) &&
+      phone.length === 11 &&
+      EMAIL_REGEX.test(email);
+
+    if (onValidityChange) {
+      onValidityChange(isValid);
+    }
+  }, [
+    lastName,
+    firstName,
+    middleName,
+    phone,
+    email,
+    onValidityChange,
+  ]);
 
   const handleNameChange = (
     value: string,
@@ -37,12 +68,21 @@ const PaymentCard = () => {
   };
 
   const handlePhoneChange = (value: string) => {
-    if (!PHONE_REGEX.test(value.replace(/[\s+\-_()]/g, ''))) {
-      setPhoneError('Только цифры');
+    const digits = value.replace(/\D/g, '');
+    if (!digits) {
+      setPhone('');
+      setPhoneError('');
       return;
     }
-    setPhone(formatPhone(value));
+    const withCode = digits.startsWith('7') ? digits : `7${digits}`;
+    setPhone(withCode.slice(0, 11));
     setPhoneError('');
+  };
+
+  const handlePhoneFocus = () => {
+    if (!phone) {
+      setPhone('7');
+    }
   };
 
   const handleEmailChange = (value: string) => {
@@ -128,8 +168,9 @@ const PaymentCard = () => {
             type="text"
             placeholder="+7 ___ ___ __ __"
             className={`${styles.paymentCard__input} ${styles.paymentCard__input_wide}`}
-            value={phone}
+            value={formatPhoneDisplay(phone)}
             onChange={(e) => handlePhoneChange(e.target.value)}
+            onFocus={handlePhoneFocus}
           />
           {phoneError && (
             <span className={styles.paymentCard__error}>{phoneError}</span>

@@ -5,6 +5,7 @@ type NextButtonProps = {
   to?: string;
   onClick?: () => void;
   disabled?: boolean;
+  wide?: boolean;
   children?: string;
 };
 
@@ -12,6 +13,7 @@ const NextButton = ({
   to,
   onClick,
   disabled = false,
+  wide = false,
   children = 'Далее',
 }: NextButtonProps) => {
   const navigate = useNavigate();
@@ -21,10 +23,18 @@ const NextButton = ({
     if (to) navigate(to);
   };
 
+  const className = [
+    styles.button,
+    wide ? styles.button_wide : '',
+    disabled ? styles.button_disabled : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <button
       type="button"
-      className={`${styles.button} ${disabled ? styles.button_disabled : ''}`}
+      className={className}
       onClick={handleClick}
       disabled={disabled}
     >

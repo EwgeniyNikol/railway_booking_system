@@ -19,34 +19,9 @@
     flex-direction: column;
   }
 
-  &__button {
+  &__next {
     align-self: flex-end;
-    width: 20.1875rem;
-    height: 3.75rem;
     margin-top: 7.25rem;
-    background: #ffa800;
-    border: none;
-    border-radius: 0.3125rem;
-    font-family: var(--font-family);
-    font-weight: var(--font-weight-bold);
-    font-size: 1.5rem;
-    line-height: 1.75rem;
-    text-align: center;
-    text-transform: uppercase;
-    color: var(--color-white);
-    cursor: pointer;
-    transition: box-shadow 0.2s, background 0.2s, color 0.2s, border 0.2s;
-
-    &:hover {
-      box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
-    }
-
-    &:active {
-      background: transparent;
-      border: 1px solid #ffa800;
-      color: #ffa800;
-      filter: drop-shadow(0 0.25rem 0.25rem rgba(0, 0, 0, 0.25));
-    }
   }
 }
 
@@ -75,9 +50,8 @@
     gap: 2rem;
   }
 
-  .page__button {
+  .page__next {
     width: 100%;
-    font-size: 1.25rem;
     margin-top: 2rem;
   }
 }
