@@ -49,7 +49,7 @@ const OrderPage = () => {
 
   return (
     <>
-      <HeaderTrain />
+      <HeaderTrain isLoading={orderStatus === 'loading'} />
       <ProgressSteps activeStep={3} />
       <div className={styles.page}>
         <div className={styles.page__sidebar}>

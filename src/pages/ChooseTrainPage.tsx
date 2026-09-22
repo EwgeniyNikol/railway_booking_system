@@ -7,6 +7,7 @@ import LastTickets from '../components/choose-train/LastTickets/LastTickets';
 import TicketsToolbar from '../components/choose-train/TicketsToolbar/TicketsToolbar';
 import TicketCard from '../components/choose-train/TicketCard/TicketCard';
 import Pagination from '../components/choose-train/Pagination/Pagination';
+import LoadingScreen from '../components/choose-train/LoadingScreen/LoadingScreen';
 import Footer from '../components/Footer/Footer';
 import { searchRoutes } from '../store/slices/searchSlice';
 import type { RootState, AppDispatch } from '../store/store';
@@ -32,6 +33,9 @@ const ChooseTrainPage = () => {
     (state: RootState) => state.search.returnRoutes
   );
   const status = useSelector((state: RootState) => state.search.status);
+  const returnStatus = useSelector(
+    (state: RootState) => state.search.returnStatus
+  );
   const savedFromCity = useSelector(
     (state: RootState) => state.search.from_city
   );
@@ -127,20 +131,13 @@ const ChooseTrainPage = () => {
     end_arrival_hour_to,
   ]);
 
-  if (status === 'loading') {
+  const isLoading = status === 'loading' || returnStatus === 'loading';
+
+  if (isLoading) {
     return (
       <>
         <HeaderTrain key={savedFromCity?._id || 'empty'} />
-        <ProgressSteps activeStep={0} />
-        <div className={styles.page}>
-          <div className={styles.page__sidebar}>
-            <Sidebar />
-            <LastTickets />
-          </div>
-          <div className={styles.page__content}>
-            <div className={styles.page__loader}>Загрузка...</div>
-          </div>
-        </div>
+        <LoadingScreen />
         <Footer />
       </>
     );

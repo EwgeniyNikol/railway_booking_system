@@ -67,6 +67,8 @@ export interface BookingState {
   selectedReturnRoute: Departure | null;
   seats: CoachApiResponse[];
   returnSeats: CoachApiResponse[];
+  seatsStatus: 'idle' | 'loading' | 'success' | 'error';
+  seatsError: string | null;
   selectedPlaces: SelectedPlace[];
   passengerCount: {
     adults: number;
@@ -120,6 +122,8 @@ const initialState: BookingState = {
   selectedReturnRoute: null,
   seats: [],
   returnSeats: [],
+  seatsStatus: 'idle',
+  seatsError: null,
   selectedPlaces: [],
   passengerCount: {
     adults: 2,
@@ -325,6 +329,8 @@ const bookingSlice = createSlice({
       state.selectedReturnRoute = null;
       state.seats = [];
       state.returnSeats = [];
+      state.seatsStatus = 'idle';
+      state.seatsError = null;
       state.selectedPlaces = [];
       state.passengerCount = initialState.passengerCount;
       state.passengers = [];
@@ -339,11 +345,28 @@ const bookingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getSeats.pending, (state) => {
+        state.seatsStatus = 'loading';
+      })
       .addCase(getSeats.fulfilled, (state, action) => {
+        state.seatsStatus = 'success';
         state.seats = action.payload;
       })
+      .addCase(getSeats.rejected, (state, action) => {
+        state.seatsStatus = 'error';
+        state.seatsError = action.error.message || 'Ошибка загрузки мест';
+      })
+      .addCase(getReturnSeats.pending, (state) => {
+        state.seatsStatus = 'loading';
+      })
       .addCase(getReturnSeats.fulfilled, (state, action) => {
+        state.seatsStatus = 'success';
         state.returnSeats = action.payload;
+      })
+      .addCase(getReturnSeats.rejected, (state, action) => {
+        state.seatsStatus = 'error';
+        state.seatsError =
+          action.error.message || 'Ошибка загрузки обратных мест';
       })
       .addCase(submitBooking.pending, (state) => {
         state.orderStatus = 'loading';

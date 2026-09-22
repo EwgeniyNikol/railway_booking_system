@@ -40,6 +40,8 @@ export interface SearchState {
   cities: unknown[];
   status: 'idle' | 'loading' | 'success' | 'error';
   error: string | null;
+  returnStatus: 'idle' | 'loading' | 'success' | 'error';
+  returnError: string | null;
 }
 
 const initialState: SearchState = {
@@ -79,6 +81,8 @@ const initialState: SearchState = {
   cities: [],
   status: 'idle',
   error: null,
+  returnStatus: 'idle',
+  returnError: null,
 };
 
 export const searchRoutes = createAsyncThunk(
@@ -119,6 +123,10 @@ const searchSlice = createSlice({
   reducers: {
     setParams(state, action: PayloadAction<Partial<SearchState['params']>>) {
       state.params = { ...state.params, ...action.payload };
+      state.status = 'idle';
+      state.error = null;
+      state.returnStatus = 'idle';
+      state.returnError = null;
     },
     setCities(
       state,
@@ -151,16 +159,16 @@ const searchSlice = createSlice({
         state.error = action.error.message || 'Ошибка загрузки направлений';
       })
       .addCase(getReturnRoutes.pending, (state) => {
-        state.status = 'loading';
+        state.returnStatus = 'loading';
       })
       .addCase(getReturnRoutes.fulfilled, (state, action) => {
-        state.status = 'success';
+        state.returnStatus = 'success';
         state.returnRoutes = action.payload.items;
         state.return_total_count = action.payload.total_count;
       })
       .addCase(getReturnRoutes.rejected, (state, action) => {
-        state.status = 'error';
-        state.error =
+        state.returnStatus = 'error';
+        state.returnError =
           action.error.message || 'Ошибка загрузки обратных направлений';
       })
       .addCase(getLastRoutes.fulfilled, (state, action) => {

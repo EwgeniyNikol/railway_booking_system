@@ -1,0 +1,12 @@
+.bar {
+  width: 100%;
+  height: 0.5rem;
+  background: #292929;
+  overflow: hidden;
+}
+
+.bar__fill {
+  height: 100%;
+  background: #ffa800;
+  transition: width 0.3s ease;
+}

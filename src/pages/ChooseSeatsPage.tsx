@@ -33,6 +33,9 @@ const ChooseSeatsPage = () => {
   const returnSeats = useSelector(
     (state: RootState) => state.booking.returnSeats
   );
+  const seatsStatus = useSelector(
+    (state: RootState) => state.booking.seatsStatus
+  );
   const passengerCount = useSelector(
     (state: RootState) => state.booking.passengerCount
   );
@@ -98,7 +101,7 @@ const ChooseSeatsPage = () => {
 
   return (
     <>
-      <HeaderTrain />
+      <HeaderTrain isLoading={seatsStatus === 'loading'} />
       <ProgressSteps activeStep={0} />
       <div className={styles.page}>
         <div className={styles.page__sidebar}>
