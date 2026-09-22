@@ -1,11 +1,14 @@
 # railway_booking_system
 
+[![CI](https://github.com/EwgeniyNikol/railway_booking_system/actions/workflows/deploy.yml/badge.svg)](https://github.com/EwgeniyNikol/railway_booking_system/actions/workflows/deploy.yml)
+
 SPA для системы бронирования ж/д билетов на React + TypeScript.
 
 ## Демо
 
 - **GitHub Pages**: (будет добавлено после деплоя)
 - **API**: https://students.netoservices.ru/fe-diplom
+- **Fallback API**: (Render, будет добавлено после деплоя)
 
 ## Технологии
 
@@ -32,7 +35,7 @@ SPA для системы бронирования ж/д билетов на Rea
 src/
   api/                    — запросы к API
   components/             — компоненты
-    common/               — общие компоненты (Calendar, CityInput, NextButton)
+    common/               — общие компоненты (Calendar, CityInput, NextButton, LoadingBar)
     choose-train/         — компоненты страницы выбора поезда
     choose-seats/         — компоненты страницы выбора мест
     passengers/           — компоненты страницы пассажиров (TripDetails, PassengerCard)
@@ -51,8 +54,8 @@ src/
     selectors/            — селекторы
     slices/               — срезы
   styles/                 — SCSS-миксы
-  types/                  — типы API
-  utils/                  — утилиты (валидация)
+  types/                  — типы API и заказа
+  utils/                  — утилиты (валидация, форматирование, сборка заказа)
   index.scss              — глобальные стили
   App.tsx                 — роутинг
   main.tsx                — точка входа
@@ -66,11 +69,11 @@ npm run dev
 
 ### Mock-сервер
 
-В dev-режиме используется локальный mock-сервер (Express + CORS):
+В dev-режиме используется локальный mock-сервер (Express + CORS). **Запускается в отдельном терминале:**
 
 cd mock-server
 npm install
-node server.js
+npm start
 
 Сервер запускается на http://localhost:3001
 
@@ -97,6 +100,8 @@ npm run format:check  — проверка форматирования
 
 Базовый URL: `https://students.netoservices.ru/fe-diplom`
 
+Fallback: mock-сервер на Render (используется, если Нетология недоступна).
+
 | Метод | Эндпоинт | Описание |
 |-------|----------|----------|
 | GET | `/routes/cities?name=` | Поиск городов |
@@ -105,3 +110,10 @@ npm run format:check  — проверка форматирования
 | GET | `/routes/{id}/seats` | Места в вагоне |
 | POST | `/routes/order` | Оформление заказа |
 | GET | `/subscribe?email=` | Подписка |
+
+## Деплой
+
+- **Фронт** — GitHub Pages (GitHub Actions)
+- **Бэк** — Render (mock-сервер)
+
+Логика: при первом запросе параллельно пингуются Нетология и Render. Победитель кэшируется на сессию. При ошибке — fallback на второй URL.
