@@ -167,7 +167,7 @@ const Header = () => {
               }`}
             />
             <img
-              src="/src/images/ic-cached.svg"
+              src={`${import.meta.env.BASE_URL}images/ic-cached.svg`}
               alt=""
               className={styles.header__swap}
             />

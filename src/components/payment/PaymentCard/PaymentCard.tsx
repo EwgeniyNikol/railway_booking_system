@@ -201,7 +201,7 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
           >
             {payer.paymentMethod === 'online' && (
               <img
-                src="/src/images/icon-check.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-check.svg`}
                 alt=""
                 className={styles.paymentCard__check}
               />
@@ -242,7 +242,7 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
             >
               {payer.paymentMethod === 'cash' && (
                 <img
-                  src="/src/images/icon-check.svg"
+                  src={`${import.meta.env.BASE_URL}images/icon-check.svg`}
                   alt=""
                   className={styles.paymentCard__check}
                 />

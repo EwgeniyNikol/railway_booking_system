@@ -7,8 +7,8 @@
   min-height: 37.25rem;
   background:
   image-set(
-    url('/src/images/station-1x.webp') 1x,
-    url('/src/images/station-2x.webp') 2x
+    url('../../../images/station-1x.webp') 1x,
+    url('../../../images/station-2x.webp') 2x
   ) center top / cover no-repeat,
   #000000;
 
@@ -121,14 +121,14 @@
   }
 
   &__input_icon {
-    background-image: url('../../images/vector-arrow.svg');
+    background-image: url('../../../images/vector-arrow.svg');
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.25rem 1.875rem;
   }
 
   &__input_calendar {
-    background-image: url('../../images/calendar.svg');
+    background-image: url('../../../images/calendar.svg');
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.875rem 2.095625rem;

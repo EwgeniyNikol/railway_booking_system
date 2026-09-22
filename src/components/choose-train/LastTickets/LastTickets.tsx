@@ -49,21 +49,21 @@ const LastTickets = () => {
               <div className={styles.lastTickets__icons}>
                 {route.departure.have_air_conditioning && (
                   <img
-                    src="/src/images/icon-conditioner.svg"
+                    src={`${import.meta.env.BASE_URL}images/icon-conditioner.svg`}
                     alt=""
                     className={styles.lastTickets__icon}
                   />
                 )}
                 {route.departure.have_wifi && (
                   <img
-                    src="/src/images/icon-wifi.svg"
+                    src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`}
                     alt=""
                     className={styles.lastTickets__icon}
                   />
                 )}
                 {route.departure.is_express && (
                   <img
-                    src="/src/images/icon-express.svg"
+                    src={`${import.meta.env.BASE_URL}images/icon-express.svg`}
                     alt=""
                     className={styles.lastTickets__icon}
                   />

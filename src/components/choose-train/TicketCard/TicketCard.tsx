@@ -116,7 +116,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
     <div className={styles.ticketCard} ref={cardRef}>
       <div className={styles.ticketCard__left}>
         <img
-          src="/src/images/icon-train.svg"
+          src={`${import.meta.env.BASE_URL}images/icon-train.svg`}
           alt=""
           className={styles.ticketCard__trainIcon}
         />
@@ -149,7 +149,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
               )}
             </div>
             <img
-              src="/src/images/arrow-right.svg"
+              src={`${import.meta.env.BASE_URL}images/arrow-right.svg`}
               alt=""
               className={styles.ticketCard__arrow}
             />
@@ -190,7 +190,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                 )}
               </div>
               <img
-                src="/src/images/arrow-left.svg"
+                src={`${import.meta.env.BASE_URL}images/arrow-left.svg`}
                 alt=""
                 className={styles.ticketCard__arrow}
               />
@@ -230,7 +230,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
               ).toLocaleString('ru-RU')}
             </span>
             <img
-              src="/src/images/icon-ruble.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
               alt=""
               className={styles.ticketCard__seatCurrency}
             />
@@ -251,7 +251,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                       )}
                     </span>
                     <img
-                      src="/src/images/icon-ruble.svg"
+                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                       alt=""
                       className={styles.ticketCard__tooltipCurrency}
                     />
@@ -280,7 +280,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
               ).toLocaleString('ru-RU')}
             </span>
             <img
-              src="/src/images/icon-ruble.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
               alt=""
               className={styles.ticketCard__seatCurrency}
             />
@@ -300,7 +300,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                       )}
                     </span>
                     <img
-                      src="/src/images/icon-ruble.svg"
+                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                       alt=""
                       className={styles.ticketCard__tooltipCurrency}
                     />
@@ -321,7 +321,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                       )}
                     </span>
                     <img
-                      src="/src/images/icon-ruble.svg"
+                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                       alt=""
                       className={styles.ticketCard__tooltipCurrency}
                     />
@@ -341,7 +341,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                       )}
                     </span>
                     <img
-                      src="/src/images/icon-ruble.svg"
+                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                       alt=""
                       className={styles.ticketCard__tooltipCurrency}
                     />
@@ -370,7 +370,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
               ).toLocaleString('ru-RU')}
             </span>
             <img
-              src="/src/images/icon-ruble.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
               alt=""
               className={styles.ticketCard__seatCurrency}
             />
@@ -390,7 +390,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                       )}
                     </span>
                     <img
-                      src="/src/images/icon-ruble.svg"
+                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                       alt=""
                       className={styles.ticketCard__tooltipCurrency}
                     />
@@ -411,7 +411,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                       )}
                     </span>
                     <img
-                      src="/src/images/icon-ruble.svg"
+                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                       alt=""
                       className={styles.ticketCard__tooltipCurrency}
                     />
@@ -440,7 +440,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
               ).toLocaleString('ru-RU')}
             </span>
             <img
-              src="/src/images/icon-ruble.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
               alt=""
               className={styles.ticketCard__seatCurrency}
             />
@@ -461,7 +461,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
                       )}
                     </span>
                     <img
-                      src="/src/images/icon-ruble.svg"
+                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                       alt=""
                       className={styles.ticketCard__tooltipCurrency}
                     />
@@ -475,35 +475,35 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
         <div className={styles.ticketCard__icons}>
           {departureRoute.have_wifi && (
             <img
-              src="/src/images/icon-wifi.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`}
               alt=""
               className={styles.ticketCard__icon}
             />
           )}
           {departureRoute.is_express && (
             <img
-              src="/src/images/icon-express.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-express.svg`}
               alt=""
               className={styles.ticketCard__icon}
             />
           )}
           {departureRoute.have_air_conditioning && (
             <img
-              src="/src/images/icon-conditioner.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-conditioner.svg`}
               alt=""
               className={styles.ticketCard__icon}
             />
           )}
           {departureRoute.have_food && (
             <img
-              src="/src/images/icon-food.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-food.svg`}
               alt=""
               className={styles.ticketCard__icon}
             />
           )}
           {departureRoute.have_linens && (
             <img
-              src="/src/images/icon-linens.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-linens.svg`}
               alt=""
               className={styles.ticketCard__icon}
             />

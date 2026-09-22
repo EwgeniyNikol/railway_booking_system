@@ -13,7 +13,7 @@ const HowItWorks = () => {
         <div className={styles.how__item}>
           <div className={styles.how__icon}>
             <img
-              src="/src/images/icon-order.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-order.svg`}
               alt=""
               className={styles.how__icon_img}
             />
@@ -25,7 +25,7 @@ const HowItWorks = () => {
         <div className={styles.how__item}>
           <div className={styles.how__icon}>
             <img
-              src="/src/images/icon-office.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-office.svg`}
               alt=""
               className={styles.how__icon_img}
             />
@@ -35,7 +35,7 @@ const HowItWorks = () => {
         <div className={styles.how__item}>
           <div className={styles.how__icon}>
             <img
-              src="/src/images/icon-directions.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-directions.svg`}
               alt=""
               className={styles.how__icon_img}
             />

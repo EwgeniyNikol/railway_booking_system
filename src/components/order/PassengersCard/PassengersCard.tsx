@@ -40,7 +40,7 @@ const PassengersCard = () => {
               <div className={styles.passengersCard__item}>
                 <div className={styles.passengersCard__left}>
                   <img
-                    src="/src/images/icon-user.svg"
+                    src={`${import.meta.env.BASE_URL}images/icon-user.svg`}
                     alt=""
                     className={styles.passengersCard__icon}
                   />
@@ -78,7 +78,7 @@ const PassengersCard = () => {
               {totalPrice.toLocaleString('ru-RU')}
             </span>
             <img
-              src="/src/images/icon-ruble.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
               alt=""
               className={styles.passengersCard__totalCurrency}
             />

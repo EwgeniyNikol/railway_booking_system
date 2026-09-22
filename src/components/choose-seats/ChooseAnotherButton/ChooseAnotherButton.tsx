@@ -30,11 +30,11 @@ const ChooseAnotherButton = ({
     >
       {direction === 'forward' ? (
         <span className={styles.button__icon}>
-          <img src="/src/images/arrow-right-white.svg" alt="" />
+          <img src={`${import.meta.env.BASE_URL}images/arrow-right-white.svg`} alt="" />
         </span>
       ) : (
         <img
-          src="/src/images/arrow-back-white.svg"
+          src={`${import.meta.env.BASE_URL}images/arrow-back-white.svg`}
           alt=""
           className={styles.button__iconFull}
         />

@@ -17,25 +17,25 @@ const CAR_TYPES: {
   {
     key: 'sitting',
     label: 'Сидячий',
-    icon: '/src/images/icon-car-sitting.svg',
+    icon: `${import.meta.env.BASE_URL}images/icon-car-sitting.svg`,
     apiType: 'fourth',
   },
   {
     key: 'platzkart',
     label: 'Плацкарт',
-    icon: '/src/images/icon-car-platzkart.svg',
+    icon: `${import.meta.env.BASE_URL}images/icon-car-platzkart.svg`,
     apiType: 'third',
   },
   {
     key: 'coupe',
     label: 'Купе',
-    icon: '/src/images/icon-car-coupe.svg',
+    icon: `${import.meta.env.BASE_URL}images/icon-car-coupe.svg`,
     apiType: 'second',
   },
   {
     key: 'lux',
     label: 'Люкс',
-    icon: '/src/images/icon-car-lux.svg',
+    icon: `${import.meta.env.BASE_URL}images/icon-car-lux.svg`,
     apiType: 'first',
   },
 ];

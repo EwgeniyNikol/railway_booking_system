@@ -169,7 +169,7 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
                   className={`${styles.header__input} ${styles.header__input_icon}`}
                 />
                 <img
-                  src="/src/images/ic-cached.svg"
+                  src={`${import.meta.env.BASE_URL}images/ic-cached.svg`}
                   alt=""
                   className={styles.header__swap}
                 />

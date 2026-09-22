@@ -429,8 +429,8 @@ const PassengerCard = ({
                 <img
                   src={
                     isValid
-                      ? '/src/images/icon-success-check.svg'
-                      : '/src/images/icon-success-error.svg'
+                      ? `${import.meta.env.BASE_URL}images/icon-success-check.svg`
+                      : `${import.meta.env.BASE_URL}images/icon-success-error.svg`
                   }
                   alt=""
                   className={styles.passengerCard__statusSvg}

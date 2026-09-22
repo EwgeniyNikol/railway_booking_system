@@ -8,7 +8,7 @@ const Footer = () => {
           <h2 className={styles.footer__title}>Свяжитесь с нами</h2>
           <div className={styles.footer__contact}>
             <img
-              src="/src/images/tel.svg"
+              src={`${import.meta.env.BASE_URL}images/tel.svg`}
               alt=""
               className={styles.footer__icon}
             />
@@ -16,7 +16,7 @@ const Footer = () => {
           </div>
           <div className={styles.footer__contact}>
             <img
-              src="/src/images/mail.svg"
+              src={`${import.meta.env.BASE_URL}images/mail.svg`}
               alt=""
               className={styles.footer__icon}
             />
@@ -24,7 +24,7 @@ const Footer = () => {
           </div>
           <div className={styles.footer__contact}>
             <img
-              src="/src/images/skype.svg"
+              src={`${import.meta.env.BASE_URL}images/skype.svg`}
               alt=""
               className={styles.footer__icon}
             />
@@ -32,7 +32,7 @@ const Footer = () => {
           </div>
           <div className={styles.footer__contact}>
             <img
-              src="/src/images/place.svg"
+              src={`${import.meta.env.BASE_URL}images/place.svg`}
               alt=""
               className={styles.footer__icon}
             />
@@ -57,27 +57,27 @@ const Footer = () => {
           <p className={styles.footer__social_title}>Подписывайтесь на нас</p>
           <div className={styles.footer__socials}>
             <img
-              src="/src/images/yotube.svg"
+              src={`${import.meta.env.BASE_URL}images/yotube.svg`}
               alt=""
               className={styles.footer__social}
             />
             <img
-              src="/src/images/in.svg"
+              src={`${import.meta.env.BASE_URL}images/in.svg`}
               alt=""
               className={styles.footer__social}
             />
             <img
-              src="/src/images/google.svg"
+              src={`${import.meta.env.BASE_URL}images/google.svg`}
               alt=""
               className={styles.footer__social}
             />
             <img
-              src="/src/images/facebook.svg"
+              src={`${import.meta.env.BASE_URL}images/facebook.svg`}
               alt=""
               className={styles.footer__social}
             />
             <img
-              src="/src/images/twiter.svg"
+              src={`${import.meta.env.BASE_URL}images/twiter.svg`}
               alt=""
               className={styles.footer__social}
             />
@@ -88,7 +88,7 @@ const Footer = () => {
         <span className={styles.footer__logo}>Лого</span>
         <div className={styles.footer__arrow}>
           <img
-            src="/src/images/arrow-up.svg"
+            src={`${import.meta.env.BASE_URL}images/arrow-up.svg`}
             alt=""
             className={styles.footer__arrow_icon}
           />

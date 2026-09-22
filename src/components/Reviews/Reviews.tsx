@@ -7,8 +7,8 @@ const Reviews = () => {
       <div className={styles.reviews__list}>
         <div className={styles.reviews__item}>
           <img
-            src="/src/images/review-1-1x.webp"
-            srcSet="/src/images/review-1-1x.webp 1x, /src/images/review-1-2x.webp 2x"
+            src={`${import.meta.env.BASE_URL}images/review-1-1x.webp`}
+            srcSet={`${import.meta.env.BASE_URL}images/review-1-1x.webp 1x, ${import.meta.env.BASE_URL}images/review-1-2x.webp 2x`}
             alt="Екатерина Вальнова"
             className={styles.reviews__photo}
           />
@@ -23,8 +23,8 @@ const Reviews = () => {
         </div>
         <div className={styles.reviews__item}>
           <img
-            src="/src/images/review-2-1x.webp"
-            srcSet="/src/images/review-2-1x.webp 1x, /src/images/review-2-2x.webp 2x"
+            src={`${import.meta.env.BASE_URL}images/review-2-1x.webp`}
+            srcSet={`${import.meta.env.BASE_URL}images/review-2-1x.webp 1x, ${import.meta.env.BASE_URL}images/review-2-2x.webp 2x`}
             alt="Евгений Стрыкало"
             className={styles.reviews__photo}
           />

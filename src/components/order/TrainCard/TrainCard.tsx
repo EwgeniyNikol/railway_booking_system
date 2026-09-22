@@ -51,8 +51,8 @@ const DirectionRow = ({ route, isReturn }: DirectionRowProps) => (
       <img
         src={
           isReturn
-            ? '/src/images/arrow-duration-left.svg'
-            : '/src/images/arrow-duration.svg'
+            ? `${import.meta.env.BASE_URL}images/arrow-duration-left.svg`
+            : `${import.meta.env.BASE_URL}images/arrow-duration.svg`
         }
         alt=""
         className={styles.trainCard__arrow}
@@ -113,7 +113,7 @@ const TrainCard = () => {
       <div className={styles.trainCard__body}>
         <div className={styles.trainCard__left}>
           <img
-            src="/src/images/icon-train.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-train.svg`}
             alt=""
             className={styles.trainCard__trainIcon}
           />
@@ -148,7 +148,7 @@ const TrainCard = () => {
                 )}
               </span>
               <img
-                src="/src/images/icon-ruble.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                 alt=""
                 className={styles.trainCard__seatCurrency}
               />
@@ -168,7 +168,7 @@ const TrainCard = () => {
                         ).toLocaleString('ru-RU')}
                       </span>
                       <img
-                        src="/src/images/icon-ruble.svg"
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                         alt=""
                         className={styles.trainCard__tooltipCurrency}
                       />
@@ -195,7 +195,7 @@ const TrainCard = () => {
                 )}
               </span>
               <img
-                src="/src/images/icon-ruble.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                 alt=""
                 className={styles.trainCard__seatCurrency}
               />
@@ -215,7 +215,7 @@ const TrainCard = () => {
                         )}
                       </span>
                       <img
-                        src="/src/images/icon-ruble.svg"
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                         alt=""
                         className={styles.trainCard__tooltipCurrency}
                       />
@@ -235,7 +235,7 @@ const TrainCard = () => {
                         ).toLocaleString('ru-RU')}
                       </span>
                       <img
-                        src="/src/images/icon-ruble.svg"
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                         alt=""
                         className={styles.trainCard__tooltipCurrency}
                       />
@@ -255,7 +255,7 @@ const TrainCard = () => {
                         ).toLocaleString('ru-RU')}
                       </span>
                       <img
-                        src="/src/images/icon-ruble.svg"
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                         alt=""
                         className={styles.trainCard__tooltipCurrency}
                       />
@@ -282,7 +282,7 @@ const TrainCard = () => {
                 )}
               </span>
               <img
-                src="/src/images/icon-ruble.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                 alt=""
                 className={styles.trainCard__seatCurrency}
               />
@@ -302,7 +302,7 @@ const TrainCard = () => {
                         ).toLocaleString('ru-RU')}
                       </span>
                       <img
-                        src="/src/images/icon-ruble.svg"
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                         alt=""
                         className={styles.trainCard__tooltipCurrency}
                       />
@@ -322,7 +322,7 @@ const TrainCard = () => {
                         ).toLocaleString('ru-RU')}
                       </span>
                       <img
-                        src="/src/images/icon-ruble.svg"
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                         alt=""
                         className={styles.trainCard__tooltipCurrency}
                       />
@@ -349,7 +349,7 @@ const TrainCard = () => {
                 )}
               </span>
               <img
-                src="/src/images/icon-ruble.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                 alt=""
                 className={styles.trainCard__seatCurrency}
               />
@@ -369,7 +369,7 @@ const TrainCard = () => {
                         ).toLocaleString('ru-RU')}
                       </span>
                       <img
-                        src="/src/images/icon-ruble.svg"
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
                         alt=""
                         className={styles.trainCard__tooltipCurrency}
                       />
@@ -383,35 +383,35 @@ const TrainCard = () => {
           <div className={styles.trainCard__icons}>
             {route.have_wifi && (
               <img
-                src="/src/images/icon-wifi.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`}
                 alt=""
                 className={styles.trainCard__icon}
               />
             )}
             {route.is_express && (
               <img
-                src="/src/images/icon-express.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-express.svg`}
                 alt=""
                 className={styles.trainCard__icon}
               />
             )}
             {route.have_air_conditioning && (
               <img
-                src="/src/images/icon-conditioner.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-conditioner.svg`}
                 alt=""
                 className={styles.trainCard__icon}
               />
             )}
             {route.have_food && (
               <img
-                src="/src/images/icon-food.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-food.svg`}
                 alt=""
                 className={styles.trainCard__icon}
               />
             )}
             {route.have_linens && (
               <img
-                src="/src/images/icon-linens.svg"
+                src={`${import.meta.env.BASE_URL}images/icon-linens.svg`}
                 alt=""
                 className={styles.trainCard__icon}
               />

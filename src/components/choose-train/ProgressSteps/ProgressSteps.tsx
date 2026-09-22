@@ -21,7 +21,7 @@ const ProgressSteps = ({ activeStep }: ProgressStepsProps) => {
           </div>
           {index > activeStep && index < steps.length - 1 && (
             <img
-              src="/src/images/strel.svg"
+              src={`${import.meta.env.BASE_URL}images/strel.svg`}
               alt=""
               className={styles.progress__arrow}
             />

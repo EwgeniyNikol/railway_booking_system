@@ -47,7 +47,7 @@ const SuccessCard = () => {
             {orderTotal.toLocaleString('ru-RU')}
           </span>
           <img
-            src="/src/images/icon-ruble.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
             alt=""
             className={styles.successCard__sumCurrency}
           />
@@ -60,7 +60,7 @@ const SuccessCard = () => {
         <div className={styles.successCard__step}>
           <div className={styles.successCard__stepIcon}>
             <img
-              src="/src/images/icon-success-mail.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-success-mail.svg`}
               alt=""
               className={styles.successCard__iconSvg}
             />
@@ -73,7 +73,7 @@ const SuccessCard = () => {
         <div className={styles.successCard__step}>
           <div className={styles.successCard__stepIcon}>
             <img
-              src="/src/images/icon-success-print.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-success-print.svg`}
               alt=""
               className={styles.successCard__iconSvg}
             />
@@ -86,7 +86,7 @@ const SuccessCard = () => {
         <div className={styles.successCard__step}>
           <div className={styles.successCard__stepIcon}>
             <img
-              src="/src/images/icon-success-ticket.svg"
+              src={`${import.meta.env.BASE_URL}images/icon-success-ticket.svg`}
               alt=""
               className={styles.successCard__iconSvg}
             />
@@ -128,7 +128,7 @@ const SuccessCard = () => {
                 onMouseEnter={() => setHover(n)}
               >
                 <img
-                  src="/src/images/icon-star.svg"
+                  src={`${import.meta.env.BASE_URL}images/icon-star.svg`}
                   alt=""
                   className={styles.successCard__starIcon}
                 />

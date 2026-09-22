@@ -128,7 +128,7 @@ const Sidebar = () => {
               className={styles.sidebar__inputField}
             />
             <img
-              src="/src/images/calendar.svg"
+              src={`${import.meta.env.BASE_URL}images/calendar.svg`}
               alt=""
               className={styles.sidebar__inputIcon}
             />
@@ -161,7 +161,7 @@ const Sidebar = () => {
               className={styles.sidebar__inputField}
             />
             <img
-              src="/src/images/calendar.svg"
+              src={`${import.meta.env.BASE_URL}images/calendar.svg`}
               alt=""
               className={styles.sidebar__inputIcon}
             />
@@ -186,7 +186,7 @@ const Sidebar = () => {
       <div className={styles.sidebar__section}>
         <div className={styles.sidebar__option}>
           <img
-            src="/src/images/icon-coupe.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-coupe.svg`}
             alt=""
             className={styles.sidebar__optionIcon}
           />
@@ -202,7 +202,7 @@ const Sidebar = () => {
 
         <div className={styles.sidebar__option}>
           <img
-            src="/src/images/icon-platzkart.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-platzkart.svg`}
             alt=""
             className={styles.sidebar__optionIcon}
           />
@@ -218,7 +218,7 @@ const Sidebar = () => {
 
         <div className={styles.sidebar__option}>
           <img
-            src="/src/images/icon-sitting.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-sitting.svg`}
             alt=""
             className={styles.sidebar__optionIcon}
           />
@@ -234,7 +234,7 @@ const Sidebar = () => {
 
         <div className={styles.sidebar__option}>
           <img
-            src="/src/images/icon-lux.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-lux.svg`}
             alt=""
             className={styles.sidebar__optionIcon}
           />
@@ -250,7 +250,7 @@ const Sidebar = () => {
 
         <div className={styles.sidebar__option}>
           <img
-            src="/src/images/icon-wifi.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`}
             alt=""
             className={styles.sidebar__optionIcon}
           />
@@ -266,7 +266,7 @@ const Sidebar = () => {
 
         <div className={styles.sidebar__option}>
           <img
-            src="/src/images/icon-express.svg"
+            src={`${import.meta.env.BASE_URL}images/icon-express.svg`}
             alt=""
             className={styles.sidebar__optionIcon}
           />
@@ -327,14 +327,14 @@ const Sidebar = () => {
         onClick={() => setToExpanded(!toExpanded)}
       >
         <span className={styles.sidebar__directionIcon}>
-          <img src="/src/images/arrow-to.svg" alt="" />
+          <img src={`${import.meta.env.BASE_URL}images/arrow-to.svg`} alt="" />
         </span>
         <span className={styles.sidebar__directionLabel}>Туда</span>
         <img
           src={
             toExpanded
-              ? '/src/images/icon-minus.svg'
-              : '/src/images/icon-plus.svg'
+              ? `${import.meta.env.BASE_URL}images/icon-minus.svg`
+              : `${import.meta.env.BASE_URL}images/icon-plus.svg`
           }
           alt=""
           className={styles.sidebar__directionToggle}
@@ -443,14 +443,14 @@ const Sidebar = () => {
         onClick={() => setBackExpanded(!backExpanded)}
       >
         <span className={styles.sidebar__directionIcon}>
-          <img src="/src/images/arrow-back.svg" alt="" />
+          <img src={`${import.meta.env.BASE_URL}images/arrow-back.svg`} alt="" />
         </span>
         <span className={styles.sidebar__directionLabel}>Обратно</span>
         <img
           src={
             backExpanded
-              ? '/src/images/icon-minus.svg'
-              : '/src/images/icon-plus.svg'
+              ? `${import.meta.env.BASE_URL}images/icon-minus.svg`
+              : `${import.meta.env.BASE_URL}images/icon-plus.svg`
           }
           alt=""
           className={styles.sidebar__directionToggle}

@@ -67,7 +67,7 @@ const TripDetails = () => {
               onClick={() => setToExpanded(!toExpanded)}
             >
               <img
-                src="/src/images/arrow-to.svg"
+                src={`${import.meta.env.BASE_URL}images/arrow-to.svg`}
                 alt=""
                 className={styles.tripDetails__icon}
               />
@@ -75,8 +75,8 @@ const TripDetails = () => {
               <img
                 src={
                   toExpanded
-                    ? '/src/images/icon-minus.svg'
-                    : '/src/images/icon-plus.svg'
+                    ? `${import.meta.env.BASE_URL}images/icon-minus.svg`
+                    : `${import.meta.env.BASE_URL}images/icon-plus.svg`
                 }
                 alt=""
                 className={styles.tripDetails__toggle}
@@ -112,7 +112,7 @@ const TripDetails = () => {
                       )}
                     </span>
                     <img
-                      src="/src/images/arrow-duration.svg"
+                      src={`${import.meta.env.BASE_URL}images/arrow-duration.svg`}
                       alt=""
                       className={styles.tripDetails__arrow}
                     />
@@ -166,7 +166,7 @@ const TripDetails = () => {
               onClick={() => setBackExpanded(!backExpanded)}
             >
               <img
-                src="/src/images/arrow-back.svg"
+                src={`${import.meta.env.BASE_URL}images/arrow-back.svg`}
                 alt=""
                 className={styles.tripDetails__icon}
               />
@@ -174,8 +174,8 @@ const TripDetails = () => {
               <img
                 src={
                   backExpanded
-                    ? '/src/images/icon-minus.svg'
-                    : '/src/images/icon-plus.svg'
+                    ? `${import.meta.env.BASE_URL}images/icon-minus.svg`
+                    : `${import.meta.env.BASE_URL}images/icon-plus.svg`
                 }
                 alt=""
                 className={styles.tripDetails__toggle}
@@ -211,7 +211,7 @@ const TripDetails = () => {
                       )}
                     </span>
                     <img
-                      src="/src/images/arrow-duration-left.svg"
+                      src={`${import.meta.env.BASE_URL}images/arrow-duration-left.svg`}
                       alt=""
                       className={styles.tripDetails__arrow}
                     />
@@ -270,8 +270,8 @@ const TripDetails = () => {
           <img
             src={
               passengersExpanded
-                ? '/src/images/icon-minus.svg'
-                : '/src/images/icon-plus.svg'
+                ? `${import.meta.env.BASE_URL}images/icon-minus.svg`
+                : `${import.meta.env.BASE_URL}images/icon-plus.svg`
             }
             alt=""
             className={styles.tripDetails__toggle}
