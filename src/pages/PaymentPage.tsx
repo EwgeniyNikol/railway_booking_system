@@ -27,11 +27,7 @@ const PaymentPage = () => {
         <div className={styles.page__content}>
           <PaymentCard onValidityChange={setIsFormValid} />
           <div className={styles.page__next}>
-            <NextButton
-              wide
-              onClick={handleBuy}
-              disabled={!isFormValid}
-            >
+            <NextButton wide onClick={handleBuy} disabled={!isFormValid}>
               Купить билеты
             </NextButton>
           </div>

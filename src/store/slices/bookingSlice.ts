@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { fetchSeats, submitOrder } from '../../api';
 import type { Departure } from '../../types/api';
+import type { OrderPayload } from '../../types/order';
 
 export interface SelectedPlace {
   coachId: string;
@@ -52,6 +53,15 @@ export interface CoachApiResponse {
   }[];
 }
 
+export interface Payer {
+  firstName: string;
+  lastName: string;
+  patronymic: string;
+  phone: string;
+  email: string;
+  paymentMethod: 'online' | 'cash';
+}
+
 export interface BookingState {
   selectedRoute: Departure | null;
   selectedReturnRoute: Departure | null;
@@ -64,6 +74,7 @@ export interface BookingState {
     childrenWithoutSeat: number;
   };
   passengers: Passenger[];
+  payer: Payer;
   services: {
     linens: boolean;
     wifi: boolean;
@@ -71,6 +82,9 @@ export interface BookingState {
   };
   orderStatus: 'idle' | 'loading' | 'success' | 'error';
   orderError: string | null;
+  lastOrderId: string | null;
+  orderTotal: number;
+  rating: number;
 }
 
 export const createPassenger = (
@@ -92,6 +106,15 @@ export const createPassenger = (
   isCollapsed,
 });
 
+const initialPayer: Payer = {
+  firstName: '',
+  lastName: '',
+  patronymic: '',
+  phone: '',
+  email: '',
+  paymentMethod: 'online',
+};
+
 const initialState: BookingState = {
   selectedRoute: null,
   selectedReturnRoute: null,
@@ -104,6 +127,7 @@ const initialState: BookingState = {
     childrenWithoutSeat: 0,
   },
   passengers: [],
+  payer: initialPayer,
   services: {
     linens: false,
     wifi: false,
@@ -111,6 +135,9 @@ const initialState: BookingState = {
   },
   orderStatus: 'idle',
   orderError: null,
+  lastOrderId: null,
+  orderTotal: 0,
+  rating: 0,
 };
 
 const syncPassengers = (state: BookingState) => {
@@ -176,7 +203,7 @@ export const getReturnSeats = createAsyncThunk(
 
 export const submitBooking = createAsyncThunk(
   'booking/submitBooking',
-  async (order: unknown) => {
+  async (order: OrderPayload) => {
     const response = await submitOrder(order);
     return response;
   }
@@ -275,6 +302,18 @@ const bookingSlice = createSlice({
         };
       }
     },
+    setPayer(state, action: PayloadAction<Partial<Payer>>) {
+      state.payer = { ...state.payer, ...action.payload };
+    },
+    setLastOrderId(state, action: PayloadAction<string>) {
+      state.lastOrderId = action.payload;
+    },
+    setOrderTotal(state, action: PayloadAction<number>) {
+      state.orderTotal = action.payload;
+    },
+    setRating(state, action: PayloadAction<number>) {
+      state.rating = action.payload;
+    },
     setServices(
       state,
       action: PayloadAction<Partial<BookingState['services']>>
@@ -289,9 +328,13 @@ const bookingSlice = createSlice({
       state.selectedPlaces = [];
       state.passengerCount = initialState.passengerCount;
       state.passengers = [];
+      state.payer = initialPayer;
       state.services = initialState.services;
       state.orderStatus = 'idle';
       state.orderError = null;
+      state.lastOrderId = null;
+      state.orderTotal = 0;
+      state.rating = 0;
     },
   },
   extraReducers: (builder) => {
@@ -326,6 +369,10 @@ export const {
   togglePassengerCollapsed,
   updatePassenger,
   removePassenger,
+  setPayer,
+  setLastOrderId,
+  setOrderTotal,
+  setRating,
   setServices,
   resetBooking,
 } = bookingSlice.actions;

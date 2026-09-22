@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '../../../store/store';
+import { setPayer } from '../../../store/slices/bookingSlice';
 import styles from './PaymentCard.module.scss';
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]*$/;
@@ -20,12 +23,9 @@ type PaymentCardProps = {
 };
 
 const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
-  const [paymentMethod, setPaymentMethod] = useState('online');
-  const [lastName, setLastName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const dispatch = useDispatch();
+  const payer = useSelector((state: RootState) => state.booking.payer);
+
   const [lastNameError, setLastNameError] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
   const [middleNameError, setMiddleNameError] = useState('');
@@ -34,33 +34,26 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
 
   useEffect(() => {
     const isValid =
-      lastName.trim() !== '' &&
-      NAME_REGEX.test(lastName) &&
-      firstName.trim() !== '' &&
-      NAME_REGEX.test(firstName) &&
-      (!middleName || NAME_REGEX.test(middleName)) &&
-      phone.length === 11 &&
-      EMAIL_REGEX.test(email);
+      payer.lastName.trim() !== '' &&
+      NAME_REGEX.test(payer.lastName) &&
+      payer.firstName.trim() !== '' &&
+      NAME_REGEX.test(payer.firstName) &&
+      (!payer.patronymic || NAME_REGEX.test(payer.patronymic)) &&
+      payer.phone.length === 11 &&
+      EMAIL_REGEX.test(payer.email);
 
     if (onValidityChange) {
       onValidityChange(isValid);
     }
-  }, [
-    lastName,
-    firstName,
-    middleName,
-    phone,
-    email,
-    onValidityChange,
-  ]);
+  }, [payer, onValidityChange]);
 
   const handleNameChange = (
     value: string,
-    setter: (v: string) => void,
+    field: 'lastName' | 'firstName' | 'patronymic',
     errorSetter: (v: string) => void
   ) => {
     if (NAME_REGEX.test(value)) {
-      setter(value);
+      dispatch(setPayer({ [field]: value }));
       errorSetter('');
     } else {
       errorSetter('Только русские буквы');
@@ -70,23 +63,23 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
   const handlePhoneChange = (value: string) => {
     const digits = value.replace(/\D/g, '');
     if (!digits) {
-      setPhone('');
+      dispatch(setPayer({ phone: '' }));
       setPhoneError('');
       return;
     }
     const withCode = digits.startsWith('7') ? digits : `7${digits}`;
-    setPhone(withCode.slice(0, 11));
+    dispatch(setPayer({ phone: withCode.slice(0, 11) }));
     setPhoneError('');
   };
 
   const handlePhoneFocus = () => {
-    if (!phone) {
-      setPhone('7');
+    if (!payer.phone) {
+      dispatch(setPayer({ phone: '7' }));
     }
   };
 
   const handleEmailChange = (value: string) => {
-    setEmail(value);
+    dispatch(setPayer({ email: value }));
     if (value && !EMAIL_REGEX.test(value)) {
       setEmailError('Неверный e-mail');
     } else {
@@ -109,9 +102,9 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
             <input
               type="text"
               className={styles.paymentCard__input}
-              value={lastName}
+              value={payer.lastName}
               onChange={(e) =>
-                handleNameChange(e.target.value, setLastName, setLastNameError)
+                handleNameChange(e.target.value, 'lastName', setLastNameError)
               }
             />
             {lastNameError && (
@@ -123,13 +116,9 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
             <input
               type="text"
               className={styles.paymentCard__input}
-              value={firstName}
+              value={payer.firstName}
               onChange={(e) =>
-                handleNameChange(
-                  e.target.value,
-                  setFirstName,
-                  setFirstNameError
-                )
+                handleNameChange(e.target.value, 'firstName', setFirstNameError)
               }
             />
             {firstNameError && (
@@ -143,11 +132,11 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
             <input
               type="text"
               className={styles.paymentCard__input}
-              value={middleName}
+              value={payer.patronymic}
               onChange={(e) =>
                 handleNameChange(
                   e.target.value,
-                  setMiddleName,
+                  'patronymic',
                   setMiddleNameError
                 )
               }
@@ -168,7 +157,7 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
             type="text"
             placeholder="+7 ___ ___ __ __"
             className={`${styles.paymentCard__input} ${styles.paymentCard__input_wide}`}
-            value={formatPhoneDisplay(phone)}
+            value={formatPhoneDisplay(payer.phone)}
             onChange={(e) => handlePhoneChange(e.target.value)}
             onFocus={handlePhoneFocus}
           />
@@ -183,7 +172,7 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
             type="text"
             placeholder="inbox@gmail.ru"
             className={`${styles.paymentCard__input} ${styles.paymentCard__input_wide}`}
-            value={email}
+            value={payer.email}
             onChange={(e) => handleEmailChange(e.target.value)}
           />
           {emailError && (
@@ -201,16 +190,16 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
       <div className={styles.paymentCard__section}>
         <label
           className={styles.paymentCard__method}
-          onClick={() => setPaymentMethod('online')}
+          onClick={() => dispatch(setPayer({ paymentMethod: 'online' }))}
         >
           <span
             className={
-              paymentMethod === 'online'
+              payer.paymentMethod === 'online'
                 ? styles.paymentCard__radio_active
                 : styles.paymentCard__radio
             }
           >
-            {paymentMethod === 'online' && (
+            {payer.paymentMethod === 'online' && (
               <img
                 src="/src/images/icon-check.svg"
                 alt=""
@@ -220,7 +209,7 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
           </span>
           <span
             className={
-              paymentMethod === 'online'
+              payer.paymentMethod === 'online'
                 ? styles.paymentCard__methodName_active
                 : styles.paymentCard__methodName
             }
@@ -242,16 +231,16 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
         <div className={styles.paymentCard__cash}>
           <label
             className={styles.paymentCard__method}
-            onClick={() => setPaymentMethod('cash')}
+            onClick={() => dispatch(setPayer({ paymentMethod: 'cash' }))}
           >
             <span
               className={
-                paymentMethod === 'cash'
+                payer.paymentMethod === 'cash'
                   ? styles.paymentCard__radio_active
                   : styles.paymentCard__radio
               }
             >
-              {paymentMethod === 'cash' && (
+              {payer.paymentMethod === 'cash' && (
                 <img
                   src="/src/images/icon-check.svg"
                   alt=""
@@ -261,7 +250,7 @@ const PaymentCard = ({ onValidityChange }: PaymentCardProps) => {
             </span>
             <span
               className={
-                paymentMethod === 'cash'
+                payer.paymentMethod === 'cash'
                   ? styles.paymentCard__methodName_active
                   : styles.paymentCard__methodName
               }

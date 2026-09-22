@@ -8,6 +8,8 @@ import {
   searchRoutes,
   getReturnRoutes,
 } from '../../../store/slices/searchSlice';
+import { resetBooking } from '../../../store/slices/bookingSlice';
+import { clearOrder } from '../../../utils/orderStorage';
 import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './HeaderTrain.module.scss';
 
@@ -77,6 +79,9 @@ const HeaderTrain = () => {
     const depDate = parseDate(departureDate);
     const arrDate = parseDate(arrivalDate);
     if (depDate && arrDate && arrDate < depDate) return;
+
+    clearOrder();
+    dispatch(resetBooking());
 
     const params = {
       from_city_id: fromCityId,

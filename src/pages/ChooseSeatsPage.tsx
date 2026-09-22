@@ -78,8 +78,7 @@ const ChooseSeatsPage = () => {
     return <Navigate to="/choose-train" replace />;
   }
 
-  const requiredPlaces =
-    passengerCount.adults + passengerCount.children;
+  const requiredPlaces = passengerCount.adults + passengerCount.children;
 
   const forwardSelected = selectedPlaces.filter(
     (p) => p.direction === 'forward'

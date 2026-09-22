@@ -1,3 +1,7 @@
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import type { RootState } from '../../../store/store';
+import { selectTotalPrice } from '../../../store/selectors/totalPrice';
 import styles from './PassengersCard.module.scss';
 
 const formatBirthday = (value: string): string => {
@@ -13,46 +17,12 @@ const formatDocument = (type: string, data: string): string => {
   return `Свидетельство о рождении ${data}`;
 };
 
-const testPassengers = [
-  {
-    passengerId: 'test-1',
-    firstName: 'Ирина',
-    lastName: 'Мартынюк',
-    patronymic: 'Эдуардовна',
-    gender: false,
-    birthday: '17/02/1985',
-    documentType: 'passport',
-    documentData: '4204380694',
-    isAdult: true,
-  },
-  {
-    passengerId: 'test-2',
-    firstName: 'Кирилл',
-    lastName: 'Мартынюк',
-    patronymic: 'Сергеевич',
-    gender: true,
-    birthday: '25/01/2006',
-    documentType: 'birth',
-    documentData: 'VIII УН 256319',
-    isAdult: false,
-  },
-  {
-    passengerId: 'test-3',
-    firstName: 'Сергей',
-    lastName: 'Мартынюк',
-    patronymic: 'Петрович',
-    gender: true,
-    birthday: '19/06/1982',
-    documentType: 'passport',
-    documentData: '4204380694',
-    isAdult: true,
-  },
-];
-
-const testTotal = '7 760';
-
 const PassengersCard = () => {
-  const passengers = testPassengers;
+  const navigate = useNavigate();
+  const passengers = useSelector(
+    (state: RootState) => state.booking.passengers
+  );
+  const { totalPrice } = useSelector(selectTotalPrice);
 
   return (
     <div className={styles.passengersCard}>
@@ -104,14 +74,20 @@ const PassengersCard = () => {
         <div className={styles.passengersCard__aside}>
           <div className={styles.passengersCard__total}>
             <span className={styles.passengersCard__totalLabel}>Всего</span>
-            <span className={styles.passengersCard__totalSum}>{testTotal}</span>
+            <span className={styles.passengersCard__totalSum}>
+              {totalPrice.toLocaleString('ru-RU')}
+            </span>
             <img
               src="/src/images/icon-ruble.svg"
               alt=""
               className={styles.passengersCard__totalCurrency}
             />
           </div>
-          <button type="button" className={styles.passengersCard__change}>
+          <button
+            type="button"
+            className={styles.passengersCard__change}
+            onClick={() => navigate('/passengers')}
+          >
             Изменить
           </button>
         </div>

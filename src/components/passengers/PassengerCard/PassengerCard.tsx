@@ -174,10 +174,7 @@ const PassengerCard = ({
 
   return (
     <div className={styles.passengerCard}>
-      <div
-        className={styles.passengerCard__header}
-        onClick={handleHeaderClick}
-      >
+      <div className={styles.passengerCard__header} onClick={handleHeaderClick}>
         <button
           type="button"
           className={styles.passengerCard__toggle}

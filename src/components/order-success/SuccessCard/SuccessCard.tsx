@@ -1,17 +1,51 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import type { RootState } from '../../../store/store';
+import { setRating, resetBooking } from '../../../store/slices/bookingSlice';
+import { clearOrder } from '../../../utils/orderStorage';
 import styles from './SuccessCard.module.scss';
 
 const SuccessCard = () => {
-  const [rating, setRating] = useState(0);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [hover, setHover] = useState(0);
+
+  const lastOrderId = useSelector(
+    (state: RootState) => state.booking.lastOrderId
+  );
+  const orderTotal = useSelector(
+    (state: RootState) => state.booking.orderTotal
+  );
+  const payer = useSelector((state: RootState) => state.booking.payer);
+  const rating = useSelector((state: RootState) => state.booking.rating);
+
+  const handleRating = (n: number) => {
+    dispatch(setRating(n));
+  };
+
+  const handleBack = () => {
+    clearOrder();
+    dispatch(resetBooking());
+    navigate('/');
+  };
+
+  const name = payer.patronymic
+    ? `${payer.firstName} ${payer.patronymic}!`
+    : `${payer.firstName}!`;
 
   return (
     <div className={styles.successCard}>
       <div className={styles.successCard__head}>
-        <span className={styles.successCard__order}>№Заказа 285АА</span>
+        <span className={styles.successCard__order}>
+          №Заказа {lastOrderId ?? '—'}
+        </span>
         <div className={styles.successCard__sum}>
           <span className={styles.successCard__sumLabel}>сумма</span>
-          <span className={styles.successCard__sumValue}>7 760</span>
+          <span className={styles.successCard__sumValue}>
+            {orderTotal.toLocaleString('ru-RU')}
+          </span>
           <img
             src="/src/images/icon-ruble.svg"
             alt=""
@@ -64,7 +98,7 @@ const SuccessCard = () => {
       </div>
 
       <div className={styles.successCard__content}>
-        <h2 className={styles.successCard__name}>Ирина Эдуардовна!</h2>
+        <h2 className={styles.successCard__name}>{name}</h2>
         <p className={styles.successCard__text}>
           Ваш заказ успешно оформлен. В ближайшее время с вами свяжется наш
           оператор для подтверждения.
@@ -90,7 +124,7 @@ const SuccessCard = () => {
                 className={`${styles.successCard__star} ${
                   n <= (hover || rating) ? styles.successCard__star_active : ''
                 }`}
-                onClick={() => setRating(n)}
+                onClick={() => handleRating(n)}
                 onMouseEnter={() => setHover(n)}
               >
                 <img
@@ -102,7 +136,11 @@ const SuccessCard = () => {
             ))}
           </div>
         </div>
-        <button type="button" className={styles.successCard__button}>
+        <button
+          type="button"
+          className={styles.successCard__button}
+          onClick={handleBack}
+        >
           вернуться на главную
         </button>
       </div>
