@@ -43,7 +43,9 @@ const PassengersPage = () => {
     }
   };
 
-  const allValid = passengers.every((p) => validatePassenger(p).length === 0);
+  const allValid =
+    passengers.length > 0 &&
+    passengers.every((p) => validatePassenger(p).length === 0);
 
   return (
     <>
@@ -94,11 +96,9 @@ const PassengersPage = () => {
               />
             </svg>
           </button>
-          {allValid && (
-            <div className={styles.page__next}>
-              <NextButton to="/payment" />
-            </div>
-          )}
+          <div className={styles.page__next}>
+            <NextButton to="/payment" disabled={!allValid} />
+          </div>
         </div>
       </div>
       <Footer />

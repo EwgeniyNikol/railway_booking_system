@@ -33,6 +33,12 @@ const ChooseSeatsPage = () => {
   const returnSeats = useSelector(
     (state: RootState) => state.booking.returnSeats
   );
+  const passengerCount = useSelector(
+    (state: RootState) => state.booking.passengerCount
+  );
+  const selectedPlaces = useSelector(
+    (state: RootState) => state.booking.selectedPlaces
+  );
 
   const [selectedCarType, setSelectedCarType] = useState<string>('');
   const [selectedCarTypeBack, setSelectedCarTypeBack] = useState<string>('');
@@ -71,6 +77,25 @@ const ChooseSeatsPage = () => {
   if (!selectedRoute) {
     return <Navigate to="/choose-train" replace />;
   }
+
+  const requiredPlaces =
+    passengerCount.adults + passengerCount.children;
+
+  const forwardSelected = selectedPlaces.filter(
+    (p) => p.direction === 'forward'
+  ).length;
+  const backSelected = selectedPlaces.filter(
+    (p) => p.direction === 'back'
+  ).length;
+
+  const forwardReady =
+    selectedCarType !== '' && forwardSelected === requiredPlaces;
+
+  const backReady = selectedReturnRoute
+    ? selectedCarTypeBack !== '' && backSelected === requiredPlaces
+    : true;
+
+  const isNextDisabled = !forwardReady || !backReady;
 
   return (
     <>
@@ -140,7 +165,7 @@ const ChooseSeatsPage = () => {
           )}
 
           <div className={styles.page__next}>
-            <NextButton to="/passengers" />
+            <NextButton to="/passengers" disabled={isNextDisabled} />
           </div>
         </div>
       </div>
