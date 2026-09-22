@@ -9,7 +9,7 @@ import OrderSuccessPage from './pages/OrderSuccessPage';
 
 const App = () => {
   return (
-    <BrowserRouter basename="/railway_booking_system">
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/choose-train" element={<ChooseTrainPage />} />
