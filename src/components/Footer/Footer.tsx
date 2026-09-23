@@ -1,6 +1,46 @@
+import { useState } from 'react';
+import { subscribeEmail } from '../../api';
 import styles from './Footer.module.scss';
 
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+  const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      setEmailError('Укажите e-mail');
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailError('Неверный e-mail');
+      return;
+    }
+
+    setEmailError('');
+
+    try {
+      await subscribeEmail(email);
+      setEmail('');
+      setSubscribed(true);
+      setError('');
+      setTimeout(() => setSubscribed(false), 3000);
+    } catch {
+      setError('Ошибка подписки');
+    }
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (emailError) {
+      setEmailError('');
+    }
+  };
+
   return (
     <footer className={styles.footer} id="contacts">
       <div className={styles.footer__top}>
@@ -49,11 +89,24 @@ const Footer = () => {
               type="email"
               placeholder="e-mail"
               className={styles.footer__input}
+              value={email}
+              onChange={(e) => handleEmailChange(e.target.value)}
             />
-            <button type="button" className={styles.footer__button}>
+            <button
+              type="button"
+              className={styles.footer__button}
+              onClick={handleSubscribe}
+            >
               отправить
             </button>
           </div>
+          {emailError && (
+            <p className={styles.footer__error}>{emailError}</p>
+          )}
+          {subscribed && (
+            <p className={styles.footer__subtitle}>Вы подписаны!</p>
+          )}
+          {error && <p className={styles.footer__subtitle}>{error}</p>}
           <p className={styles.footer__social_title}>Подписывайтесь на нас</p>
           <div className={styles.footer__socials}>
             <img

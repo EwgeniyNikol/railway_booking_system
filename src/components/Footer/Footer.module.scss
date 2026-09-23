@@ -162,6 +162,15 @@
     line-height: 1.75rem;
     color: var(--color-light);
   }
+
+  &__error {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    font-size: 1rem;
+    line-height: 1.25rem;
+    color: #ff0000;
+  }
+  
 }
 
 @include respond-to(laptop) {

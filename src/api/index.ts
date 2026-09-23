@@ -2,18 +2,22 @@ import { resolveApiBaseUrl, getApiBaseUrl, getFallbackUrl } from './config';
 
 const fetchWithFallback = async (
   path: string,
-  options?: RequestInit
+  options?: RequestInit,
+  preferFallback = false
 ): Promise<Response> => {
   await resolveApiBaseUrl();
   const current = getApiBaseUrl();
+  const fallback = getFallbackUrl(current);
+
+  const first = preferFallback ? fallback : current;
+  const second = preferFallback ? current : fallback;
 
   try {
-    const res = await fetch(`${current}${path}`, options);
+    const res = await fetch(`${first}${path}`, options);
     if (res.ok) return res;
     throw new Error(`HTTP ${res.status}`);
   } catch {
-    const fallback = getFallbackUrl(current);
-    return fetch(`${fallback}${path}`, options);
+    return fetch(`${second}${path}`, options);
   }
 };
 
@@ -90,7 +94,9 @@ export async function submitOrder(order: unknown) {
 
 export async function subscribeEmail(email: string) {
   const response = await fetchWithFallback(
-    `/subscribe?email=${encodeURIComponent(email)}`
+    `/subscribe?email=${encodeURIComponent(email)}`,
+    undefined,
+    true
   );
   if (!response.ok) {
     throw new Error('Ошибка подписки');
