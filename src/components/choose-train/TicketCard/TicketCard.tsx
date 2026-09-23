@@ -11,63 +11,9 @@ import {
 } from '../../../utils/format';
 import { useTooltip } from '../../../hooks/useTooltip';
 import TrainIcons from '../../common/TrainIcons/TrainIcons';
+import type { Departure } from '../../../types/api';
 import type { AppDispatch } from '../../../store/store';
 import styles from './TicketCard.module.scss';
-
-type City = {
-  _id: string;
-  name: string;
-};
-
-type Station = {
-  railway_station_name: string;
-  city: City;
-  datetime: number;
-};
-
-type PriceInfo = {
-  top_price?: number;
-  bottom_price?: number;
-  side_price?: number;
-  price?: number;
-  top_seats?: number;
-  bottom_seats?: number;
-  side_seats?: number;
-};
-
-type Departure = {
-  _id: string;
-  have_first_class: boolean;
-  have_second_class: boolean;
-  have_third_class: boolean;
-  have_fourth_class: boolean;
-  have_wifi: boolean;
-  have_air_conditioning: boolean;
-  is_express: boolean;
-  have_food?: boolean;
-  have_linens?: boolean;
-  min_price: number;
-  duration: number;
-  available_seats: number;
-  available_seats_info: {
-    first?: number;
-    second?: number;
-    third?: number;
-    fourth?: number;
-  };
-  train: {
-    _id: string;
-    name: string;
-  };
-  from: Station;
-  to: Station;
-  price_info: {
-    first?: PriceInfo;
-    second?: PriceInfo;
-    third?: PriceInfo;
-    fourth?: PriceInfo;
-  };
-};
 
 type TicketCardProps = {
   departureRoute: Departure;
