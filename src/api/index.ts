@@ -1,10 +1,25 @@
-const API_BASE_URL = import.meta.env.DEV
-  ? 'http://localhost:3001'
-  : 'https://students.netoservices.ru/fe-diplom';
+import { resolveApiBaseUrl, getApiBaseUrl, getFallbackUrl } from './config';
+
+const fetchWithFallback = async (
+  path: string,
+  options?: RequestInit
+): Promise<Response> => {
+  await resolveApiBaseUrl();
+  const current = getApiBaseUrl();
+
+  try {
+    const res = await fetch(`${current}${path}`, options);
+    if (res.ok) return res;
+    throw new Error(`HTTP ${res.status}`);
+  } catch {
+    const fallback = getFallbackUrl(current);
+    return fetch(`${fallback}${path}`, options);
+  }
+};
 
 export async function searchCities(name: string) {
-  const response = await fetch(
-    `${API_BASE_URL}/routes/cities?name=${encodeURIComponent(name)}`
+  const response = await fetchWithFallback(
+    `/routes/cities?name=${encodeURIComponent(name)}`
   );
   if (!response.ok) {
     throw new Error('Ошибка поиска городов');
@@ -13,7 +28,7 @@ export async function searchCities(name: string) {
 }
 
 export async function fetchLastRoutes() {
-  const response = await fetch(`${API_BASE_URL}/routes/last`);
+  const response = await fetchWithFallback('/routes/last');
   if (!response.ok) {
     throw new Error('Ошибка загрузки последних направлений');
   }
@@ -31,7 +46,7 @@ export async function fetchRoutes(
     }
   });
 
-  const response = await fetch(`${API_BASE_URL}/routes?${queryParams}`);
+  const response = await fetchWithFallback(`/routes?${queryParams}`);
   if (!response.ok) {
     throw new Error('Ошибка поиска направлений');
   }
@@ -50,8 +65,8 @@ export async function fetchSeats(
     }
   });
 
-  const response = await fetch(
-    `${API_BASE_URL}/routes/${routeId}/seats?${queryParams}`
+  const response = await fetchWithFallback(
+    `/routes/${routeId}/seats?${queryParams}`
   );
   if (!response.ok) {
     throw new Error('Ошибка загрузки мест');
@@ -60,7 +75,7 @@ export async function fetchSeats(
 }
 
 export async function submitOrder(order: unknown) {
-  const response = await fetch(`${API_BASE_URL}/order`, {
+  const response = await fetchWithFallback('/order', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -74,8 +89,8 @@ export async function submitOrder(order: unknown) {
 }
 
 export async function subscribeEmail(email: string) {
-  const response = await fetch(
-    `${API_BASE_URL}/subscribe?email=${encodeURIComponent(email)}`
+  const response = await fetchWithFallback(
+    `/subscribe?email=${encodeURIComponent(email)}`
   );
   if (!response.ok) {
     throw new Error('Ошибка подписки');

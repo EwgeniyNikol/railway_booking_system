@@ -50,7 +50,10 @@ const RouteInfo = ({
     <div className={styles.routeInfo}>
       <div className={styles.routeInfo__left}>
         <div className={styles.routeInfo__trainIcon}>
-          <img src={`${import.meta.env.BASE_URL}images/icon-train-seats.svg`} alt="" />
+          <img
+            src={`${import.meta.env.BASE_URL}images/icon-train-seats.svg`}
+            alt=""
+          />
         </div>
         <div className={styles.routeInfo__trainInfo}>
           <div className={styles.routeInfo__trainNumber}>{trainNumber}</div>
@@ -99,7 +102,10 @@ const RouteInfo = ({
 
       <div className={styles.routeInfo__durationBlock}>
         <div className={styles.routeInfo__clock}>
-          <img src={`${import.meta.env.BASE_URL}images/icon-clock.svg`} alt="" />
+          <img
+            src={`${import.meta.env.BASE_URL}images/icon-clock.svg`}
+            alt=""
+          />
         </div>
         <div className={styles.routeInfo__duration}>
           {formatDuration(from.datetime, to.datetime)}

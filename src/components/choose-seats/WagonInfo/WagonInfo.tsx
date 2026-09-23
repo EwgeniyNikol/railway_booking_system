@@ -131,7 +131,10 @@ const WagonInfo = ({
               }`}
               onClick={() => toggleService('linens')}
             >
-              <img src={`${import.meta.env.BASE_URL}images/icon-linens.svg`} alt="" />
+              <img
+                src={`${import.meta.env.BASE_URL}images/icon-linens.svg`}
+                alt=""
+              />
             </button>
           )}
           {coach.have_wifi && (
@@ -144,7 +147,10 @@ const WagonInfo = ({
               }`}
               onClick={() => toggleService('wifi')}
             >
-              <img src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`} alt="" />
+              <img
+                src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`}
+                alt=""
+              />
             </button>
           )}
           <button
@@ -156,7 +162,10 @@ const WagonInfo = ({
             }`}
             onClick={() => toggleService('food')}
           >
-            <img src={`${import.meta.env.BASE_URL}images/icon-food.svg`} alt="" />
+            <img
+              src={`${import.meta.env.BASE_URL}images/icon-food.svg`}
+              alt=""
+            />
           </button>
           {coach.have_air_conditioning && (
             <button
@@ -168,7 +177,10 @@ const WagonInfo = ({
               }`}
               onClick={() => toggleService('conditioner')}
             >
-              <img src={`${import.meta.env.BASE_URL}images/icon-conditioner.svg`} alt="" />
+              <img
+                src={`${import.meta.env.BASE_URL}images/icon-conditioner.svg`}
+                alt=""
+              />
             </button>
           )}
         </div>

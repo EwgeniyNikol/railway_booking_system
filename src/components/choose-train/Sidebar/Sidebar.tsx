@@ -443,7 +443,10 @@ const Sidebar = () => {
         onClick={() => setBackExpanded(!backExpanded)}
       >
         <span className={styles.sidebar__directionIcon}>
-          <img src={`${import.meta.env.BASE_URL}images/arrow-back.svg`} alt="" />
+          <img
+            src={`${import.meta.env.BASE_URL}images/arrow-back.svg`}
+            alt=""
+          />
         </span>
         <span className={styles.sidebar__directionLabel}>Обратно</span>
         <img
