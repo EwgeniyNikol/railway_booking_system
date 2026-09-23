@@ -10,8 +10,12 @@ const DATE_REGEX = /^\d{2}\/\d{2}\/\d{4}$/;
 const PASSPORT_REGEX = /^\d{10}$/;
 const BIRTH_CERT_REGEX = /^[IVX]{1,4}-[А-ЯЁ]{2}-\d{6}$/;
 
-const getAge = (value: string): number => {
+export const getAge = (value: string): number | null => {
+  if (!DATE_REGEX.test(value)) return null;
   const [day, month, year] = value.split('/').map(Number);
+  if (month < 1 || month > 12) return null;
+  const daysInMonth = new Date(year, month, 0).getDate();
+  if (day < 1 || day > daysInMonth) return null;
   const today = new Date();
   let age = today.getFullYear() - year;
   if (
@@ -20,23 +24,12 @@ const getAge = (value: string): number => {
   ) {
     age -= 1;
   }
+  if (age < 0 || age > 120) return null;
   return age;
 };
 
 const validateBirthday = (value: string): string | null => {
-  if (!DATE_REGEX.test(value)) {
-    return 'Неверная дата';
-  }
-  const [day, month, year] = value.split('/').map(Number);
-  if (month < 1 || month > 12) {
-    return 'Неверная дата';
-  }
-  const daysInMonth = new Date(year, month, 0).getDate();
-  if (day < 1 || day > daysInMonth) {
-    return 'Неверная дата';
-  }
-  const age = getAge(value);
-  if (age < 0 || age > 120) {
+  if (getAge(value) === null) {
     return 'Неверная дата';
   }
   return null;

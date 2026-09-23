@@ -10,15 +10,28 @@ import {
   addPassenger,
   initPassengers,
   removePassenger,
+  togglePlace,
 } from '../store/slices/bookingSlice';
 import type { RootState } from '../store/store';
 import { validatePassenger } from '../utils/validation';
 import styles from './PassengersPage.module.scss';
 
+type CoachClass = 'first' | 'second' | 'third' | 'fourth';
+
 const PassengersPage = () => {
   const dispatch = useDispatch();
   const passengers = useSelector(
     (state: RootState) => state.booking.passengers
+  );
+  const selectedPlaces = useSelector(
+    (state: RootState) => state.booking.selectedPlaces
+  );
+  const seats = useSelector((state: RootState) => state.booking.seats);
+  const returnSeats = useSelector(
+    (state: RootState) => state.booking.returnSeats
+  );
+  const selectedReturnRoute = useSelector(
+    (state: RootState) => state.booking.selectedReturnRoute
   );
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -32,8 +45,54 @@ const PassengersPage = () => {
     }
   };
 
+  const findFreePlace = (
+    coaches: typeof seats,
+    direction: 'forward' | 'back'
+  ) => {
+    for (const item of coaches) {
+      const coach = item.coach;
+      const takenSeats = selectedPlaces
+        .filter((p) => p.coachId === coach._id && p.direction === direction)
+        .map((p) => p.seatNumber);
+
+      for (const seat of item.seats) {
+        if (seat.available && !takenSeats.includes(seat.index)) {
+          const price =
+            coach.bottom_price ||
+            coach.top_price ||
+            coach.side_price ||
+            coach.price;
+
+          return {
+            coachId: coach._id,
+            seatNumber: seat.index,
+            classType: coach.class_type as CoachClass,
+            price,
+            direction,
+            linensPrice: coach.linens_price,
+            wifiPrice: coach.wifi_price,
+            isLinensIncluded: coach.is_linens_included,
+          };
+        }
+      }
+    }
+    return null;
+  };
+
   const handleAddPassenger = () => {
     dispatch(addPassenger());
+
+    const forwardPlace = findFreePlace(seats, 'forward');
+    if (forwardPlace) {
+      dispatch(togglePlace(forwardPlace));
+    }
+
+    if (selectedReturnRoute) {
+      const backPlace = findFreePlace(returnSeats, 'back');
+      if (backPlace) {
+        dispatch(togglePlace(backPlace));
+      }
+    }
   };
 
   const handleRemove = (index: number) => {

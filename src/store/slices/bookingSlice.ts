@@ -126,8 +126,8 @@ const initialState: BookingState = {
   seatsError: null,
   selectedPlaces: [],
   passengerCount: {
-    adults: 2,
-    children: 1,
+    adults: 1,
+    children: 0,
     childrenWithoutSeat: 0,
   },
   passengers: [],
@@ -262,8 +262,9 @@ const bookingSlice = createSlice({
       syncPassengers(state);
     },
     addPassenger(state) {
-      const passenger = createPassenger(false, true, true);
+      const passenger = createPassenger(true, false, true);
       state.passengers.push(passenger);
+      state.passengerCount.adults += 1;
     },
     togglePassengerCollapsed(state, action: PayloadAction<string>) {
       const passenger = state.passengers.find(

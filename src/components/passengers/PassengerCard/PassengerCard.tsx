@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import {
+  setPassengerCount,
   togglePassengerCollapsed,
   updatePassenger,
   type Passenger,
 } from '../../../store/slices/bookingSlice';
-import { validatePassenger } from '../../../utils/validation';
+import { getAge, validatePassenger } from '../../../utils/validation';
 import styles from './PassengerCard.module.scss';
 
 type PassengerCardProps = {
@@ -29,22 +30,6 @@ const formatDate = (value: string): string => {
   return parts.join('/');
 };
 
-const getAge = (value: string): number | null => {
-  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-    return null;
-  }
-  const [day, month, year] = value.split('/').map(Number);
-  const today = new Date();
-  let age = today.getFullYear() - year;
-  if (
-    today.getMonth() + 1 < month ||
-    (today.getMonth() + 1 === month && today.getDate() < day)
-  ) {
-    age -= 1;
-  }
-  return age;
-};
-
 const PassengerCard = ({
   passengerId,
   index,
@@ -56,6 +41,9 @@ const PassengerCard = ({
   const dispatch = useDispatch();
   const passenger = useSelector((state: RootState) =>
     state.booking.passengers.find((p) => p.passengerId === passengerId)
+  );
+  const passengerCount = useSelector(
+    (state: RootState) => state.booking.passengerCount
   );
   const [birthDateError, setBirthDateError] = useState('');
   const [passportSeriesError, setPassportSeriesError] = useState('');
@@ -100,9 +88,11 @@ const PassengerCard = ({
   const handleBirthDateChange = (value: string) => {
     const formatted = formatDate(value);
     const age = getAge(formatted);
+    const wasAdult = passenger.isAdult;
 
     if (age !== null) {
       const isAdult = age >= 18;
+
       update({
         birthday: formatted,
         isAdult,
@@ -110,6 +100,19 @@ const PassengerCard = ({
         documentType: isAdult ? 'passport' : 'birth',
         documentData: '',
       });
+
+      if (wasAdult !== isAdult) {
+        dispatch(
+          setPassengerCount({
+            adults: isAdult
+              ? passengerCount.adults + 1
+              : Math.max(0, passengerCount.adults - 1),
+            children: isAdult
+              ? Math.max(0, passengerCount.children - 1)
+              : passengerCount.children + 1,
+          })
+        );
+      }
     } else {
       update({ birthday: formatted });
     }
@@ -143,13 +146,30 @@ const PassengerCard = ({
   };
 
   const handlePassengerTypeChange = (value: 'adult' | 'child') => {
+    const wasAdult = passenger.isAdult;
+    const willBeAdult = value === 'adult';
+
     update({
-      isAdult: value === 'adult',
-      isChild: value === 'child',
-      documentType: value === 'adult' ? 'passport' : 'birth',
+      isAdult: willBeAdult,
+      isChild: !willBeAdult,
+      documentType: willBeAdult ? 'passport' : 'birth',
       birthday: '',
       documentData: '',
     });
+
+    if (wasAdult !== willBeAdult) {
+      dispatch(
+        setPassengerCount({
+          adults: willBeAdult
+            ? passengerCount.adults + 1
+            : Math.max(0, passengerCount.adults - 1),
+          children: willBeAdult
+            ? Math.max(0, passengerCount.children - 1)
+            : passengerCount.children + 1,
+        })
+      );
+    }
+
     setBirthDateError('');
     setPassportNumberError('');
     setPassportSeriesError('');
