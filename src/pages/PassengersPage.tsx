@@ -7,10 +7,12 @@ import PassengerCard from '../components/passengers/PassengerCard/PassengerCard'
 import NextButton from '../components/common/NextButton/NextButton';
 import Footer from '../components/Footer/Footer';
 import {
-  addPassenger,
   initPassengers,
   removePassenger,
+  setPassengerCount,
   togglePlace,
+  updatePassenger,
+  type Passenger,
 } from '../store/slices/bookingSlice';
 import type { RootState } from '../store/store';
 import { validatePassenger } from '../utils/validation';
@@ -22,6 +24,9 @@ const PassengersPage = () => {
   const dispatch = useDispatch();
   const passengers = useSelector(
     (state: RootState) => state.booking.passengers
+  );
+  const passengerCount = useSelector(
+    (state: RootState) => state.booking.passengerCount
   );
   const selectedPlaces = useSelector(
     (state: RootState) => state.booking.selectedPlaces
@@ -38,6 +43,53 @@ const PassengersPage = () => {
   useEffect(() => {
     dispatch(initPassengers());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (passengers.length === 0) return;
+
+    const forwardPlaces = [...selectedPlaces]
+      .filter((p) => p.direction === 'forward')
+      .sort((a, b) => a.seatNumber - b.seatNumber);
+
+    const backPlaces = [...selectedPlaces]
+      .filter((p) => p.direction === 'back')
+      .sort((a, b) => a.seatNumber - b.seatNumber);
+
+    const usedForward = new Set(
+      passengers.map((p) => p.placeId).filter(Boolean) as string[]
+    );
+    const usedBack = new Set(
+      passengers.map((p) => p.returnPlaceId).filter(Boolean) as string[]
+    );
+
+    const freeForward = forwardPlaces.filter((p) => !usedForward.has(p.id));
+    const freeBack = backPlaces.filter((p) => !usedBack.has(p.id));
+
+    let fIdx = 0;
+    let bIdx = 0;
+
+    passengers.forEach((passenger) => {
+      const updates: Partial<Passenger> = {};
+
+      if (!passenger.placeId && freeForward[fIdx]) {
+        updates.placeId = freeForward[fIdx].id;
+        fIdx += 1;
+      }
+      if (!passenger.returnPlaceId && freeBack[bIdx]) {
+        updates.returnPlaceId = freeBack[bIdx].id;
+        bIdx += 1;
+      }
+
+      if (Object.keys(updates).length > 0) {
+        dispatch(
+          updatePassenger({
+            passengerId: passenger.passengerId,
+            data: updates,
+          })
+        );
+      }
+    });
+  }, [dispatch, passengers, selectedPlaces]);
 
   const handleNext = () => {
     if (activeIndex < passengers.length - 1) {
@@ -64,6 +116,7 @@ const PassengersPage = () => {
             coach.price;
 
           return {
+            id: crypto.randomUUID(),
             coachId: coach._id,
             seatNumber: seat.index,
             classType: coach.class_type as CoachClass,
@@ -80,18 +133,22 @@ const PassengersPage = () => {
   };
 
   const handleAddPassenger = () => {
-    dispatch(addPassenger());
+    if (passengerCount.adults >= 4) return;
 
     const forwardPlace = findFreePlace(seats, 'forward');
-    if (forwardPlace) {
-      dispatch(togglePlace(forwardPlace));
+    if (!forwardPlace) return;
+
+    let returnPlace = null;
+    if (selectedReturnRoute) {
+      returnPlace = findFreePlace(returnSeats, 'back');
     }
 
-    if (selectedReturnRoute) {
-      const backPlace = findFreePlace(returnSeats, 'back');
-      if (backPlace) {
-        dispatch(togglePlace(backPlace));
-      }
+    dispatch(setPassengerCount({ adults: passengerCount.adults + 1 }));
+
+    dispatch(togglePlace(forwardPlace));
+
+    if (returnPlace) {
+      dispatch(togglePlace(returnPlace));
     }
   };
 

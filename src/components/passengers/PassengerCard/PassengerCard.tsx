@@ -149,6 +149,8 @@ const PassengerCard = ({
     const wasAdult = passenger.isAdult;
     const willBeAdult = value === 'adult';
 
+    if (wasAdult === willBeAdult) return;
+
     update({
       isAdult: willBeAdult,
       isChild: !willBeAdult,
@@ -157,18 +159,16 @@ const PassengerCard = ({
       documentData: '',
     });
 
-    if (wasAdult !== willBeAdult) {
-      dispatch(
-        setPassengerCount({
-          adults: willBeAdult
-            ? passengerCount.adults + 1
-            : Math.max(0, passengerCount.adults - 1),
-          children: willBeAdult
-            ? Math.max(0, passengerCount.children - 1)
-            : passengerCount.children + 1,
-        })
-      );
-    }
+    dispatch(
+      setPassengerCount({
+        adults: willBeAdult
+          ? passengerCount.adults + 1
+          : Math.max(0, passengerCount.adults - 1),
+        children: willBeAdult
+          ? Math.max(0, passengerCount.children - 1)
+          : passengerCount.children + 1,
+      })
+    );
 
     setBirthDateError('');
     setPassportNumberError('');

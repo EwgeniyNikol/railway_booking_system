@@ -60,6 +60,22 @@ export const validatePassenger = (passenger: Passenger): ValidationError[] => {
     const dateError = validateBirthday(passenger.birthday);
     if (dateError) {
       errors.push({ field: 'birthday', message: dateError });
+    } else {
+      const age = getAge(passenger.birthday);
+      if (age !== null) {
+        if (passenger.isAdult && age < 18) {
+          errors.push({
+            field: 'isAdult',
+            message: 'Возраст не соответствует типу пассажира',
+          });
+        }
+        if (passenger.isChild && age >= 18) {
+          errors.push({
+            field: 'isChild',
+            message: 'Возраст не соответствует типу пассажира',
+          });
+        }
+      }
     }
   }
 

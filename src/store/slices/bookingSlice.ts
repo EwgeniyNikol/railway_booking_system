@@ -5,6 +5,7 @@ import type { Departure } from '../../types/api';
 import type { OrderPayload } from '../../types/order';
 
 export interface SelectedPlace {
+  id: string;
   coachId: string;
   seatNumber: number;
   classType: 'first' | 'second' | 'third' | 'fourth';
@@ -18,6 +19,7 @@ export interface SelectedPlace {
 export interface Passenger {
   passengerId: string;
   placeId: string | null;
+  returnPlaceId: string | null;
   firstName: string;
   lastName: string;
   patronymic: string;
@@ -96,6 +98,7 @@ export const createPassenger = (
 ): Passenger => ({
   passengerId: crypto.randomUUID(),
   placeId: null,
+  returnPlaceId: null,
   firstName: '',
   lastName: '',
   patronymic: '',
@@ -144,6 +147,19 @@ const initialState: BookingState = {
   rating: 0,
 };
 
+const removePassengerPlaces = (state: BookingState, passenger: Passenger) => {
+  if (passenger.placeId) {
+    state.selectedPlaces = state.selectedPlaces.filter(
+      (p) => p.id !== passenger.placeId
+    );
+  }
+  if (passenger.returnPlaceId) {
+    state.selectedPlaces = state.selectedPlaces.filter(
+      (p) => p.id !== passenger.returnPlaceId
+    );
+  }
+};
+
 const syncPassengers = (state: BookingState) => {
   const { adults, children, childrenWithoutSeat } = state.passengerCount;
   const adultsInState = state.passengers.filter((p) => p.isAdult).length;
@@ -165,6 +181,7 @@ const syncPassengers = (state: BookingState) => {
   while (needAdults < 0) {
     const index = state.passengers.findIndex((p) => p.isAdult);
     if (index === -1) break;
+    removePassengerPlaces(state, state.passengers[index]);
     state.passengers.splice(index, 1);
     needAdults += 1;
   }
@@ -172,6 +189,7 @@ const syncPassengers = (state: BookingState) => {
   while (needChildren < 0) {
     const index = state.passengers.findIndex((p) => !p.isAdult);
     if (index === -1) break;
+    removePassengerPlaces(state, state.passengers[index]);
     state.passengers.splice(index, 1);
     needChildren += 1;
   }
@@ -252,6 +270,11 @@ const bookingSlice = createSlice({
       }
       state.selectedPlaces.push(action.payload);
     },
+    removePlace(state, action: PayloadAction<string>) {
+      state.selectedPlaces = state.selectedPlaces.filter(
+        (p) => p.id !== action.payload
+      );
+    },
     clearPlaces(state) {
       state.selectedPlaces = [];
     },
@@ -260,11 +283,6 @@ const bookingSlice = createSlice({
         return;
       }
       syncPassengers(state);
-    },
-    addPassenger(state) {
-      const passenger = createPassenger(true, false, true);
-      state.passengers.push(passenger);
-      state.passengerCount.adults += 1;
     },
     togglePassengerCollapsed(state, action: PayloadAction<string>) {
       const passenger = state.passengers.find(
@@ -290,6 +308,8 @@ const bookingSlice = createSlice({
         (p) => p.passengerId === action.payload
       );
       if (!passenger) return;
+
+      removePassengerPlaces(state, passenger);
 
       state.passengers = state.passengers.filter(
         (p) => p.passengerId !== action.payload
@@ -387,9 +407,9 @@ export const {
   setSelectedReturnRoute,
   setPassengerCount,
   togglePlace,
+  removePlace,
   clearPlaces,
   initPassengers,
-  addPassenger,
   togglePassengerCollapsed,
   updatePassenger,
   removePassenger,

@@ -56,6 +56,7 @@ const SeatsBlock = ({ coaches, direction = 'forward' }: SeatsBlockProps) => {
 
     dispatch(
       togglePlace({
+        id: crypto.randomUUID(),
         coachId: coach._id,
         seatNumber: index,
         classType: coach.class_type,
