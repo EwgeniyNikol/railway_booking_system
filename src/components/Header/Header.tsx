@@ -9,6 +9,7 @@ import {
   searchRoutes,
   getReturnRoutes,
 } from '../../store/slices/searchSlice';
+import { saveSearch, loadSearch } from '../../utils/searchStorage';
 import type { AppDispatch } from '../../store/store';
 import styles from './Header.module.scss';
 
@@ -36,12 +37,18 @@ const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const [fromCity, setFromCity] = useState('');
-  const [toCity, setToCity] = useState('');
-  const [fromCityId, setFromCityId] = useState<string | null>(null);
-  const [toCityId, setToCityId] = useState<string | null>(null);
-  const [departureDate, setDepartureDate] = useState('');
-  const [arrivalDate, setArrivalDate] = useState('');
+  const [stored] = useState(() => loadSearch());
+
+  const [fromCity, setFromCity] = useState(stored?.fromCity?.name || '');
+  const [toCity, setToCity] = useState(stored?.toCity?.name || '');
+  const [fromCityId, setFromCityId] = useState<string | null>(
+    stored?.fromCity?._id || null
+  );
+  const [toCityId, setToCityId] = useState<string | null>(
+    stored?.toCity?._id || null
+  );
+  const [departureDate, setDepartureDate] = useState(stored?.dateStart || '');
+  const [arrivalDate, setArrivalDate] = useState(stored?.dateEnd || '');
   const [calendarOpenDeparture, setCalendarOpenDeparture] = useState(false);
   const [calendarOpenArrival, setCalendarOpenArrival] = useState(false);
   const [errors, setErrors] = useState({
@@ -77,6 +84,13 @@ const Header = () => {
     if (fromError || toError || dateError) {
       return;
     }
+
+    saveSearch({
+      fromCity: { _id: fromCityId!, name: fromCity },
+      toCity: { _id: toCityId!, name: toCity },
+      dateStart: departureDate,
+      dateEnd: arrivalDate,
+    });
 
     const params = {
       from_city_id: fromCityId,

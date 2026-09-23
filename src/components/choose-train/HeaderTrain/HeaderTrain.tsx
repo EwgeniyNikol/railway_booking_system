@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Calendar from '../../common/Calendar/Calendar';
 import CityInput from '../../common/CityInput/CityInput';
@@ -11,6 +11,7 @@ import {
 } from '../../../store/slices/searchSlice';
 import { resetBooking } from '../../../store/slices/bookingSlice';
 import { clearOrder } from '../../../utils/orderStorage';
+import { loadSearch, saveSearch } from '../../../utils/searchStorage';
 import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './HeaderTrain.module.scss';
 
@@ -53,22 +54,41 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
   const savedToCity = useSelector((state: RootState) => state.search.to_city);
   const savedParams = useSelector((state: RootState) => state.search.params);
 
-  const [fromCity, setFromCity] = useState(savedFromCity?.name || '');
-  const [toCity, setToCity] = useState(savedToCity?.name || '');
+  const [stored] = useState(() => loadSearch());
+
+  const [fromCity, setFromCity] = useState(
+    stored?.fromCity?.name || savedFromCity?.name || ''
+  );
+  const [toCity, setToCity] = useState(
+    stored?.toCity?.name || savedToCity?.name || ''
+  );
   const [fromCityId, setFromCityId] = useState<string | null>(
-    savedFromCity?._id || null
+    stored?.fromCity?._id || savedFromCity?._id || null
   );
   const [toCityId, setToCityId] = useState<string | null>(
-    savedToCity?._id || null
+    stored?.toCity?._id || savedToCity?._id || null
   );
   const [departureDate, setDepartureDate] = useState(
-    isoToDisplay(savedParams.date_start)
+    stored?.dateStart || isoToDisplay(savedParams.date_start)
   );
   const [arrivalDate, setArrivalDate] = useState(
-    isoToDisplay(savedParams.date_end)
+    stored?.dateEnd || isoToDisplay(savedParams.date_end)
   );
   const [calendarOpenDeparture, setCalendarOpenDeparture] = useState(false);
   const [calendarOpenArrival, setCalendarOpenArrival] = useState(false);
+
+  useEffect(() => {
+    if (!stored) return;
+
+    if (stored.fromCity && stored.toCity) {
+      dispatch(
+        setCities({
+          from_city: stored.fromCity,
+          to_city: stored.toCity,
+        })
+      );
+    }
+  }, [dispatch, stored]);
 
   const handleFromSelect = (city: City) => {
     setFromCityId(city._id);
@@ -87,6 +107,13 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
 
     clearOrder();
     dispatch(resetBooking());
+
+    saveSearch({
+      fromCity: { _id: fromCityId, name: fromCity },
+      toCity: { _id: toCityId, name: toCity },
+      dateStart: departureDate,
+      dateEnd: arrivalDate,
+    });
 
     const params = {
       from_city_id: fromCityId,
