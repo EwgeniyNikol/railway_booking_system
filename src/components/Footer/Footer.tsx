@@ -100,9 +100,7 @@ const Footer = () => {
               отправить
             </button>
           </div>
-          {emailError && (
-            <p className={styles.footer__error}>{emailError}</p>
-          )}
+          {emailError && <p className={styles.footer__error}>{emailError}</p>}
           {subscribed && (
             <p className={styles.footer__subtitle}>Вы подписаны!</p>
           )}

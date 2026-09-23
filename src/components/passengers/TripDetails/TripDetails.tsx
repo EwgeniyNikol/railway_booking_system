@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import { selectTotalPrice } from '../../../store/selectors/totalPrice';
+import {
+  capitalizeCity,
+  formatTime,
+  formatDuration,
+} from '../../../utils/format';
 import styles from './TripDetails.module.scss';
-
-const capitalizeCity = (name: string) =>
-  name
-    .split(/[-\s]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(name.includes('-') ? '-' : ' ');
 
 const formatDate = (timestamp: number): string => {
   const date = new Date(timestamp * 1000);
@@ -16,20 +15,6 @@ const formatDate = (timestamp: number): string => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   return `${day}.${month}.${year}`;
-};
-
-const formatTime = (timestamp: number): string => {
-  const date = new Date(timestamp * 1000);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
-};
-
-const formatDuration = (fromTs: number, toTs: number): string => {
-  const diffSec = Math.abs(toTs - fromTs);
-  const hours = Math.floor(diffSec / 3600);
-  const minutes = Math.floor((diffSec % 3600) / 60);
-  return `${hours} : ${String(minutes).padStart(2, '0')}`;
 };
 
 const formatPrice = (value: number): string => {

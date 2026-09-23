@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCities } from '../../../store/slices/searchSlice';
+import { capitalizeCity } from '../../../utils/format';
 import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './CityInput.module.scss';
 
@@ -16,12 +17,6 @@ type CityInputProps = {
   placeholder?: string;
   className?: string;
 };
-
-const capitalizeCity = (name: string) =>
-  name
-    .split(/[-\s]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(name.includes('-') ? '-' : ' ');
 
 const CityInput = ({
   value,

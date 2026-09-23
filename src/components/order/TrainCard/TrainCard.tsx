@@ -1,29 +1,14 @@
-import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../../../store/store';
 import type { Departure } from '../../../types/api';
+import {
+  capitalizeCity,
+  formatTime,
+  formatDuration,
+} from '../../../utils/format';
+import { useTooltip } from '../../../hooks/useTooltip';
 import styles from './TrainCard.module.scss';
-
-const capitalizeCity = (name: string) =>
-  name
-    .split(/[-\s]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(name.includes('-') ? '-' : ' ');
-
-const formatTime = (timestamp: number): string => {
-  const date = new Date(timestamp * 1000);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
-};
-
-const formatDuration = (fromTs: number, toTs: number): string => {
-  const diffSec = Math.abs(toTs - fromTs);
-  const hours = Math.floor(diffSec / 3600);
-  const minutes = Math.floor((diffSec % 3600) / 60);
-  return `${hours} : ${String(minutes).padStart(2, '0')}`;
-};
 
 type DirectionRowProps = {
   route: Departure;
@@ -80,36 +65,14 @@ const TrainCard = () => {
     (state: RootState) => state.booking.selectedReturnRoute
   );
 
-  const [openTooltip, setOpenTooltip] = useState<string | null>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const handleTooltipToggle = (type: string) => {
-    setOpenTooltip(openTooltip === type ? null : type);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const isSeatCount = target.closest('[class*="trainCard__seatCount"]');
-      const isTooltip = target.closest('[class*="trainCard__tooltip"]');
-
-      if (!isSeatCount && !isTooltip) {
-        setOpenTooltip(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const { openTooltip, toggle, ref } = useTooltip('trainCard');
 
   if (!route) {
     return null;
   }
 
   return (
-    <div className={styles.trainCard} ref={cardRef}>
+    <div className={styles.trainCard} ref={ref}>
       <div className={styles.trainCard__header}>
         <h2 className={styles.trainCard__title}>Поезд</h2>
       </div>
@@ -141,7 +104,7 @@ const TrainCard = () => {
               <span className={styles.trainCard__seatName}>Сидячий</span>
               <span
                 className={styles.trainCard__seatCount}
-                onClick={() => handleTooltipToggle('fourth')}
+                onClick={() => toggle('fourth')}
               >
                 {route.available_seats_info.fourth ?? 0}
               </span>
@@ -210,7 +173,7 @@ const TrainCard = () => {
               <span className={styles.trainCard__seatName}>Плацкарт</span>
               <span
                 className={styles.trainCard__seatCount}
-                onClick={() => handleTooltipToggle('third')}
+                onClick={() => toggle('third')}
               >
                 {route.available_seats_info.third ?? 0}
               </span>
@@ -319,7 +282,7 @@ const TrainCard = () => {
               <span className={styles.trainCard__seatName}>Купе</span>
               <span
                 className={styles.trainCard__seatCount}
-                onClick={() => handleTooltipToggle('second')}
+                onClick={() => toggle('second')}
               >
                 {route.available_seats_info.second ?? 0}
               </span>
@@ -407,7 +370,7 @@ const TrainCard = () => {
               <span className={styles.trainCard__seatName}>Люкс</span>
               <span
                 className={styles.trainCard__seatCount}
-                onClick={() => handleTooltipToggle('first')}
+                onClick={() => toggle('first')}
               >
                 {route.available_seats_info.first ?? 0}
               </span>
