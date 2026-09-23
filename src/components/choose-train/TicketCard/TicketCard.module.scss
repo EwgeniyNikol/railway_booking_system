@@ -182,16 +182,8 @@
   }
 
   &__icons {
-    display: flex;
-    gap: 0.625rem;
-    justify-content: flex-end;
     margin-top: auto;
     margin-bottom: 1rem;
-  }
-
-  &__icon {
-    height: 1.25rem;
-    width: auto;
   }
 
   &__tooltip {

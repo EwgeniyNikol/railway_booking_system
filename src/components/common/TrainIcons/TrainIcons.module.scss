@@ -1,0 +1,11 @@
+.trainIcons {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.trainIcons__icon {
+  height: 1.25rem;
+  width: auto;
+}

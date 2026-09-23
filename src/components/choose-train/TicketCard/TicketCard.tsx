@@ -10,6 +10,7 @@ import {
   formatDuration,
 } from '../../../utils/format';
 import { useTooltip } from '../../../hooks/useTooltip';
+import TrainIcons from '../../common/TrainIcons/TrainIcons';
 import type { AppDispatch } from '../../../store/store';
 import styles from './TicketCard.module.scss';
 
@@ -530,41 +531,7 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
         )}
 
         <div className={styles.ticketCard__icons}>
-          {departureRoute.have_wifi && (
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`}
-              alt=""
-              className={styles.ticketCard__icon}
-            />
-          )}
-          {departureRoute.is_express && (
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-express.svg`}
-              alt=""
-              className={styles.ticketCard__icon}
-            />
-          )}
-          {departureRoute.have_air_conditioning && (
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-conditioner.svg`}
-              alt=""
-              className={styles.ticketCard__icon}
-            />
-          )}
-          {departureRoute.have_food && (
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-food.svg`}
-              alt=""
-              className={styles.ticketCard__icon}
-            />
-          )}
-          {departureRoute.have_linens && (
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-linens.svg`}
-              alt=""
-              className={styles.ticketCard__icon}
-            />
-          )}
+          <TrainIcons route={departureRoute} />
         </div>
 
         <button

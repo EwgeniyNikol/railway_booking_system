@@ -8,6 +8,7 @@ import {
   formatDuration,
 } from '../../../utils/format';
 import { useTooltip } from '../../../hooks/useTooltip';
+import TrainIcons from '../../common/TrainIcons/TrainIcons';
 import styles from './TrainCard.module.scss';
 
 type DirectionRowProps = {
@@ -434,41 +435,7 @@ const TrainCard = () => {
           )}
 
           <div className={styles.trainCard__icons}>
-            {route.have_wifi && (
-              <img
-                src={`${import.meta.env.BASE_URL}images/icon-wifi.svg`}
-                alt=""
-                className={styles.trainCard__icon}
-              />
-            )}
-            {route.is_express && (
-              <img
-                src={`${import.meta.env.BASE_URL}images/icon-express.svg`}
-                alt=""
-                className={styles.trainCard__icon}
-              />
-            )}
-            {route.have_air_conditioning && (
-              <img
-                src={`${import.meta.env.BASE_URL}images/icon-conditioner.svg`}
-                alt=""
-                className={styles.trainCard__icon}
-              />
-            )}
-            {route.have_food && (
-              <img
-                src={`${import.meta.env.BASE_URL}images/icon-food.svg`}
-                alt=""
-                className={styles.trainCard__icon}
-              />
-            )}
-            {route.have_linens && (
-              <img
-                src={`${import.meta.env.BASE_URL}images/icon-linens.svg`}
-                alt=""
-                className={styles.trainCard__icon}
-              />
-            )}
+            <TrainIcons route={route} />
           </div>
 
           <button
