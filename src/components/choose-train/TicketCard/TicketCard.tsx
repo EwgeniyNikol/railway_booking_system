@@ -101,7 +101,11 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+      const target = event.target as HTMLElement;
+      const isSeatCount = target.closest('[class*="ticketCard__seatCount"]');
+      const isTooltip = target.closest('[class*="ticketCard__tooltip"]');
+
+      if (!isSeatCount && !isTooltip) {
         setOpenTooltip(null);
       }
     };
@@ -212,265 +216,364 @@ const TicketCard = ({ departureRoute, returnRoute }: TicketCardProps) => {
       </div>
 
       <div className={styles.ticketCard__right}>
-        {departureRoute.have_fourth_class && (
-          <div className={styles.ticketCard__seatType}>
-            <span className={styles.ticketCard__seatName}>Сидячий</span>
-            <span
-              className={styles.ticketCard__seatCount}
-              onClick={() => handleTooltipToggle('fourth')}
-            >
-              {departureRoute.available_seats_info.fourth}
-            </span>
-            <span className={styles.ticketCard__seatLabel}>от</span>
-            <span className={styles.ticketCard__seatPrice}>
-              {(
-                departureRoute.price_info.fourth?.bottom_price ??
-                departureRoute.price_info.fourth?.price ??
-                0
-              ).toLocaleString('ru-RU')}
-            </span>
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-              alt=""
-              className={styles.ticketCard__seatCurrency}
-            />
-            {openTooltip === 'fourth' && (
-              <div className={styles.ticketCard__tooltip}>
-                {departureRoute.price_info.fourth?.bottom_seats !==
-                  undefined && (
-                  <div className={styles.ticketCard__tooltipRow}>
-                    <span className={styles.ticketCard__tooltipName}>
-                      Нижние
-                    </span>
-                    <span className={styles.ticketCard__tooltipCount}>
-                      {departureRoute.price_info.fourth.bottom_seats}
-                    </span>
-                    <span className={styles.ticketCard__tooltipPrice}>
-                      {departureRoute.price_info.fourth.bottom_price?.toLocaleString(
-                        'ru-RU'
-                      )}
-                    </span>
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-                      alt=""
-                      className={styles.ticketCard__tooltipCurrency}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+        {departureRoute.have_fourth_class &&
+          departureRoute.price_info.fourth && (
+            <div className={styles.ticketCard__seatType}>
+              <span className={styles.ticketCard__seatName}>Сидячий</span>
+              <span
+                className={styles.ticketCard__seatCount}
+                onClick={() => handleTooltipToggle('fourth')}
+              >
+                {departureRoute.available_seats_info.fourth ?? 0}
+              </span>
+              <span className={styles.ticketCard__seatLabel}>от</span>
+              <span className={styles.ticketCard__seatPrice}>
+                {(
+                  departureRoute.price_info.fourth.bottom_price ??
+                  departureRoute.price_info.fourth.price ??
+                  0
+                ).toLocaleString('ru-RU')}
+              </span>
+              <img
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                alt=""
+                className={styles.ticketCard__seatCurrency}
+              />
+              {openTooltip === 'fourth' && (
+                <div className={styles.ticketCard__tooltip}>
+                  {departureRoute.price_info.fourth.bottom_seats !==
+                    undefined && (
+                    <div className={styles.ticketCard__tooltipRow}>
+                      <span className={styles.ticketCard__tooltipName}>
+                        Нижние
+                      </span>
+                      <span className={styles.ticketCard__tooltipCount}>
+                        {departureRoute.price_info.fourth.bottom_seats}
+                      </span>
+                      <span className={styles.ticketCard__tooltipPrice}>
+                        {departureRoute.price_info.fourth.bottom_price?.toLocaleString(
+                          'ru-RU'
+                        )}
+                      </span>
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                        alt=""
+                        className={styles.ticketCard__tooltipCurrency}
+                      />
+                    </div>
+                  )}
+                  {departureRoute.price_info.fourth.bottom_seats ===
+                    undefined &&
+                    departureRoute.price_info.fourth.top_seats ===
+                      undefined &&
+                    departureRoute.price_info.fourth.side_seats ===
+                      undefined && (
+                      <div className={styles.ticketCard__tooltipRow}>
+                        <span className={styles.ticketCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.ticketCard__tooltipCount}>
+                          {departureRoute.available_seats_info.fourth ?? 0}
+                        </span>
+                        <span className={styles.ticketCard__tooltipPrice}>
+                          {departureRoute.price_info.fourth.bottom_price?.toLocaleString(
+                            'ru-RU'
+                          )}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.ticketCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+          )}
 
-        {departureRoute.have_third_class && (
-          <div className={styles.ticketCard__seatType}>
-            <span className={styles.ticketCard__seatName}>Плацкарт</span>
-            <span
-              className={styles.ticketCard__seatCount}
-              onClick={() => handleTooltipToggle('third')}
-            >
-              {departureRoute.available_seats_info.third}
-            </span>
-            <span className={styles.ticketCard__seatLabel}>от</span>
-            <span className={styles.ticketCard__seatPrice}>
-              {(
-                departureRoute.price_info.third?.bottom_price ??
-                departureRoute.price_info.third?.price ??
-                0
-              ).toLocaleString('ru-RU')}
-            </span>
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-              alt=""
-              className={styles.ticketCard__seatCurrency}
-            />
-            {openTooltip === 'third' && (
-              <div className={styles.ticketCard__tooltip}>
-                {departureRoute.price_info.third?.top_seats !== undefined && (
-                  <div className={styles.ticketCard__tooltipRow}>
-                    <span className={styles.ticketCard__tooltipName}>
-                      Верхние
-                    </span>
-                    <span className={styles.ticketCard__tooltipCount}>
-                      {departureRoute.price_info.third.top_seats}
-                    </span>
-                    <span className={styles.ticketCard__tooltipPrice}>
-                      {departureRoute.price_info.third.top_price?.toLocaleString(
-                        'ru-RU'
-                      )}
-                    </span>
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-                      alt=""
-                      className={styles.ticketCard__tooltipCurrency}
-                    />
-                  </div>
-                )}
-                {departureRoute.price_info.third?.bottom_seats !==
-                  undefined && (
-                  <div className={styles.ticketCard__tooltipRow}>
-                    <span className={styles.ticketCard__tooltipName}>
-                      Нижние
-                    </span>
-                    <span className={styles.ticketCard__tooltipCount}>
-                      {departureRoute.price_info.third.bottom_seats}
-                    </span>
-                    <span className={styles.ticketCard__tooltipPrice}>
-                      {departureRoute.price_info.third.bottom_price?.toLocaleString(
-                        'ru-RU'
-                      )}
-                    </span>
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-                      alt=""
-                      className={styles.ticketCard__tooltipCurrency}
-                    />
-                  </div>
-                )}
-                {departureRoute.price_info.third?.side_seats !== undefined && (
-                  <div className={styles.ticketCard__tooltipRow}>
-                    <span className={styles.ticketCard__tooltipName}>
-                      Боковые
-                    </span>
-                    <span className={styles.ticketCard__tooltipCount}>
-                      {departureRoute.price_info.third.side_seats}
-                    </span>
-                    <span className={styles.ticketCard__tooltipPrice}>
-                      {departureRoute.price_info.third.side_price?.toLocaleString(
-                        'ru-RU'
-                      )}
-                    </span>
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-                      alt=""
-                      className={styles.ticketCard__tooltipCurrency}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+        {departureRoute.have_third_class &&
+          departureRoute.price_info.third && (
+            <div className={styles.ticketCard__seatType}>
+              <span className={styles.ticketCard__seatName}>Плацкарт</span>
+              <span
+                className={styles.ticketCard__seatCount}
+                onClick={() => handleTooltipToggle('third')}
+              >
+                {departureRoute.available_seats_info.third ?? 0}
+              </span>
+              <span className={styles.ticketCard__seatLabel}>от</span>
+              <span className={styles.ticketCard__seatPrice}>
+                {(
+                  departureRoute.price_info.third.bottom_price ??
+                  departureRoute.price_info.third.price ??
+                  0
+                ).toLocaleString('ru-RU')}
+              </span>
+              <img
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                alt=""
+                className={styles.ticketCard__seatCurrency}
+              />
+              {openTooltip === 'third' && (
+                <div className={styles.ticketCard__tooltip}>
+                  {departureRoute.price_info.third.top_seats !== undefined && (
+                    <div className={styles.ticketCard__tooltipRow}>
+                      <span className={styles.ticketCard__tooltipName}>
+                        Верхние
+                      </span>
+                      <span className={styles.ticketCard__tooltipCount}>
+                        {departureRoute.price_info.third.top_seats}
+                      </span>
+                      <span className={styles.ticketCard__tooltipPrice}>
+                        {departureRoute.price_info.third.top_price?.toLocaleString(
+                          'ru-RU'
+                        )}
+                      </span>
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                        alt=""
+                        className={styles.ticketCard__tooltipCurrency}
+                      />
+                    </div>
+                  )}
+                  {departureRoute.price_info.third.bottom_seats !==
+                    undefined && (
+                    <div className={styles.ticketCard__tooltipRow}>
+                      <span className={styles.ticketCard__tooltipName}>
+                        Нижние
+                      </span>
+                      <span className={styles.ticketCard__tooltipCount}>
+                        {departureRoute.price_info.third.bottom_seats}
+                      </span>
+                      <span className={styles.ticketCard__tooltipPrice}>
+                        {departureRoute.price_info.third.bottom_price?.toLocaleString(
+                          'ru-RU'
+                        )}
+                      </span>
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                        alt=""
+                        className={styles.ticketCard__tooltipCurrency}
+                      />
+                    </div>
+                  )}
+                  {departureRoute.price_info.third.side_seats !== undefined && (
+                    <div className={styles.ticketCard__tooltipRow}>
+                      <span className={styles.ticketCard__tooltipName}>
+                        Боковые
+                      </span>
+                      <span className={styles.ticketCard__tooltipCount}>
+                        {departureRoute.price_info.third.side_seats}
+                      </span>
+                      <span className={styles.ticketCard__tooltipPrice}>
+                        {departureRoute.price_info.third.side_price?.toLocaleString(
+                          'ru-RU'
+                        )}
+                      </span>
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                        alt=""
+                        className={styles.ticketCard__tooltipCurrency}
+                      />
+                    </div>
+                  )}
+                  {departureRoute.price_info.third.bottom_seats ===
+                    undefined &&
+                    departureRoute.price_info.third.top_seats === undefined &&
+                    departureRoute.price_info.third.side_seats ===
+                      undefined && (
+                      <div className={styles.ticketCard__tooltipRow}>
+                        <span className={styles.ticketCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.ticketCard__tooltipCount}>
+                          {departureRoute.available_seats_info.third ?? 0}
+                        </span>
+                        <span className={styles.ticketCard__tooltipPrice}>
+                          {departureRoute.price_info.third.bottom_price?.toLocaleString(
+                            'ru-RU'
+                          )}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.ticketCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+          )}
 
-        {departureRoute.have_second_class && (
-          <div className={styles.ticketCard__seatType}>
-            <span className={styles.ticketCard__seatName}>Купе</span>
-            <span
-              className={styles.ticketCard__seatCount}
-              onClick={() => handleTooltipToggle('second')}
-            >
-              {departureRoute.available_seats_info.second}
-            </span>
-            <span className={styles.ticketCard__seatLabel}>от</span>
-            <span className={styles.ticketCard__seatPrice}>
-              {(
-                departureRoute.price_info.second?.bottom_price ??
-                departureRoute.price_info.second?.price ??
-                0
-              ).toLocaleString('ru-RU')}
-            </span>
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-              alt=""
-              className={styles.ticketCard__seatCurrency}
-            />
-            {openTooltip === 'second' && (
-              <div className={styles.ticketCard__tooltip}>
-                {departureRoute.price_info.second?.top_seats !== undefined && (
-                  <div className={styles.ticketCard__tooltipRow}>
-                    <span className={styles.ticketCard__tooltipName}>
-                      Верхние
-                    </span>
-                    <span className={styles.ticketCard__tooltipCount}>
-                      {departureRoute.price_info.second.top_seats}
-                    </span>
-                    <span className={styles.ticketCard__tooltipPrice}>
-                      {departureRoute.price_info.second.top_price?.toLocaleString(
-                        'ru-RU'
-                      )}
-                    </span>
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-                      alt=""
-                      className={styles.ticketCard__tooltipCurrency}
-                    />
-                  </div>
-                )}
-                {departureRoute.price_info.second?.bottom_seats !==
-                  undefined && (
-                  <div className={styles.ticketCard__tooltipRow}>
-                    <span className={styles.ticketCard__tooltipName}>
-                      Нижние
-                    </span>
-                    <span className={styles.ticketCard__tooltipCount}>
-                      {departureRoute.price_info.second.bottom_seats}
-                    </span>
-                    <span className={styles.ticketCard__tooltipPrice}>
-                      {departureRoute.price_info.second.bottom_price?.toLocaleString(
-                        'ru-RU'
-                      )}
-                    </span>
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-                      alt=""
-                      className={styles.ticketCard__tooltipCurrency}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+        {departureRoute.have_second_class &&
+          departureRoute.price_info.second && (
+            <div className={styles.ticketCard__seatType}>
+              <span className={styles.ticketCard__seatName}>Купе</span>
+              <span
+                className={styles.ticketCard__seatCount}
+                onClick={() => handleTooltipToggle('second')}
+              >
+                {departureRoute.available_seats_info.second ?? 0}
+              </span>
+              <span className={styles.ticketCard__seatLabel}>от</span>
+              <span className={styles.ticketCard__seatPrice}>
+                {(
+                  departureRoute.price_info.second.bottom_price ??
+                  departureRoute.price_info.second.price ??
+                  0
+                ).toLocaleString('ru-RU')}
+              </span>
+              <img
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                alt=""
+                className={styles.ticketCard__seatCurrency}
+              />
+              {openTooltip === 'second' && (
+                <div className={styles.ticketCard__tooltip}>
+                  {departureRoute.price_info.second.top_seats !== undefined && (
+                    <div className={styles.ticketCard__tooltipRow}>
+                      <span className={styles.ticketCard__tooltipName}>
+                        Верхние
+                      </span>
+                      <span className={styles.ticketCard__tooltipCount}>
+                        {departureRoute.price_info.second.top_seats}
+                      </span>
+                      <span className={styles.ticketCard__tooltipPrice}>
+                        {departureRoute.price_info.second.top_price?.toLocaleString(
+                          'ru-RU'
+                        )}
+                      </span>
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                        alt=""
+                        className={styles.ticketCard__tooltipCurrency}
+                      />
+                    </div>
+                  )}
+                  {departureRoute.price_info.second.bottom_seats !==
+                    undefined && (
+                    <div className={styles.ticketCard__tooltipRow}>
+                      <span className={styles.ticketCard__tooltipName}>
+                        Нижние
+                      </span>
+                      <span className={styles.ticketCard__tooltipCount}>
+                        {departureRoute.price_info.second.bottom_seats}
+                      </span>
+                      <span className={styles.ticketCard__tooltipPrice}>
+                        {departureRoute.price_info.second.bottom_price?.toLocaleString(
+                          'ru-RU'
+                        )}
+                      </span>
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                        alt=""
+                        className={styles.ticketCard__tooltipCurrency}
+                      />
+                    </div>
+                  )}
+                  {departureRoute.price_info.second.bottom_seats ===
+                    undefined &&
+                    departureRoute.price_info.second.top_seats ===
+                      undefined && (
+                      <div className={styles.ticketCard__tooltipRow}>
+                        <span className={styles.ticketCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.ticketCard__tooltipCount}>
+                          {departureRoute.available_seats_info.second ?? 0}
+                        </span>
+                        <span className={styles.ticketCard__tooltipPrice}>
+                          {departureRoute.price_info.second.bottom_price?.toLocaleString(
+                            'ru-RU'
+                          )}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.ticketCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+          )}
 
-        {departureRoute.have_first_class && (
-          <div className={styles.ticketCard__seatType}>
-            <span className={styles.ticketCard__seatName}>Люкс</span>
-            <span
-              className={styles.ticketCard__seatCount}
-              onClick={() => handleTooltipToggle('first')}
-            >
-              {departureRoute.available_seats_info.first}
-            </span>
-            <span className={styles.ticketCard__seatLabel}>от</span>
-            <span className={styles.ticketCard__seatPrice}>
-              {(
-                departureRoute.price_info.first?.bottom_price ??
-                departureRoute.price_info.first?.price ??
-                0
-              ).toLocaleString('ru-RU')}
-            </span>
-            <img
-              src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-              alt=""
-              className={styles.ticketCard__seatCurrency}
-            />
-            {openTooltip === 'first' && (
-              <div className={styles.ticketCard__tooltip}>
-                {departureRoute.price_info.first?.bottom_seats !==
-                  undefined && (
-                  <div className={styles.ticketCard__tooltipRow}>
-                    <span className={styles.ticketCard__tooltipName}>
-                      Нижние
-                    </span>
-                    <span className={styles.ticketCard__tooltipCount}>
-                      {departureRoute.price_info.first.bottom_seats}
-                    </span>
-                    <span className={styles.ticketCard__tooltipPrice}>
-                      {departureRoute.price_info.first.bottom_price?.toLocaleString(
-                        'ru-RU'
-                      )}
-                    </span>
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
-                      alt=""
-                      className={styles.ticketCard__tooltipCurrency}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+        {departureRoute.have_first_class &&
+          departureRoute.price_info.first && (
+            <div className={styles.ticketCard__seatType}>
+              <span className={styles.ticketCard__seatName}>Люкс</span>
+              <span
+                className={styles.ticketCard__seatCount}
+                onClick={() => handleTooltipToggle('first')}
+              >
+                {departureRoute.available_seats_info.first ?? 0}
+              </span>
+              <span className={styles.ticketCard__seatLabel}>от</span>
+              <span className={styles.ticketCard__seatPrice}>
+                {(
+                  departureRoute.price_info.first.bottom_price ??
+                  departureRoute.price_info.first.price ??
+                  0
+                ).toLocaleString('ru-RU')}
+              </span>
+              <img
+                src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                alt=""
+                className={styles.ticketCard__seatCurrency}
+              />
+              {openTooltip === 'first' && (
+                <div className={styles.ticketCard__tooltip}>
+                  {departureRoute.price_info.first.bottom_seats !==
+                    undefined && (
+                    <div className={styles.ticketCard__tooltipRow}>
+                      <span className={styles.ticketCard__tooltipName}>
+                        Нижние
+                      </span>
+                      <span className={styles.ticketCard__tooltipCount}>
+                        {departureRoute.price_info.first.bottom_seats}
+                      </span>
+                      <span className={styles.ticketCard__tooltipPrice}>
+                        {departureRoute.price_info.first.bottom_price?.toLocaleString(
+                          'ru-RU'
+                        )}
+                      </span>
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                        alt=""
+                        className={styles.ticketCard__tooltipCurrency}
+                      />
+                    </div>
+                  )}
+                  {departureRoute.price_info.first.bottom_seats ===
+                    undefined &&
+                    departureRoute.price_info.first.top_seats ===
+                      undefined && (
+                      <div className={styles.ticketCard__tooltipRow}>
+                        <span className={styles.ticketCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.ticketCard__tooltipCount}>
+                          {departureRoute.available_seats_info.first ?? 0}
+                        </span>
+                        <span className={styles.ticketCard__tooltipPrice}>
+                          {departureRoute.price_info.first.bottom_price?.toLocaleString(
+                            'ru-RU'
+                          )}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.ticketCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+          )}
 
         <div className={styles.ticketCard__icons}>
           {departureRoute.have_wifi && (

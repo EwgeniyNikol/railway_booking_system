@@ -17,6 +17,12 @@ type CityInputProps = {
   className?: string;
 };
 
+const capitalizeCity = (name: string) =>
+  name
+    .split(/[-\s]/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(name.includes('-') ? '-' : ' ');
+
 const CityInput = ({
   value,
   onChange,
@@ -60,8 +66,7 @@ const CityInput = ({
   }, []);
 
   const handleSelect = (city: City) => {
-    const capitalized = city.name.charAt(0).toUpperCase() + city.name.slice(1);
-    onChange(capitalized);
+    onChange(capitalizeCity(city.name));
     onSelect(city);
     setOpen(false);
   };
@@ -87,7 +92,7 @@ const CityInput = ({
               className={styles.cityInput__item}
               onClick={() => handleSelect(city)}
             >
-              {city.name.charAt(0).toUpperCase() + city.name.slice(1)}
+              {capitalizeCity(city.name)}
             </li>
           ))}
         </ul>

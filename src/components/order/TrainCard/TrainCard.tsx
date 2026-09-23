@@ -89,7 +89,11 @@ const TrainCard = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+      const target = event.target as HTMLElement;
+      const isSeatCount = target.closest('[class*="trainCard__seatCount"]');
+      const isTooltip = target.closest('[class*="trainCard__tooltip"]');
+
+      if (!isSeatCount && !isTooltip) {
         setOpenTooltip(null);
       }
     };
@@ -174,6 +178,28 @@ const TrainCard = () => {
                       />
                     </div>
                   )}
+                  {route.price_info.fourth.bottom_seats === undefined &&
+                    route.price_info.fourth.top_seats === undefined &&
+                    route.price_info.fourth.side_seats === undefined && (
+                      <div className={styles.trainCard__tooltipRow}>
+                        <span className={styles.trainCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.trainCard__tooltipCount}>
+                          {route.available_seats_info.fourth ?? 0}
+                        </span>
+                        <span className={styles.trainCard__tooltipPrice}>
+                          {(
+                            route.price_info.fourth.bottom_price ?? 0
+                          ).toLocaleString('ru-RU')}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.trainCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -261,6 +287,28 @@ const TrainCard = () => {
                       />
                     </div>
                   )}
+                  {route.price_info.third.bottom_seats === undefined &&
+                    route.price_info.third.top_seats === undefined &&
+                    route.price_info.third.side_seats === undefined && (
+                      <div className={styles.trainCard__tooltipRow}>
+                        <span className={styles.trainCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.trainCard__tooltipCount}>
+                          {route.available_seats_info.third ?? 0}
+                        </span>
+                        <span className={styles.trainCard__tooltipPrice}>
+                          {(
+                            route.price_info.third.bottom_price ?? 0
+                          ).toLocaleString('ru-RU')}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.trainCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -328,6 +376,27 @@ const TrainCard = () => {
                       />
                     </div>
                   )}
+                  {route.price_info.second.bottom_seats === undefined &&
+                    route.price_info.second.top_seats === undefined && (
+                      <div className={styles.trainCard__tooltipRow}>
+                        <span className={styles.trainCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.trainCard__tooltipCount}>
+                          {route.available_seats_info.second ?? 0}
+                        </span>
+                        <span className={styles.trainCard__tooltipPrice}>
+                          {(
+                            route.price_info.second.bottom_price ?? 0
+                          ).toLocaleString('ru-RU')}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.trainCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -375,6 +444,27 @@ const TrainCard = () => {
                       />
                     </div>
                   )}
+                  {route.price_info.first.bottom_seats === undefined &&
+                    route.price_info.first.top_seats === undefined && (
+                      <div className={styles.trainCard__tooltipRow}>
+                        <span className={styles.trainCard__tooltipName}>
+                          Все места
+                        </span>
+                        <span className={styles.trainCard__tooltipCount}>
+                          {route.available_seats_info.first ?? 0}
+                        </span>
+                        <span className={styles.trainCard__tooltipPrice}>
+                          {(
+                            route.price_info.first.bottom_price ?? 0
+                          ).toLocaleString('ru-RU')}
+                        </span>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/icon-ruble.svg`}
+                          alt=""
+                          className={styles.trainCard__tooltipCurrency}
+                        />
+                      </div>
+                    )}
                 </div>
               )}
             </div>
