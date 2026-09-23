@@ -6,9 +6,9 @@ SPA для системы бронирования ж/д билетов на Rea
 
 ## Демо
 
-- **GitHub Pages**: (будет добавлено после деплоя)
+- **GitHub Pages**: [https://ewgeniynikol.github.io/railway_booking_system/](https://ewgeniynikol.github.io/railway_booking_system/)
 - **API**: https://students.netoservices.ru/fe-diplom
-- **Fallback API**: (Render, будет добавлено после деплоя)
+- **Fallback API**: https://railway-booking-system-e82p.onrender.com
 
 ## Технологии
 
@@ -100,7 +100,9 @@ npm run format:check  — проверка форматирования
 
 Базовый URL: `https://students.netoservices.ru/fe-diplom`
 
-Fallback: mock-сервер на Render (используется, если Нетология недоступна).
+Fallback: `https://railway-booking-system-e82p.onrender.com` (mock-сервер на Render, используется если Нетология недоступна).
+
+Логика: при первом запросе пингуется Нетология (таймаут 3 сек). Если отвечает — используется она. Если нет — Render. При ошибке текущего — fallback на второй, с обновлением кэша.
 
 | Метод | Эндпоинт | Описание |
 |-------|----------|----------|
@@ -108,12 +110,10 @@ Fallback: mock-сервер на Render (используется, если Не
 | GET | `/routes/last` | Последние направления |
 | GET | `/routes?from_city_id=&to_city_id=&...` | Поиск направлений |
 | GET | `/routes/{id}/seats` | Места в вагоне |
-| POST | `/routes/order` | Оформление заказа |
+| POST | `/order` | Оформление заказа |
 | GET | `/subscribe?email=` | Подписка |
 
 ## Деплой
 
 - **Фронт** — GitHub Pages (GitHub Actions)
 - **Бэк** — Render (mock-сервер)
-
-Логика: при первом запросе параллельно пингуются Нетология и Render. Победитель кэшируется на сессию. При ошибке — fallback на второй URL.
