@@ -11,12 +11,14 @@
     display: flex;
     flex-direction: column;
     gap: 5.875rem;
+    flex-shrink: 0;
   }
 
   &__content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 
   &__next {

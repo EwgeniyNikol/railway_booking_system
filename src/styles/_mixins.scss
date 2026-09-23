@@ -8,7 +8,7 @@
       @content;
     }
   } @else if $breakpoint == laptop {
-    @media (max-width: 1366px) {
+    @media (max-width: 1440px) {
       @content;
     }
   } @else if $breakpoint == desktop {
@@ -37,4 +37,3 @@
   font-size: $size;
   line-height: $line-height;
 }
-

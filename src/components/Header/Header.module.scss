@@ -195,6 +195,14 @@
 
 @include respond-to(laptop) {
   .header {
+    &__top {
+      padding-left: 1.25rem;
+    }
+
+    &__nav {
+      padding-left: 1.25rem;
+    }
+
     &__search {
       margin-left: auto;
     }

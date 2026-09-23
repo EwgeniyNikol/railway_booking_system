@@ -1,7 +1,8 @@
 @use '../../../styles/mixins' as *;
 
 .sidebar {
-  width: 22.5rem;
+  max-width: 22.5rem;
+  width: 100%;
   background: #3e3c41;
   padding: 2.6875rem 2rem 2.6875rem 2.0625rem;
   display: flex;
