@@ -12,6 +12,12 @@ import {
 import { resetBooking } from '../../../store/slices/bookingSlice';
 import { clearOrder } from '../../../utils/orderStorage';
 import { loadSearch, saveSearch } from '../../../utils/searchStorage';
+import {
+  formatDate,
+  formatDateOnBlur,
+  normalizeCalendarDate,
+} from '../../../utils/format';
+import { validateDate } from '../../../utils/validation';
 import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './HeaderTrain.module.scss';
 
@@ -76,6 +82,11 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
   );
   const [calendarOpenDeparture, setCalendarOpenDeparture] = useState(false);
   const [calendarOpenArrival, setCalendarOpenArrival] = useState(false);
+  const [errors, setErrors] = useState({
+    from: false,
+    to: false,
+    date: false,
+  });
 
   useEffect(() => {
     if (!stored) return;
@@ -92,25 +103,44 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
 
   const handleFromSelect = (city: City) => {
     setFromCityId(city._id);
+    setErrors((prev) => ({ ...prev, from: false }));
   };
 
   const handleToSelect = (city: City) => {
     setToCityId(city._id);
+    setErrors((prev) => ({ ...prev, to: false }));
   };
 
   const handleSubmit = () => {
-    if (!fromCityId || !toCityId) return;
+    const fromError = !fromCityId;
+    const toError = !toCityId;
+
+    let dateError = false;
+    if (departureDate && !validateDate(departureDate)) {
+      dateError = true;
+    }
+    if (arrivalDate && !validateDate(arrivalDate)) {
+      dateError = true;
+    }
 
     const depDate = parseDate(departureDate);
     const arrDate = parseDate(arrivalDate);
-    if (depDate && arrDate && arrDate < depDate) return;
+    if (depDate && arrDate && arrDate < depDate) {
+      dateError = true;
+    }
+
+    setErrors({ from: fromError, to: toError, date: dateError });
+
+    if (fromError || toError || dateError) {
+      return;
+    }
 
     clearOrder();
     dispatch(resetBooking());
 
     saveSearch({
-      fromCity: { _id: fromCityId, name: fromCity },
-      toCity: { _id: toCityId, name: toCity },
+      fromCity: { _id: fromCityId!, name: fromCity },
+      toCity: { _id: toCityId!, name: toCity },
       dateStart: departureDate,
       dateEnd: arrivalDate,
     });
@@ -145,8 +175,8 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
     dispatch(setParams(params));
     dispatch(
       setCities({
-        from_city: { _id: fromCityId, name: fromCity },
-        to_city: { _id: toCityId, name: toCity },
+        from_city: { _id: fromCityId!, name: fromCity },
+        to_city: { _id: toCityId!, name: toCity },
       })
     );
     dispatch(searchRoutes(params));
@@ -193,7 +223,9 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
                   onChange={setFromCity}
                   onSelect={handleFromSelect}
                   placeholder="Откуда"
-                  className={`${styles.header__input} ${styles.header__input_icon}`}
+                  className={`${styles.header__input} ${styles.header__input_icon} ${
+                    errors.from ? styles.header__input_error : ''
+                  }`}
                 />
                 <img
                   src={`${import.meta.env.BASE_URL}images/ic-cached.svg`}
@@ -205,7 +237,9 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
                   onChange={setToCity}
                   onSelect={handleToSelect}
                   placeholder="Куда"
-                  className={`${styles.header__input} ${styles.header__input_icon}`}
+                  className={`${styles.header__input} ${styles.header__input_icon} ${
+                    errors.to ? styles.header__input_error : ''
+                  }`}
                 />
               </div>
             </div>
@@ -216,8 +250,13 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
                   <input
                     type="text"
                     value={departureDate}
-                    placeholder="ДД/ММ/ГГ"
-                    onChange={(e) => setDepartureDate(e.target.value)}
+                    placeholder="ДД/ММ/ГГГГ"
+                    onChange={(e) =>
+                      setDepartureDate(formatDate(e.target.value))
+                    }
+                    onBlur={() =>
+                      setDepartureDate(formatDateOnBlur(departureDate))
+                    }
                     onFocus={() => setCalendarOpenDeparture(true)}
                     className={`${styles.header__input} ${styles.header__input_calendar}`}
                   />
@@ -225,7 +264,7 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
                     <div className={styles.header__calendar}>
                       <Calendar
                         onSelect={(date) => {
-                          setDepartureDate(date);
+                          setDepartureDate(normalizeCalendarDate(date));
                           setCalendarOpenDeparture(false);
                         }}
                         onClose={() => setCalendarOpenDeparture(false)}
@@ -237,16 +276,19 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
                   <input
                     type="text"
                     value={arrivalDate}
-                    placeholder="ДД/ММ/ГГ"
-                    onChange={(e) => setArrivalDate(e.target.value)}
+                    placeholder="ДД/ММ/ГГГГ"
+                    onChange={(e) => setArrivalDate(formatDate(e.target.value))}
+                    onBlur={() => setArrivalDate(formatDateOnBlur(arrivalDate))}
                     onFocus={() => setCalendarOpenArrival(true)}
-                    className={`${styles.header__input} ${styles.header__input_calendar}`}
+                    className={`${styles.header__input} ${styles.header__input_calendar} ${
+                      errors.date ? styles.header__input_error : ''
+                    }`}
                   />
                   {calendarOpenArrival && (
                     <div className={styles.header__calendar}>
                       <Calendar
                         onSelect={(date) => {
-                          setArrivalDate(date);
+                          setArrivalDate(normalizeCalendarDate(date));
                           setCalendarOpenArrival(false);
                         }}
                         onClose={() => setCalendarOpenArrival(false)}

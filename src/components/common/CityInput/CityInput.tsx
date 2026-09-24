@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCities } from '../../../store/slices/searchSlice';
 import { capitalizeCity } from '../../../utils/format';
+import { CITY_REGEX } from '../../../utils/validation';
 import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './CityInput.module.scss';
 
@@ -73,8 +74,10 @@ const CityInput = ({
         value={value}
         placeholder={placeholder}
         onChange={(e) => {
-          onChange(e.target.value);
-          setOpen(true);
+          if (CITY_REGEX.test(e.target.value)) {
+            onChange(e.target.value);
+            setOpen(true);
+          }
         }}
         onFocus={() => setOpen(true)}
         className={className}

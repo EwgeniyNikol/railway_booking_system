@@ -10,6 +10,12 @@ import {
   getReturnRoutes,
 } from '../../store/slices/searchSlice';
 import { saveSearch, loadSearch } from '../../utils/searchStorage';
+import {
+  formatDate,
+  formatDateOnBlur,
+  normalizeCalendarDate,
+} from '../../utils/format';
+import { validateDate } from '../../utils/validation';
 import type { AppDispatch } from '../../store/store';
 import styles from './Header.module.scss';
 
@@ -72,9 +78,15 @@ const Header = () => {
     const toError = !toCityId;
 
     let dateError = false;
+    if (departureDate && !validateDate(departureDate)) {
+      dateError = true;
+    }
+    if (arrivalDate && !validateDate(arrivalDate)) {
+      dateError = true;
+    }
+
     const depDate = parseDate(departureDate);
     const arrDate = parseDate(arrivalDate);
-
     if (depDate && arrDate && arrDate < depDate) {
       dateError = true;
     }
@@ -201,8 +213,9 @@ const Header = () => {
               <input
                 type="text"
                 value={departureDate}
-                placeholder="ДД/ММ/ГГ"
-                onChange={(e) => setDepartureDate(e.target.value)}
+                placeholder="ДД/ММ/ГГГГ"
+                onChange={(e) => setDepartureDate(formatDate(e.target.value))}
+                onBlur={() => setDepartureDate(formatDateOnBlur(departureDate))}
                 onFocus={() => setCalendarOpenDeparture(true)}
                 className={`${styles.header__input} ${styles.header__input_calendar}`}
               />
@@ -210,7 +223,7 @@ const Header = () => {
                 <div className={styles.header__calendar}>
                   <Calendar
                     onSelect={(date) => {
-                      setDepartureDate(date);
+                      setDepartureDate(normalizeCalendarDate(date));
                       setCalendarOpenDeparture(false);
                     }}
                     onClose={() => setCalendarOpenDeparture(false)}
@@ -222,8 +235,9 @@ const Header = () => {
               <input
                 type="text"
                 value={arrivalDate}
-                placeholder="ДД/ММ/ГГ"
-                onChange={(e) => setArrivalDate(e.target.value)}
+                placeholder="ДД/ММ/ГГГГ"
+                onChange={(e) => setArrivalDate(formatDate(e.target.value))}
+                onBlur={() => setArrivalDate(formatDateOnBlur(arrivalDate))}
                 onFocus={() => setCalendarOpenArrival(true)}
                 className={`${styles.header__input} ${styles.header__input_calendar} ${
                   errors.date ? styles.header__input_error : ''
@@ -233,7 +247,7 @@ const Header = () => {
                 <div className={styles.header__calendar}>
                   <Calendar
                     onSelect={(date) => {
-                      setArrivalDate(date);
+                      setArrivalDate(normalizeCalendarDate(date));
                       setCalendarOpenArrival(false);
                     }}
                     onClose={() => setCalendarOpenArrival(false)}

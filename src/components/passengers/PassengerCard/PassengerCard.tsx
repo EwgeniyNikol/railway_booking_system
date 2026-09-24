@@ -7,6 +7,7 @@ import {
   updatePassenger,
   type Passenger,
 } from '../../../store/slices/bookingSlice';
+import { formatDate } from '../../../utils/format';
 import { getAge, validatePassenger } from '../../../utils/validation';
 import styles from './PassengerCard.module.scss';
 
@@ -20,15 +21,6 @@ type PassengerCardProps = {
 };
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]*$/;
-
-const formatDate = (value: string): string => {
-  const digits = value.replace(/\D/g, '').slice(0, 8);
-  const parts = [];
-  if (digits.length > 0) parts.push(digits.slice(0, 2));
-  if (digits.length > 2) parts.push(digits.slice(2, 4));
-  if (digits.length > 4) parts.push(digits.slice(4, 8));
-  return parts.join('/');
-};
 
 const PassengerCard = ({
   passengerId,

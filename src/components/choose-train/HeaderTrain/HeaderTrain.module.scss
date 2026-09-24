@@ -134,6 +134,10 @@
     background-size: 1.875rem 2.095625rem;
   }
 
+  &__input_error {
+    border: 2px solid #ff0000 !important;
+  }
+
   &__button {
     @include button-primary;
     align-self: flex-end;

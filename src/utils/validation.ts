@@ -6,11 +6,21 @@ export interface ValidationError {
 }
 
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+export const CITY_REGEX = /^[А-Яа-яЁё0-9\s-]*$/;
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]+$/;
 const DATE_REGEX = /^\d{2}\/\d{2}\/\d{4}$/;
 const PASSPORT_REGEX = /^\d{10}$/;
 const BIRTH_CERT_REGEX = /^[IVX]{1,4}-[А-ЯЁ]{2}-\d{6}$/;
+
+export const validateDate = (value: string): boolean => {
+  if (!DATE_REGEX.test(value)) return false;
+  const [day, month, year] = value.split('/').map(Number);
+  if (month < 1 || month > 12) return false;
+  const daysInMonth = new Date(year, month, 0).getDate();
+  if (day < 1 || day > daysInMonth) return false;
+  return true;
+};
 
 export const getAge = (value: string): number | null => {
   if (!DATE_REGEX.test(value)) return null;
