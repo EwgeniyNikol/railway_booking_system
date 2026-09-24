@@ -36,7 +36,7 @@ SPA для системы бронирования ж/д билетов на Rea
 src/
   api/                    — запросы к API
   components/             — компоненты
-    common/               — общие компоненты (Calendar, CityInput, NextButton, LoadingBar)
+    common/               — общие компоненты (Calendar, CityInput, NextButton, LoadingBar, TrainIcons)
     choose-train/         — компоненты страницы выбора поезда
     choose-seats/         — компоненты страницы выбора мест
     passengers/           — компоненты страницы пассажиров (TripDetails, PassengerCard)
@@ -49,6 +49,7 @@ src/
     Reviews/              — блок «Отзывы»
     Footer/               — подвал
   fonts/                  — локальные шрифты
+  hooks/                  — пользовательские хуки (useTooltip)
   images/                 — изображения и иконки
   pages/                  — страницы
   store/                  — Redux Toolkit
@@ -64,19 +65,32 @@ src/
 ## Установка и запуск
 
 npm install
-npm run dev
 
-Откройте http://localhost:5173/
+### Dev-режим
 
-### Mock-сервер
+Требуется **два терминала**.
 
-В dev-режиме используется локальный mock-сервер (Express + CORS). **Запускается в отдельном терминале:**
+**Терминал 1 — mock-сервер** (обязателен для dev, без него запросы уйдут в никуда):
 
 cd mock-server
 npm install
 npm start
 
 Сервер запускается на http://localhost:3001
+
+**Терминал 2 — Vite:**
+
+npm run dev
+
+Откройте http://localhost:5173/railway_booking_system/
+
+### Прод-сборка
+
+npm run build && npm run preview
+
+Откройте http://localhost:4173/railway_booking_system/
+
+В прод-режиме mock-сервер не используется — запросы идут в Нетологию, при её недоступности — на Render.
 
 ## Скрипты
 
@@ -104,6 +118,8 @@ npm run format:check  — проверка форматирования
 Fallback: `https://railway-booking-system-e82p.onrender.com` (mock-сервер на Render, используется если Нетология недоступна).
 
 Логика: при первом запросе пингуется Нетология (таймаут 3 сек). Если отвечает — используется она. Если нет — Render. При ошибке текущего — fallback на второй, с обновлением кэша.
+
+Исключение — подписка (`/subscribe`): у Нетологии этого эндпоинта нет, запрос сразу идёт на Render.
 
 | Метод | Эндпоинт | Описание |
 |-------|----------|----------|
