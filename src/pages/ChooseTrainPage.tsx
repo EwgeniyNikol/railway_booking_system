@@ -15,9 +15,9 @@ import styles from './ChooseTrainPage.module.scss';
 
 type SortValue = 'времени' | 'стоимости' | 'длительности';
 
-const sortMap: Record<SortValue, 'date' | 'price' | 'duration'> = {
+const sortMap: Record<SortValue, 'date' | 'min_price' | 'duration'> = {
   времени: 'date',
-  стоимости: 'price',
+  стоимости: 'min_price',
   длительности: 'duration',
 };
 

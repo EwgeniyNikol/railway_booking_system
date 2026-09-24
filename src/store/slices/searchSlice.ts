@@ -28,7 +28,7 @@ export interface SearchState {
     end_arrival_hour_to: number | null;
     limit: number;
     offset: number;
-    sort: 'date' | 'price' | 'duration' | null;
+    sort: 'date' | 'min_price' | 'duration' | null;
   };
   from_city: { _id: string; name: string } | null;
   to_city: { _id: string; name: string } | null;
@@ -151,8 +151,10 @@ const searchSlice = createSlice({
       })
       .addCase(searchRoutes.fulfilled, (state, action) => {
         state.status = 'success';
-        state.routes = action.payload.items;
-        state.total_count = action.payload.total_count;
+        state.routes = Array.isArray(action.payload.items)
+          ? action.payload.items
+          : [];
+        state.total_count = action.payload.total_count ?? 0;
       })
       .addCase(searchRoutes.rejected, (state, action) => {
         state.status = 'error';
@@ -163,8 +165,10 @@ const searchSlice = createSlice({
       })
       .addCase(getReturnRoutes.fulfilled, (state, action) => {
         state.returnStatus = 'success';
-        state.returnRoutes = action.payload.items;
-        state.return_total_count = action.payload.total_count;
+        state.returnRoutes = Array.isArray(action.payload.items)
+          ? action.payload.items
+          : [];
+        state.return_total_count = action.payload.total_count ?? 0;
       })
       .addCase(getReturnRoutes.rejected, (state, action) => {
         state.returnStatus = 'error';

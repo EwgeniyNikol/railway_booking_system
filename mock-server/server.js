@@ -222,7 +222,7 @@ app.get('/routes', (req, res) => {
 
   if (sort === 'date') {
     filtered.sort((a, b) => a.from.datetime - b.from.datetime);
-  } else if (sort === 'price') {
+  } else if (sort === 'price' || sort === 'min_price') {
     filtered.sort((a, b) => a.min_price - b.min_price);
   } else if (sort === 'duration') {
     filtered.sort((a, b) => a.duration - b.duration);
