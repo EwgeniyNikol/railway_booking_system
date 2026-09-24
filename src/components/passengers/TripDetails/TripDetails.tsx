@@ -297,7 +297,7 @@ const TripDetails = () => {
       <div className={styles.tripDetails__total}>
         <span className={styles.tripDetails__totalLabel}>Итог</span>
         <span className={styles.tripDetails__totalSum}>
-          {formatPrice(totalPrice.placesTotal)}
+          {formatPrice(totalPrice.totalPrice)}
         </span>
       </div>
     </div>

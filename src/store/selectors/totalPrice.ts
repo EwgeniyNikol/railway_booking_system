@@ -30,7 +30,8 @@ export const selectTotalPrice = createSelector(
     );
 
     const airConditioningTotal = places.reduce(
-      (sum) => sum + (services.airConditioning ? 100 : 0),
+      (sum, place) =>
+        sum + (services.airConditioning ? place.airConditioningPrice : 0),
       0
     );
 

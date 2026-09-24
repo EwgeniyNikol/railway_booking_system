@@ -176,12 +176,29 @@ const PassengerCard = ({
   };
 
   const handleDocumentTypeChange = (value: string) => {
+    const wasAdult = passenger.isAdult;
+    const willBeAdult = value === 'passport';
+
     update({
       documentType: value,
-      isAdult: value === 'passport',
-      isChild: value !== 'passport',
+      isAdult: willBeAdult,
+      isChild: !willBeAdult,
       documentData: '',
     });
+
+    if (wasAdult !== willBeAdult) {
+      dispatch(
+        setPassengerCount({
+          adults: willBeAdult
+            ? passengerCount.adults + 1
+            : Math.max(0, passengerCount.adults - 1),
+          children: willBeAdult
+            ? Math.max(0, passengerCount.children - 1)
+            : passengerCount.children + 1,
+        })
+      );
+    }
+
     setPassportNumberError('');
     setPassportSeriesError('');
   };

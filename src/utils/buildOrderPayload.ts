@@ -48,39 +48,51 @@ const buildPersonInfo = (passenger: Passenger): PersonInfo => ({
 const buildSeats = (
   places: SelectedPlace[],
   passengers: Passenger[],
-  childrenWithoutSeat: number
+  childrenWithoutSeat: number,
+  direction: 'forward' | 'back'
 ): OrderSeat[] => {
   const sortedPlaces = [...places].sort((a, b) => a.seatNumber - b.seatNumber);
 
   let childrenSeatLeft = childrenWithoutSeat;
 
-  return sortedPlaces.map((place, index) => {
-    const passenger = passengers[index];
+  return sortedPlaces
+    .map((place) => {
+      const passenger = passengers.find((p) =>
+        direction === 'forward'
+          ? p.placeId === place.id
+          : p.returnPlaceId === place.id
+      );
 
-    const includeChildrenSeat = passenger.isAdult && childrenSeatLeft > 0;
+      if (!passenger) {
+        return null;
+      }
 
-    if (includeChildrenSeat) {
-      childrenSeatLeft -= 1;
-    }
+      const includeChildrenSeat = passenger.isAdult && childrenSeatLeft > 0;
 
-    return {
-      coach_id: place.coachId,
-      person_info: buildPersonInfo(passenger),
-      seat_number: place.seatNumber,
-      is_child: passenger.isChild,
-      include_children_seat: includeChildrenSeat,
-    };
-  });
+      if (includeChildrenSeat) {
+        childrenSeatLeft -= 1;
+      }
+
+      return {
+        coach_id: place.coachId,
+        person_info: buildPersonInfo(passenger),
+        seat_number: place.seatNumber,
+        is_child: passenger.isChild,
+        include_children_seat: includeChildrenSeat,
+      };
+    })
+    .filter((seat): seat is OrderSeat => seat !== null);
 };
 
 const buildDirection = (
   routeId: string,
   places: SelectedPlace[],
   passengers: Passenger[],
-  childrenWithoutSeat: number
+  childrenWithoutSeat: number,
+  direction: 'forward' | 'back'
 ): OrderDirection => ({
   route_direction_id: routeId,
-  seats: buildSeats(places, passengers, childrenWithoutSeat),
+  seats: buildSeats(places, passengers, childrenWithoutSeat, direction),
 });
 
 export const buildOrderPayload = (state: RootState): OrderPayload | null => {
@@ -121,7 +133,8 @@ export const buildOrderPayload = (state: RootState): OrderPayload | null => {
       selectedRoute._id,
       forwardPlaces,
       passengers,
-      passengerCount.childrenWithoutSeat
+      passengerCount.childrenWithoutSeat,
+      'forward'
     ),
   };
 
@@ -130,7 +143,8 @@ export const buildOrderPayload = (state: RootState): OrderPayload | null => {
       selectedReturnRoute._id,
       backPlaces,
       passengers,
-      passengerCount.childrenWithoutSeat
+      passengerCount.childrenWithoutSeat,
+      'back'
     );
   }
 

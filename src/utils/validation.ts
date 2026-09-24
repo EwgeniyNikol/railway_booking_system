@@ -5,6 +5,8 @@ export interface ValidationError {
   message: string;
 }
 
+export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const NAME_REGEX = /^[А-Яа-яЁё\s-]+$/;
 const DATE_REGEX = /^\d{2}\/\d{2}\/\d{4}$/;
 const PASSPORT_REGEX = /^\d{10}$/;

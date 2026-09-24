@@ -2,6 +2,7 @@ import WagonCoupe from '../WagonCoupe/WagonCoupe';
 import WagonLux from '../WagonLux/WagonLux';
 import WagonPlatzkart from '../WagonPlatzkart/WagonPlatzkart';
 import WagonSitting from '../WagonSitting/WagonSitting';
+import type { SeatType } from '../../../utils/seatType';
 import styles from './WagonScheme.module.scss';
 
 type Seat = {
@@ -13,7 +14,7 @@ type WagonSchemeProps = {
   classType: 'first' | 'second' | 'third' | 'fourth';
   seats: Seat[];
   selectedSeats: number[];
-  onSeatClick: (index: number) => void;
+  onSeatClick: (index: number, seatType: SeatType) => void;
 };
 
 const WagonScheme = ({

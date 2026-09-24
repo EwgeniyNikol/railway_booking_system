@@ -4,6 +4,7 @@ import {
   TeaIcon,
   TrashIcon,
 } from '../WagonIcons/WagonIcons';
+import type { SeatType } from '../../../utils/seatType';
 import styles from '../WagonScheme/WagonShared.module.scss';
 
 type Seat = {
@@ -14,13 +15,13 @@ type Seat = {
 type WagonLuxProps = {
   seats: Seat[];
   selectedSeats: number[];
-  onSeatClick: (index: number) => void;
+  onSeatClick: (index: number, seatType: SeatType) => void;
 };
 
 const renderSeat = (
   seat: Seat | undefined,
   selectedSeats: number[],
-  onSeatClick: (index: number) => void
+  onSeatClick: (index: number, seatType: SeatType) => void
 ) => {
   if (!seat) return null;
   const isSelected = selectedSeats.includes(seat.index);
@@ -30,7 +31,7 @@ const renderSeat = (
       className={`${styles.seat} ${
         !seat.available ? styles.seat_occupied : ''
       } ${isSelected ? styles.seat_selected : ''}`}
-      onClick={() => seat.available && onSeatClick(seat.index)}
+      onClick={() => seat.available && onSeatClick(seat.index, 'bottom')}
       disabled={!seat.available}
     >
       {seat.index}

@@ -14,6 +14,7 @@ import {
   updatePassenger,
   type Passenger,
 } from '../store/slices/bookingSlice';
+import { getSeatType, getSeatPrice } from '../utils/seatType';
 import type { RootState } from '../store/store';
 import { validatePassenger } from '../utils/validation';
 import styles from './PassengersPage.module.scss';
@@ -109,11 +110,8 @@ const PassengersPage = () => {
 
       for (const seat of item.seats) {
         if (seat.available && !takenSeats.includes(seat.index)) {
-          const price =
-            coach.bottom_price ||
-            coach.top_price ||
-            coach.side_price ||
-            coach.price;
+          const seatType = getSeatType(seat.index, coach.class_type);
+          const price = getSeatPrice(coach, seatType);
 
           return {
             id: crypto.randomUUID(),
@@ -124,6 +122,7 @@ const PassengersPage = () => {
             direction,
             linensPrice: coach.linens_price,
             wifiPrice: coach.wifi_price,
+            airConditioningPrice: coach.air_conditioning_price ?? 0,
             isLinensIncluded: coach.is_linens_included,
           };
         }

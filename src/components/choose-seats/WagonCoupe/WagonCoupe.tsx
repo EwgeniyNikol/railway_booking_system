@@ -4,6 +4,7 @@ import {
   TeaIcon,
   TrashIcon,
 } from '../WagonIcons/WagonIcons';
+import type { SeatType } from '../../../utils/seatType';
 import styles from '../WagonScheme/WagonShared.module.scss';
 
 type Seat = {
@@ -14,7 +15,7 @@ type Seat = {
 type WagonCoupeProps = {
   seats: Seat[];
   selectedSeats: number[];
-  onSeatClick: (index: number) => void;
+  onSeatClick: (index: number, seatType: SeatType) => void;
 };
 
 const chunk = <T,>(arr: T[], size: number): T[][] => {
@@ -28,7 +29,7 @@ const chunk = <T,>(arr: T[], size: number): T[][] => {
 const WagonCoupe = ({ seats, selectedSeats, onSeatClick }: WagonCoupeProps) => {
   const blocks = chunk(seats, 4);
 
-  const renderSeat = (seat?: Seat) => {
+  const renderSeat = (seat: Seat | undefined, seatType: SeatType) => {
     if (!seat) return null;
     const isSelected = selectedSeats.includes(seat.index);
     return (
@@ -37,7 +38,7 @@ const WagonCoupe = ({ seats, selectedSeats, onSeatClick }: WagonCoupeProps) => {
         className={`${styles.seat} ${
           !seat.available ? styles.seat_occupied : ''
         } ${isSelected ? styles.seat_selected : ''}`}
-        onClick={() => seat.available && onSeatClick(seat.index)}
+        onClick={() => seat.available && onSeatClick(seat.index, seatType)}
         disabled={!seat.available}
       >
         {seat.index}
@@ -57,12 +58,12 @@ const WagonCoupe = ({ seats, selectedSeats, onSeatClick }: WagonCoupeProps) => {
         {blocks.map((block, i) => (
           <div key={i} className={styles.block}>
             <div className={styles.blockRow}>
-              {renderSeat(block[1])}
-              {renderSeat(block[3])}
+              {renderSeat(block[1], 'top')}
+              {renderSeat(block[3], 'top')}
             </div>
             <div className={styles.blockRow}>
-              {renderSeat(block[0])}
-              {renderSeat(block[2])}
+              {renderSeat(block[0], 'bottom')}
+              {renderSeat(block[2], 'bottom')}
             </div>
           </div>
         ))}

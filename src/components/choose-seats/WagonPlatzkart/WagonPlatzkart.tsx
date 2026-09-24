@@ -4,6 +4,7 @@ import {
   TeaIcon,
   TrashIcon,
 } from '../WagonIcons/WagonIcons';
+import type { SeatType } from '../../../utils/seatType';
 import styles from '../WagonScheme/WagonShared.module.scss';
 
 type Seat = {
@@ -14,13 +15,14 @@ type Seat = {
 type WagonPlatzkartProps = {
   seats: Seat[];
   selectedSeats: number[];
-  onSeatClick: (index: number) => void;
+  onSeatClick: (index: number, seatType: SeatType) => void;
 };
 
 const renderSeat = (
   seat: Seat | undefined,
+  seatType: SeatType,
   selectedSeats: number[],
-  onSeatClick: (index: number) => void
+  onSeatClick: (index: number, seatType: SeatType) => void
 ) => {
   if (!seat) return null;
   const isSelected = selectedSeats.includes(seat.index);
@@ -30,7 +32,7 @@ const renderSeat = (
       className={`${styles.seat} ${
         !seat.available ? styles.seat_occupied : ''
       } ${isSelected ? styles.seat_selected : ''}`}
-      onClick={() => seat.available && onSeatClick(seat.index)}
+      onClick={() => seat.available && onSeatClick(seat.index, seatType)}
       disabled={!seat.available}
     >
       {seat.index}
@@ -69,12 +71,12 @@ const WagonPlatzkart = ({
           {mainBlocks.map((block, i) => (
             <div key={i} className={styles.block}>
               <div className={styles.blockRow}>
-                {renderSeat(block[1], selectedSeats, onSeatClick)}
-                {renderSeat(block[3], selectedSeats, onSeatClick)}
+                {renderSeat(block[1], 'top', selectedSeats, onSeatClick)}
+                {renderSeat(block[3], 'top', selectedSeats, onSeatClick)}
               </div>
               <div className={styles.blockRow}>
-                {renderSeat(block[0], selectedSeats, onSeatClick)}
-                {renderSeat(block[2], selectedSeats, onSeatClick)}
+                {renderSeat(block[0], 'bottom', selectedSeats, onSeatClick)}
+                {renderSeat(block[2], 'bottom', selectedSeats, onSeatClick)}
               </div>
             </div>
           ))}
@@ -83,8 +85,8 @@ const WagonPlatzkart = ({
         <div className={styles.sideRow}>
           {sideBlocks.map((block, i) => (
             <div key={i} className={styles.blockRow}>
-              {renderSeat(block[0], selectedSeats, onSeatClick)}
-              {renderSeat(block[1], selectedSeats, onSeatClick)}
+              {renderSeat(block[0], 'side', selectedSeats, onSeatClick)}
+              {renderSeat(block[1], 'side', selectedSeats, onSeatClick)}
             </div>
           ))}
         </div>

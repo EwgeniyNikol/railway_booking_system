@@ -18,6 +18,7 @@ export const loadOrder = (): StoredOrder | null => {
   try {
     return JSON.parse(raw) as StoredOrder;
   } catch {
+    sessionStorage.removeItem(STORAGE_KEY);
     return null;
   }
 };

@@ -50,8 +50,13 @@ const PassengersCard = () => {
                 </div>
                 <div className={styles.passengersCard__info}>
                   <span className={styles.passengersCard__name}>
-                    {passenger.lastName} {passenger.firstName}{' '}
-                    {passenger.patronymic}
+                    {[
+                      passenger.lastName,
+                      passenger.firstName,
+                      passenger.patronymic,
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
                   </span>
                   <span className={styles.passengersCard__detail}>
                     Пол {passenger.gender ? 'мужской' : 'женский'}

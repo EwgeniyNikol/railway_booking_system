@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { subscribeEmail } from '../../api';
+import { EMAIL_REGEX } from '../../utils/validation';
 import styles from './Footer.module.scss';
-
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const Footer = () => {
   const [email, setEmail] = useState('');

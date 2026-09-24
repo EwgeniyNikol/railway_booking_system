@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import WagonInfo from '../WagonInfo/WagonInfo';
 import WagonScheme from '../WagonScheme/WagonScheme';
 import { togglePlace } from '../../../store/slices/bookingSlice';
+import { getSeatPrice, type SeatType } from '../../../utils/seatType';
 import type { RootState, AppDispatch } from '../../../store/store';
 import styles from './SeatsBlock.module.scss';
 
@@ -24,6 +25,7 @@ type Coach = {
   side_price: number;
   linens_price: number;
   wifi_price: number;
+  air_conditioning_price?: number;
   is_linens_included: boolean;
   available_seats: number;
   seats: Seat[];
@@ -50,9 +52,8 @@ const SeatsBlock = ({ coaches, direction = 'forward' }: SeatsBlockProps) => {
     );
   };
 
-  const handleSeatClick = (coach: Coach, index: number) => {
-    const price =
-      coach.bottom_price || coach.top_price || coach.side_price || coach.price;
+  const handleSeatClick = (coach: Coach, index: number, seatType: SeatType) => {
+    const price = getSeatPrice(coach, seatType);
 
     dispatch(
       togglePlace({
@@ -64,6 +65,7 @@ const SeatsBlock = ({ coaches, direction = 'forward' }: SeatsBlockProps) => {
         direction,
         linensPrice: coach.linens_price,
         wifiPrice: coach.wifi_price,
+        airConditioningPrice: coach.air_conditioning_price ?? 0,
         isLinensIncluded: coach.is_linens_included,
       })
     );
@@ -109,7 +111,9 @@ const SeatsBlock = ({ coaches, direction = 'forward' }: SeatsBlockProps) => {
               classType={coach.class_type}
               seats={coach.seats}
               selectedSeats={selectedSeats}
-              onSeatClick={(seatIndex) => handleSeatClick(coach, seatIndex)}
+              onSeatClick={(seatIndex, seatType) =>
+                handleSeatClick(coach, seatIndex, seatType)
+              }
             />
           </div>
         );

@@ -13,6 +13,7 @@ export interface SelectedPlace {
   direction: 'forward' | 'back';
   linensPrice: number;
   wifiPrice: number;
+  airConditioningPrice: number;
   isLinensIncluded: boolean;
 }
 
@@ -45,6 +46,7 @@ export interface CoachApiResponse {
     side_price: number;
     linens_price: number;
     wifi_price: number;
+    air_conditioning_price?: number;
     is_linens_included: boolean;
     available_seats: number;
     train: string;
@@ -71,6 +73,8 @@ export interface BookingState {
   returnSeats: CoachApiResponse[];
   seatsStatus: 'idle' | 'loading' | 'success' | 'error';
   seatsError: string | null;
+  returnSeatsStatus: 'idle' | 'loading' | 'success' | 'error';
+  returnSeatsError: string | null;
   selectedPlaces: SelectedPlace[];
   passengerCount: {
     adults: number;
@@ -127,6 +131,8 @@ const initialState: BookingState = {
   returnSeats: [],
   seatsStatus: 'idle',
   seatsError: null,
+  returnSeatsStatus: 'idle',
+  returnSeatsError: null,
   selectedPlaces: [],
   passengerCount: {
     adults: 1,
@@ -352,6 +358,8 @@ const bookingSlice = createSlice({
       state.returnSeats = [];
       state.seatsStatus = 'idle';
       state.seatsError = null;
+      state.returnSeatsStatus = 'idle';
+      state.returnSeatsError = null;
       state.selectedPlaces = [];
       state.passengerCount = initialState.passengerCount;
       state.passengers = [];
@@ -378,15 +386,15 @@ const bookingSlice = createSlice({
         state.seatsError = action.error.message || 'Ошибка загрузки мест';
       })
       .addCase(getReturnSeats.pending, (state) => {
-        state.seatsStatus = 'loading';
+        state.returnSeatsStatus = 'loading';
       })
       .addCase(getReturnSeats.fulfilled, (state, action) => {
-        state.seatsStatus = 'success';
+        state.returnSeatsStatus = 'success';
         state.returnSeats = action.payload;
       })
       .addCase(getReturnSeats.rejected, (state, action) => {
-        state.seatsStatus = 'error';
-        state.seatsError =
+        state.returnSeatsStatus = 'error';
+        state.returnSeatsError =
           action.error.message || 'Ошибка загрузки обратных мест';
       })
       .addCase(submitBooking.pending, (state) => {

@@ -33,6 +33,7 @@ export const loadSearch = (): SearchData | null => {
       dateEnd: data.dateEnd,
     };
   } catch {
+    localStorage.removeItem(STORAGE_KEY);
     return null;
   }
 };

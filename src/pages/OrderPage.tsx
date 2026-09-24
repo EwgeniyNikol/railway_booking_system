@@ -25,24 +25,26 @@ const OrderPage = () => {
   const navigate = useNavigate();
   const state = useSelector((s: RootState) => s);
   const orderStatus = useSelector((s: RootState) => s.booking.orderStatus);
+  const orderError = useSelector((s: RootState) => s.booking.orderError);
   const { totalPrice } = useSelector(selectTotalPrice);
 
   const handleConfirm = async () => {
     const payload = buildOrderPayload(state);
     if (!payload) return;
 
-    const orderId = generateOrderId();
-    dispatch(setLastOrderId(orderId));
-    dispatch(setOrderTotal(totalPrice));
-
-    saveOrder({
-      lastOrderId: orderId,
-      orderTotal: totalPrice,
-      payer: state.booking.payer,
-    });
-
     const result = await dispatch(submitBooking(payload));
+
     if (submitBooking.fulfilled.match(result)) {
+      const orderId = generateOrderId();
+      dispatch(setLastOrderId(orderId));
+      dispatch(setOrderTotal(totalPrice));
+
+      saveOrder({
+        lastOrderId: orderId,
+        orderTotal: totalPrice,
+        payer: state.booking.payer,
+      });
+
       navigate('/order-success');
     }
   };
@@ -59,6 +61,9 @@ const OrderPage = () => {
           <TrainCard />
           <PassengersCard />
           <PaymentMethodCard />
+          {orderStatus === 'error' && orderError && (
+            <div className={styles.page__error}>{orderError}</div>
+          )}
           <div className={styles.page__next}>
             <NextButton
               wide

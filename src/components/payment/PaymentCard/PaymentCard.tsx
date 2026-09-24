@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import { setPayer } from '../../../store/slices/bookingSlice';
+import { EMAIL_REGEX } from '../../../utils/validation';
 import styles from './PaymentCard.module.scss';
 
 const NAME_REGEX = /^[А-Яа-яЁё\s-]*$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const formatPhoneDisplay = (digits: string): string => {
   if (!digits) return '';
