@@ -111,6 +111,14 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
     setErrors((prev) => ({ ...prev, to: false }));
   };
 
+  const handleSwap = () => {
+    setFromCity(toCity);
+    setToCity(fromCity);
+    setFromCityId(toCityId);
+    setToCityId(fromCityId);
+    setErrors((prev) => ({ ...prev, from: false, to: false }));
+  };
+
   const handleSubmit = () => {
     const fromError = !fromCityId;
     const toError = !toCityId;
@@ -227,11 +235,17 @@ const HeaderTrain = ({ isLoading = false }: HeaderTrainProps) => {
                     errors.from ? styles.header__input_error : ''
                   }`}
                 />
-                <img
-                  src={`${import.meta.env.BASE_URL}images/ic-cached.svg`}
-                  alt=""
+                <button
+                  type="button"
                   className={styles.header__swap}
-                />
+                  onClick={handleSwap}
+                  aria-label="Поменять города местами"
+                >
+                  <img
+                    src={`${import.meta.env.BASE_URL}images/ic-cached.svg`}
+                    alt=""
+                  />
+                </button>
                 <CityInput
                   value={toCity}
                   onChange={setToCity}
